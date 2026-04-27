@@ -1,26 +1,103 @@
 @import "tailwindcss";
 
+/* ─── Brand color palette (extracted from cafe interior) ─── */
+@theme {
+  --color-cream:      #F2E8D9;
+  --color-cream-light: #FAF7F2;
+  --color-sage:       #B8B394;
+  --color-caramel:    #8B6D4A;
+  --color-espresso:   #2A2320;
+  --color-rattan:     #C8A96E;
+  --color-brick:      #A0674B;
+  --color-board-red:  #C4453A;
+
+  /* Fonts */
+  --font-serif: var(--font-lora);
+  --font-sans:  var(--font-dm-sans);
+
+  /* Easing */
+  --ease-organic: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── CSS custom properties for GSAP / non-Tailwind contexts ─── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --c-cream:      #F2E8D9;
+  --c-cream-light: #FAF7F2;
+  --c-sage:       #B8B394;
+  --c-caramel:    #8B6D4A;
+  --c-espresso:   #2A2320;
+  --c-rattan:     #C8A96E;
+  --c-brick:      #A0674B;
+  --c-board-red:  #C4453A;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── Base styles ─── */
+html {
+  scroll-behavior: auto; /* Lenis handles smooth scrolling */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--c-cream);
+  color: var(--c-espresso);
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Focus indicator (rattan-gold, 2px, WCAG compliant) ─── */
+:focus-visible {
+  outline: 2px solid var(--c-rattan);
+  outline-offset: 2px;
+}
+
+/* ─── Skip-to-content link (visually hidden, revealed on focus) ─── */
+.skip-link {
+  position: absolute;
+  top: -9999px;
+  left: 0;
+  z-index: 9999;
+  padding: 0.5rem 1rem;
+  background: var(--c-rattan);
+  color: var(--c-espresso);
+  font-weight: 600;
+  border-radius: 0 0 0.25rem 0;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* ─── Bean mascot idle animation ─── */
+@keyframes bean-bob {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+.animate-bean-bob {
+  animation: bean-bob 3s ease-in-out infinite;
+}
+
+/* ─── Underline draw animation (used on CTA text links) ─── */
+.link-underline {
+  position: relative;
+  text-decoration: none;
+}
+.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.35s var(--ease-organic);
+}
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+  width: 100%;
+}
+
+/* ─── Reduced motion overrides ─── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-bean-bob { animation: none; }
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }

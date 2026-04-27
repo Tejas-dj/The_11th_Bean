@@ -1,0 +1,173 @@
+'use client';
+import { useRef, useState, useCallback } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { SectionReveal } from '@/components/shared/SectionReveal';
+import { previewItems, type MenuItem } from '@/data/menu';
+
+export function MenuPreview() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [activeIdx, setActiveIdx] = useState(0);
+
+  const scrollToCard = useCallback((idx: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const card = track.children[idx] as HTMLElement;
+    if (!card) return;
+    track.scrollTo({ left: card.offsetLeft - track.clientWidth / 2 + card.offsetWidth / 2, behavior: 'smooth' });
+    setActiveIdx(idx);
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const center = track.scrollLeft + track.clientWidth / 2;
+    let closest = 0;
+    let minDist = Infinity;
+    Array.from(track.children).forEach((child, i) => {
+      const el = child as HTMLElement;
+      const cardCenter = el.offsetLeft + el.offsetWidth / 2;
+      const dist = Math.abs(center - cardCenter);
+      if (dist < minDist) { minDist = dist; closest = i; }
+    });
+    setActiveIdx(closest);
+  }, []);
+
+  return (
+    <section className="py-20 lg:py-28 bg-cream overflow-hidden" aria-labelledby="menu-preview-heading">
+      <div className="max-w-[1400px] mx-auto px-6 mb-10">
+        <SectionReveal className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <Image
+              src="/mascot/empty_cup.svg"
+              alt=""
+              width={56}
+              height={56}
+              className="opacity-55 flex-shrink-0"
+              aria-hidden="true"
+            />
+            <h2
+              id="menu-preview-heading"
+              className="text-espresso text-3xl md:text-4xl tracking-tight"
+              style={{ fontFamily: 'var(--font-lora), Georgia, serif', fontStyle: 'italic' }}
+            >
+              From the menu
+            </h2>
+          </div>
+          <p className="text-espresso/50 text-sm max-w-xs">
+            Short menu. Every item earned its spot.
+          </p>
+        </SectionReveal>
+      </div>
+
+      {/* Horizontal scroll track */}
+      <div className="relative">
+        {/* Arrow buttons */}
+        <ArrowBtn dir="left"  onClick={() => scrollToCard(Math.max(0, activeIdx - 1))} hidden={activeIdx === 0} />
+        <ArrowBtn dir="right" onClick={() => scrollToCard(Math.min(previewItems.length - 1, activeIdx + 1))} hidden={activeIdx === previewItems.length - 1} />
+
+        <div
+          ref={trackRef}
+          onScroll={handleScroll}
+          className="flex gap-5 overflow-x-auto snap-x snap-mandatory scrollbar-hide px-[max(1.5rem,calc(50vw-280px))] pb-4"
+          style={{ scrollbarWidth: 'none' }}
+          role="list"
+          aria-label="Menu preview items"
+        >
+          {previewItems.map((item, i) => (
+            <MenuCard
+              key={item.id}
+              item={item}
+              active={i === activeIdx}
+              onClick={() => scrollToCard(i)}
+            />
+          ))}
+        </div>
+
+        {/* Pagination dots */}
+        <div className="flex justify-center gap-2 mt-6" aria-hidden="true">
+          {previewItems.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => scrollToCard(i)}
+              className="w-1.5 h-1.5 rounded-full transition-all duration-300"
+              style={{ backgroundColor: i === activeIdx ? 'var(--c-rattan)' : 'var(--c-sage)' }}
+              aria-label={`Go to card ${i + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+
+      <SectionReveal className="text-center mt-10">
+        <Link
+          href="/menu"
+          className="inline-block text-caramel font-medium link-underline hover:text-rattan transition-colors duration-200"
+        >
+          Explore the full menu →
+        </Link>
+      </SectionReveal>
+    </section>
+  );
+}
+
+function MenuCard({ item, active, onClick }: { item: MenuItem; active: boolean; onClick: () => void }) {
+  return (
+    <motion.div
+      role="listitem"
+      animate={{ opacity: active ? 1 : 0.65, scale: active ? 1 : 0.95 }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      onClick={onClick}
+      className="snap-center flex-shrink-0 cursor-pointer w-[280px] md:w-[300px]"
+    >
+      <div className="bg-cream-light rounded-2xl overflow-hidden border border-sage/30 shadow-sm">
+        {/* Square image placeholder */}
+        {/* TODO: Replace with real item photo from Shishir */}
+        <div
+          className="w-full aspect-square flex items-center justify-center text-cream/40 text-xs uppercase tracking-widest"
+          style={{ backgroundColor: active ? '#C8A96E' : '#B8B394' }}
+          aria-hidden="true"
+        >
+          {item.name}
+        </div>
+
+        <div className="p-5">
+          <h3
+            className="text-espresso text-lg font-medium mb-1"
+            style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}
+          >
+            {item.name}
+          </h3>
+          <p className="text-espresso/60 text-sm leading-relaxed mb-4">{item.description}</p>
+          <div className="flex items-center justify-between">
+            <div className="flex gap-1.5 flex-wrap">
+              {item.tags?.slice(0, 2).map((tag) => (
+                <span key={tag} className="text-[11px] bg-sage/20 text-espresso/70 px-2 py-0.5 rounded-full">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <span className="font-mono text-sm text-espresso/50 ml-2">₹{item.price}</span>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function ArrowBtn({ dir, onClick, hidden }: { dir: 'left' | 'right'; onClick: () => void; hidden: boolean }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`absolute top-[40%] z-10 w-10 h-10 rounded-full bg-cream shadow-md border border-sage/30 flex items-center justify-center transition-opacity duration-200 hover:border-rattan ${hidden ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${dir === 'left' ? 'left-4' : 'right-4'}`}
+      aria-label={dir === 'left' ? 'Previous item' : 'Next item'}
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path
+          d={dir === 'left' ? 'M10 3L5 8L10 13' : 'M6 3L11 8L6 13'}
+          stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+        />
+      </svg>
+    </button>
+  );
+}
