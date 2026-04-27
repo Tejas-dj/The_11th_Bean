@@ -1,4 +1,4 @@
-import { th } from "framer-motion/client";
+
 
 export interface InstaPost {
   /** Filename inside /public/instagram/ — e.g. 'matcha_run.jpg' */

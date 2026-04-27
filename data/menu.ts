@@ -11,6 +11,22 @@ export interface MenuItem {
     | 'matcha'
     | 'customizations';
   tags?: string[];
+  /** Mark exactly one item as the current Shishir's Pick */
+  isShishirsPick?: boolean;
+  /** Origin country — e.g. 'India' */
+  origin?: string;
+  /** Region within origin country — e.g. 'Coorg, Karnataka' */
+  originRegion?: string;
+  /** Brew method used — e.g. 'Pour Over' */
+  brewMethod?: string;
+  /** Radar chart values: acidity, body, bitterness, sweetness, aroma (0–10 each) */
+  tastingNotes?: {
+    acidity: number;
+    body: number;
+    bitterness: number;
+    sweetness: number;
+    aroma: number;
+  };
 }
 
 export const menuItems: MenuItem[] = [
@@ -22,6 +38,11 @@ export const menuItems: MenuItem[] = [
     price: 121,
     category: 'signature-brews',
     tags: ['House Blend', 'Signature'],
+    isShishirsPick: true,
+    origin: 'India',
+    originRegion: 'Coorg, Karnataka',
+    brewMethod: 'Drip',
+    tastingNotes: { acidity: 6, body: 8, bitterness: 5, sweetness: 7, aroma: 8 },
   },
   {
     id: 'single-altitude-drip',
