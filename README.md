@@ -4,7 +4,7 @@
 
 **The official website for The 11th Bean — an artisanal cafe in Basavanagudi, Bengaluru.**
 
-*Coffee crafted with obsession. A space built for community.*
+_Coffee crafted with obsession. A space built for community._
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.2.4-black?logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2.4-61DAFB?logo=react)](https://react.dev/)
@@ -50,7 +50,9 @@ The website is built to reflect that same deliberate, unhurried care:
 
 ---
 
-## Live Site
+## Live Site🌐
+
+**UNDER DEVELOPMENT🚧**
 
 > **[https://the11thbean.com](https://the11thbean.com)**
 
@@ -58,17 +60,17 @@ The website is built to reflect that same deliberate, unhurried care:
 
 ## Tech Stack
 
-| Layer | Technology | Version |
-|---|---|---|
-| Framework | [Next.js](https://nextjs.org/) (App Router) | `16.2.4` |
-| UI Library | [React](https://react.dev/) | `19.2.4` |
-| Language | [TypeScript](https://www.typescriptlang.org/) | `^5` |
-| Styling | [Tailwind CSS v4](https://tailwindcss.com/) | `^4` |
-| Animation | [GSAP](https://gsap.com/) + [@gsap/react](https://gsap.com/docs/v3/Packages/react/) | `^3.15` / `^2.1` |
-| Animation | [Framer Motion](https://www.framer.com/motion/) | `^12.38` |
-| Smooth Scroll | [Lenis](https://lenis.darkroom.engineering/) | `^1.3` |
-| Fonts | [Google Fonts](https://fonts.google.com/) via `next/font` | — |
-| Deployment | [Vercel](https://vercel.com/) | — |
+| Layer         | Technology                                                                          | Version          |
+| ------------- | ----------------------------------------------------------------------------------- | ---------------- |
+| Framework     | [Next.js](https://nextjs.org/) (App Router)                                         | `16.2.4`         |
+| UI Library    | [React](https://react.dev/)                                                         | `19.2.4`         |
+| Language      | [TypeScript](https://www.typescriptlang.org/)                                       | `^5`             |
+| Styling       | [Tailwind CSS v4](https://tailwindcss.com/)                                         | `^4`             |
+| Animation     | [GSAP](https://gsap.com/) + [@gsap/react](https://gsap.com/docs/v3/Packages/react/) | `^3.15` / `^2.1` |
+| Animation     | [Framer Motion](https://www.framer.com/motion/)                                     | `^12.38`         |
+| Smooth Scroll | [Lenis](https://lenis.darkroom.engineering/)                                        | `^1.3`           |
+| Fonts         | [Google Fonts](https://fonts.google.com/) via `next/font`                           | —                |
+| Deployment    | [Vercel](https://vercel.com/)                                                       | —                |
 
 ---
 
@@ -78,25 +80,25 @@ The visual identity is derived directly from the cafe's interior — warm, earth
 
 ### Color Palette
 
-| Token | Hex | Usage |
-|---|---|---|
-| `cream` | `#F2E8D9` | Primary background |
-| `cream-light` | `#FAF7F2` | Secondary / section backgrounds |
-| `sage` | `#B8B394` | Muted accents, dividers |
-| `caramel` | `#8B6D4A` | Secondary brand, CTA buttons |
-| `espresso` | `#2A2320` | Primary text |
-| `rattan` | `#C8A96E` | Focus rings, highlights, brand gold |
-| `brick` | `#A0674B` | Warm accent |
-| `board-red` | `#C4453A` | Alert / emphasis |
+| Token         | Hex       | Usage                               |
+| ------------- | --------- | ----------------------------------- |
+| `cream`       | `#F2E8D9` | Primary background                  |
+| `cream-light` | `#FAF7F2` | Secondary / section backgrounds     |
+| `sage`        | `#B8B394` | Muted accents, dividers             |
+| `caramel`     | `#8B6D4A` | Secondary brand, CTA buttons        |
+| `espresso`    | `#2A2320` | Primary text                        |
+| `rattan`      | `#C8A96E` | Focus rings, highlights, brand gold |
+| `brick`       | `#A0674B` | Warm accent                         |
+| `board-red`   | `#C4453A` | Alert / emphasis                    |
 
 > Colors are registered in both the **Tailwind v4 `@theme` block** (`globals.css`) and as **CSS custom properties** (prefixed `--c-*`) for use in GSAP and non-Tailwind contexts.
 
 ### Typography
 
-| Role | Font | Weights | Usage |
-|---|---|---|---|
-| Serif / Display | [Lora](https://fonts.google.com/specimen/Lora) | 400, 500, 600, 700 (+ italic) | Headlines, pull quotes, editorial text |
-| Sans / Body | [DM Sans](https://fonts.google.com/specimen/DM+Sans) | 400, 500, 700 | Body copy, UI labels, navigation |
+| Role            | Font                                                 | Weights                       | Usage                                  |
+| --------------- | ---------------------------------------------------- | ----------------------------- | -------------------------------------- |
+| Serif / Display | [Lora](https://fonts.google.com/specimen/Lora)       | 400, 500, 600, 700 (+ italic) | Headlines, pull quotes, editorial text |
+| Sans / Body     | [DM Sans](https://fonts.google.com/specimen/DM+Sans) | 400, 500, 700                 | Body copy, UI labels, navigation       |
 
 Fonts are loaded via Next.js `next/font/google` with `display: swap` for optimal performance. CSS variables `--font-serif` and `--font-sans` are exposed for use throughout the app.
 
@@ -241,17 +243,17 @@ the-11th-bean/
 
 ## Pages & Routes
 
-| Route | Page | Description |
-|---|---|---|
-| `/` | Homepage | Hero, brand pillars, menu preview, podcast teaser, social strip |
-| `/our-story` | Our Story | Four-chapter narrative: corporate life → the leap → building the cafe → today |
-| `/the-cafe` | The Cafe | Interior tour, ambient soundscape player, neighborhood map |
-| `/menu` | Menu | Full menu with category tabs, tasting charts, origin reveals, and Shishir's picks |
-| `/podcast` | Podcast | Episode list, featured episode, and persistent in-browser audio player |
-| `/watch` | Watch | Video content and behind-the-scenes footage |
-| `/gallery` | Gallery | Masonry photo gallery with collection filtering and lightbox |
-| `/visit` | Visit | Address, opening hours, and directions |
-| `/manifesto` | Manifesto | The brand philosophy and guiding values |
+| Route        | Page      | Description                                                                       |
+| ------------ | --------- | --------------------------------------------------------------------------------- |
+| `/`          | Homepage  | Hero, brand pillars, menu preview, podcast teaser, social strip                   |
+| `/our-story` | Our Story | Four-chapter narrative: corporate life → the leap → building the cafe → today     |
+| `/the-cafe`  | The Cafe  | Interior tour, ambient soundscape player, neighborhood map                        |
+| `/menu`      | Menu      | Full menu with category tabs, tasting charts, origin reveals, and Shishir's picks |
+| `/podcast`   | Podcast   | Episode list, featured episode, and persistent in-browser audio player            |
+| `/watch`     | Watch     | Video content and behind-the-scenes footage                                       |
+| `/gallery`   | Gallery   | Masonry photo gallery with collection filtering and lightbox                      |
+| `/visit`     | Visit     | Address, opening hours, and directions                                            |
+| `/manifesto` | Manifesto | The brand philosophy and guiding values                                           |
 
 ---
 
@@ -282,31 +284,36 @@ Components are organized by **feature scope**, not by type. This means:
 All content data lives in `data/` as plain TypeScript files with exported typed arrays. There is **no database or CMS** — all data is static and bundled at build time.
 
 ### `data/menu.ts`
+
 Defines the `MenuItem` interface and exports `menuItems`, `menuCategories`, and `previewItems`. Each item can optionally include:
+
 - `tastingNotes` — `{ acidity, body, sweetness, aroma }` for the TastingChart
 - `origin` / `originRegion` — for the origin reveal interaction
 - `isShishirsPick` — flags the item for the ShishirPick highlight
 - `brewMethod` — brewing parameters shown on hover
 
 ### `data/episodes.ts`
+
 Defines the `Episode` interface and exports the `episodes` array and the `latestEpisode` helper.
 
 ### `data/gallery.ts`
+
 Photo manifest with captions, collections, and dimensions for the masonry gallery.
 
 ### `data/videos.ts`
+
 Video content manifest for the `/watch` page.
 
 ---
 
 ## Custom Hooks
 
-| Hook | Purpose |
-|---|---|
-| `useLenis` | Creates and manages a Lenis smooth-scroll instance with a `requestAnimationFrame` loop |
-| `useMediaQuery` | SSR-safe hook that returns `true`/`false` for a given CSS media query string |
-| `useReducedMotion` | Returns `true` if the user has `prefers-reduced-motion: reduce` set |
-| `useScrollDirection` | Returns `'up'` or `'down'` based on the user's current scroll velocity |
+| Hook                 | Purpose                                                                                |
+| -------------------- | -------------------------------------------------------------------------------------- |
+| `useLenis`           | Creates and manages a Lenis smooth-scroll instance with a `requestAnimationFrame` loop |
+| `useMediaQuery`      | SSR-safe hook that returns `true`/`false` for a given CSS media query string           |
+| `useReducedMotion`   | Returns `true` if the user has `prefers-reduced-motion: reduce` set                    |
+| `useScrollDirection` | Returns `'up'` or `'down'` based on the user's current scroll velocity                 |
 
 ---
 
@@ -314,21 +321,21 @@ Video content manifest for the `/watch` page.
 
 The 11th Bean character — a round, expressive coffee bean — appears contextually across the site in 13 different moods and situations. All mascots are **hand-drawn SVGs** stored in `public/mascot/`.
 
-| File | Mood / Context |
-|---|---|
-| `morning.svg` | Homepage hero — the start of a day |
-| `pour_over.svg` | Menu page — the pour-over ritual |
-| `tasting.svg` | Menu / tasting chart sections |
-| `podcast_host.svg` | Podcast page — behind the mic |
-| `Chikmagalur.svg` | Our Story — the sourcing trips |
-| `stressed.svg` | Our Story — the corporate chapter |
-| `blessed.svg` | Our Story — contentment / "The Now" |
-| `after_hours.svg` | Gallery / events — late-night cafe |
-| `game_night.svg` | Community events |
-| `pickleball.svg` | Neighbourhood / lifestyle content |
-| `namaste.svg` | Welcome / greeting contexts |
-| `lost.svg` | Introspective / searching moments |
-| `empty_cup.svg` | End of a section — or a new beginning |
+| File               | Mood / Context                        |
+| ------------------ | ------------------------------------- |
+| `morning.svg`      | Homepage hero — the start of a day    |
+| `pour_over.svg`    | Menu page — the pour-over ritual      |
+| `tasting.svg`      | Menu / tasting chart sections         |
+| `podcast_host.svg` | Podcast page — behind the mic         |
+| `Chikmagalur.svg`  | Our Story — the sourcing trips        |
+| `stressed.svg`     | Our Story — the corporate chapter     |
+| `blessed.svg`      | Our Story — contentment / "The Now"   |
+| `after_hours.svg`  | Gallery / events — late-night cafe    |
+| `game_night.svg`   | Community events                      |
+| `pickleball.svg`   | Neighbourhood / lifestyle content     |
+| `namaste.svg`      | Welcome / greeting contexts           |
+| `lost.svg`         | Introspective / searching moments     |
+| `empty_cup.svg`    | End of a section — or a new beginning |
 
 Mascots are **decorative** (`aria-hidden="true"`) and use the `.animate-bean-bob` CSS keyframe for a gentle idle floating animation. The animation is suppressed under `prefers-reduced-motion`.
 
@@ -363,11 +370,11 @@ Mascot SVGs are served from Vercel's CDN with `Cache-Control: public, max-age=31
 
 ### Security Headers (via `vercel.json`)
 
-| Header | Value |
-|---|---|
-| `X-Content-Type-Options` | `nosniff` |
-| `X-Frame-Options` | `DENY` |
-| `Referrer-Policy` | `strict-origin-when-cross-origin` |
+| Header                   | Value                             |
+| ------------------------ | --------------------------------- |
+| `X-Content-Type-Options` | `nosniff`                         |
+| `X-Frame-Options`        | `DENY`                            |
+| `Referrer-Policy`        | `strict-origin-when-cross-origin` |
 
 ---
 
@@ -405,22 +412,22 @@ The `@/` alias maps to the project root. All internal imports should use this:
 
 ```typescript
 // ✅ Correct
-import { COLORS } from '@/lib/constants';
-import { MenuCard } from '@/components/menu/MenuCard';
+import { COLORS } from "@/lib/constants";
+import { MenuCard } from "@/components/menu/MenuCard";
 
 // ❌ Avoid
-import { COLORS } from '../../lib/constants';
+import { COLORS } from "../../lib/constants";
 ```
 
 ---
 
 ## Scripts
 
-| Script | Command | Description |
-|---|---|---|
-| `dev` | `npm run dev` | Start the local development server with Fast Refresh |
-| `build` | `npm run build` | Create an optimized production build |
-| `start` | `npm run start` | Serve the production build locally |
+| Script  | Command         | Description                                          |
+| ------- | --------------- | ---------------------------------------------------- |
+| `dev`   | `npm run dev`   | Start the local development server with Fast Refresh |
+| `build` | `npm run build` | Create an optimized production build                 |
+| `start` | `npm run start` | Serve the production build locally                   |
 
 ---
 
@@ -447,6 +454,6 @@ No environment variables are required for the base deployment. If future integra
 
 **The 11th Bean** · Tata Silk Farm Road, Basavanagudi, Bengaluru
 
-*He counted ten beans. None were right. Then came the eleventh.*
+_He counted ten beans. None were right. Then came the eleventh._
 
 </div>
