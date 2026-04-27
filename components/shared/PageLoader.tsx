@@ -26,26 +26,28 @@ export function PageLoader() {
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } }}
-            className="w-[60vw] h-[60vw] max-w-sm max-h-[60vh]"
+            className="w-[68vw] h-[68vw] max-w-md max-h-[65vh]"
           >
             <Image
               src="/mascot/namaste.svg"
               alt="The 11th Bean mascot greeting you"
-              width={400}
-              height={400}
+              width={500}
+              height={500}
               priority
               className="w-full h-full object-contain"
             />
           </motion.div>
 
-          {/* Wordmark */}
-          <motion.p
+          {/* Wordmark — width-matched to mascot */}
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1, transition: { delay: 0.35, duration: 0.5 } }}
-            className="mt-6 font-serif italic text-espresso/60 text-xl md:text-2xl tracking-wide"
+            className="w-[68vw] max-w-md flex flex-col items-center gap-1 mt-2"
           >
-            to the 11th bean
-          </motion.p>
+            <p className="font-serif italic text-espresso/55 text-lg md:text-xl tracking-widest w-full text-center">
+              to the 11th bean
+            </p>
+          </motion.div>
 
           {/* Progress bar */}
           <motion.div

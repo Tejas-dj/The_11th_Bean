@@ -42,8 +42,8 @@ export function MenuPreview() {
             <Image
               src="/mascot/empty_cup.svg"
               alt=""
-              width={56}
-              height={56}
+              width={72}
+              height={72}
               className="opacity-55 flex-shrink-0"
               aria-hidden="true"
             />

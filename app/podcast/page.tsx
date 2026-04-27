@@ -48,8 +48,8 @@ export default function PodcastPage() {
                 <Image
                   src="/mascot/podcast_host.svg"
                   alt=""
-                  width={80}
-                  height={80}
+                  width={100}
+                  height={100}
                   className="opacity-70"
                 />
               </div>

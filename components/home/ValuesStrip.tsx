@@ -15,15 +15,15 @@ export function ValuesStrip() {
     >
       {/* Morning mascot — large background decoration, left side */}
       <div
-        className="absolute left-0 bottom-0 w-28 md:w-40 opacity-[0.12] pointer-events-none select-none"
+        className="absolute left-0 bottom-0 w-36 md:w-52 opacity-[0.12] pointer-events-none select-none"
         aria-hidden="true"
       >
         <Image
           src="/mascot/morning.svg"
           alt=""
-          width={160}
-          height={160}
-          className="w-full h-auto"
+          width={208}
+          height={208}
+          className="w-full h-auto animate-mascot-float"
         />
       </div>
 

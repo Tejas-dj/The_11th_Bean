@@ -37,20 +37,20 @@ export function OriginHook() {
             <div className="space-y-6 relative">
               {/* Stressed mascot — floats top-right of the text block */}
               <div
-                className="absolute -top-4 -right-2 w-20 md:w-24 opacity-55 pointer-events-none select-none"
+                className="absolute -top-4 -right-2 w-28 md:w-32 opacity-55 pointer-events-none select-none"
                 aria-hidden="true"
               >
                 <Image
                   src="/mascot/stressed.svg"
                   alt=""
-                  width={96}
-                  height={96}
+                  width={128}
+                  height={128}
                   className="w-full h-auto"
                 />
               </div>
               <h2
                 id="story-hook-heading"
-                className="text-espresso text-3xl md:text-4xl lg:text-[2.6rem] leading-[1.15] tracking-tight"
+                className="text-espresso text-3xl md:text-4xl lg:text-[2.6rem] leading-[1.15] tracking-tight pr-24 md:pr-0 relative z-20"
                 style={{ fontFamily: 'var(--font-lora), Georgia, serif', fontStyle: 'italic' }}
               >
                 Before the first cup, there was a cubicle.

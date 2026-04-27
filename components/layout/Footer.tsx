@@ -47,9 +47,9 @@ export function Footer() {
               <Image
                 src="/mascot/pour_over.svg"
                 alt=""
-                width={64}
-                height={64}
-                className="mb-1"
+                width={84}
+                height={84}
+                className="mb-1 animate-bean-bob"
                 style={{ filter: 'brightness(0) invert(1)', opacity: 0.7 }}
               />
             </div>
@@ -74,7 +74,7 @@ export function Footer() {
                 Bengaluru 560028
               </address>
               <a
-                href="https://maps.google.com/?q=The+11th+Bean,+42+Tata+Silk+Farm,+Basavanagudi,+Bengaluru"
+                href="https://maps.app.goo.gl/fNYWaYGMFMGKJidN8"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block mt-2 text-rattan text-sm link-underline hover:text-rattan"

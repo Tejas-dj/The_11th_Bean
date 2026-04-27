@@ -15,15 +15,15 @@ export function StoryHero() {
 
       {/* Stressed mascot — right side, large faded silhouette sets the "corporate life" mood */}
       <div
-        className="absolute bottom-0 right-4 md:right-16 w-40 md:w-56 pointer-events-none select-none z-[1]"
+        className="absolute bottom-0 right-4 md:right-16 w-52 md:w-72 pointer-events-none select-none z-[1]"
         aria-hidden="true"
         style={{ opacity: 0.22 }}
       >
         <Image
           src="/mascot/stressed.svg"
           alt=""
-          width={224}
-          height={224}
+          width={288}
+          height={288}
           className="w-full h-auto"
           style={{ filter: 'brightness(0) invert(1)' }}
         />

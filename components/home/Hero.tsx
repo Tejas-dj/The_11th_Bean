@@ -26,29 +26,32 @@ export function Hero() {
 
       {/* Hero content */}
       <div className="relative z-[2] text-center px-6 max-w-3xl mx-auto">
+        {/* Location line — fades in first */}
         <motion.p
-          initial={reduced ? {} : { opacity: 0, y: 10 }}
+          initial={reduced ? {} : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="text-cream/70 text-xs tracking-[0.25em] uppercase mb-6 font-sans"
         >
           Basavanagudi · Bengaluru
         </motion.p>
 
+        {/* Main title — cinematic scale + slide up */}
         <motion.h1
-          initial={reduced ? {} : { opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          initial={reduced ? {} : { opacity: 0, y: 36, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 1.1, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
           className="text-cream text-[clamp(3.5rem,10vw,8rem)] leading-[0.9] mb-8 tracking-tight"
           style={{ fontFamily: 'var(--font-lora), Georgia, serif', fontStyle: 'italic' }}
         >
           The 11<sup className="text-[0.35em] not-italic align-super">th</sup>{' '}Bean
         </motion.h1>
 
+        {/* Subtitle — softer fade after title settles */}
         <motion.p
-          initial={reduced ? {} : { opacity: 0, y: 24 }}
+          initial={reduced ? {} : { opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
           className="text-cream/85 text-xl md:text-2xl leading-relaxed max-w-xl mx-auto"
           style={{ fontFamily: 'var(--font-lora), Georgia, serif', fontStyle: 'italic' }}
         >
@@ -58,32 +61,32 @@ export function Hero() {
         </motion.p>
       </div>
 
-      {/* Morning mascot — bottom-right, cream-tinted */}
+      {/* Morning mascot — bottom-right, gently floating */}
       {mounted && !reduced && (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 0.6, y: 0 }}
-          transition={{ duration: 1.2, delay: 1.6, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute bottom-14 right-4 md:right-10 z-[2] w-20 md:w-28 pointer-events-none select-none"
+          initial={{ opacity: 0, y: 28 }}
+          animate={{ opacity: 0.65, y: 0 }}
+          transition={{ duration: 1.4, delay: 1.8, ease: [0.16, 1, 0.3, 1] }}
+          className="absolute bottom-14 right-4 md:right-10 z-[2] w-28 md:w-36 pointer-events-none select-none animate-mascot-float"
           aria-hidden="true"
         >
           <Image
             src="/mascot/morning.svg"
             alt=""
-            width={112}
-            height={112}
+            width={144}
+            height={144}
             className="w-full h-auto"
             style={{ filter: 'brightness(0) invert(1)' }}
           />
         </motion.div>
       )}
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator — delayed until after subtitle appears */}
       {!reduced && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.8 }}
+          transition={{ duration: 1, delay: 2.0 }}
           className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-[2]"
           aria-hidden="true"
         >

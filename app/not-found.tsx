@@ -7,9 +7,9 @@ export default function NotFound() {
       <Image
         src="/mascot/lost.svg"
         alt=""
-        width={160}
-        height={160}
-        className="mb-8 opacity-75"
+        width={200}
+        height={200}
+        className="mb-8 opacity-75 animate-bean-bob"
         aria-hidden="true"
       />
       <p className="text-espresso/30 font-mono text-[10px] tracking-[0.25em] uppercase mb-4">404</p>

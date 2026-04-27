@@ -40,8 +40,8 @@ export function PodcastTeaser() {
                   <Image
                     src="/mascot/podcast_host.svg"
                     alt=""
-                    width={140}
-                    height={140}
+                    width={175}
+                    height={175}
                     className="opacity-55"
                     style={{ filter: 'brightness(0) invert(1)' }}
                   />

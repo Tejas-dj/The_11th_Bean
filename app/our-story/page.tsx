@@ -67,14 +67,14 @@ export default function OurStoryPage() {
         <section aria-labelledby="leap-heading" className="max-w-[1400px] mx-auto px-6 lg:px-10 relative">
           {/* Stressed mascot — floating left, conveys the chaos of the leap */}
           <div
-            className="absolute left-0 top-12 w-16 md:w-20 opacity-55 pointer-events-none select-none"
+            className="absolute left-0 top-12 w-20 md:w-28 opacity-55 pointer-events-none select-none"
             aria-hidden="true"
           >
             <Image
               src="/mascot/stressed.svg"
               alt=""
-              width={80}
-              height={80}
+              width={112}
+              height={112}
               className="w-full h-auto"
             />
           </div>
@@ -134,14 +134,14 @@ export default function OurStoryPage() {
             />
             {/* Chikmagalur mascot — references the sourcing trips mentioned in this section */}
             <div
-              className="absolute bottom-4 left-0 w-16 md:w-20 opacity-60 pointer-events-none select-none"
+              className="absolute bottom-4 left-0 w-20 md:w-28 opacity-60 pointer-events-none select-none"
               aria-hidden="true"
             >
               <Image
                 src="/mascot/Chikmagalur.svg"
                 alt=""
-                width={80}
-                height={80}
+                width={112}
+                height={112}
                 className="w-full h-auto"
               />
             </div>
@@ -190,8 +190,8 @@ export default function OurStoryPage() {
               <Image
                 src="/mascot/blessed.svg"
                 alt=""
-                width={72}
-                height={72}
+                width={96}
+                height={96}
                 className="opacity-60"
               />
             </div>

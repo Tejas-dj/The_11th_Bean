@@ -34,12 +34,12 @@ export default function VisitPage() {
       <section className="px-6 pt-10 pb-16 max-w-[1400px] mx-auto" aria-labelledby="visit-heading">
         <SectionReveal>
           <div className="flex items-start gap-5 md:gap-8">
-            <div className="flex-shrink-0 w-20 md:w-28 mt-1 opacity-70" aria-hidden="true">
+            <div className="flex-shrink-0 w-28 md:w-36 mt-1 opacity-70" aria-hidden="true">
               <Image
                 src="/mascot/namaste.svg"
                 alt=""
-                width={112}
-                height={112}
+                width={144}
+                height={144}
                 className="w-full h-auto"
               />
             </div>
@@ -78,7 +78,7 @@ export default function VisitPage() {
                 Bengaluru 560028
               </address>
               <a
-                href="https://maps.google.com/?q=The+11th+Bean+42+Tata+Silk+Farm+Basavanagudi+Bengaluru"
+                href="https://maps.app.goo.gl/fNYWaYGMFMGKJidN8"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block mt-3 text-caramel text-sm font-medium link-underline hover:text-rattan transition-colors"
@@ -150,7 +150,7 @@ export default function VisitPage() {
               className="w-full rounded-2xl overflow-hidden"
               style={{ height: 'clamp(300px, 50vh, 550px)' }}
             >
-              {/* Google Maps embed — no API key needed for basic embed */}
+              {/* Google Maps embed — pinned to exact location */}
               <iframe
                 title="The 11th Bean location on Google Maps"
                 width="100%"
@@ -158,7 +158,7 @@ export default function VisitPage() {
                 style={{ border: 0, filter: 'sepia(0.3) saturate(1.1) hue-rotate(10deg)' }}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                src="https://maps.google.com/maps?q=Tata+Silk+Farm+Basavanagudi+Bengaluru&output=embed&z=16"
+                src="https://maps.google.com/maps?q=12.936961,77.57711&output=embed&z=17"
                 aria-label="Map showing The 11th Bean location in Basavanagudi, Bengaluru"
               />
             </div>
@@ -215,8 +215,8 @@ export default function VisitPage() {
                 <Image
                   src="/mascot/game_night.svg"
                   alt=""
-                  width={72}
-                  height={72}
+                  width={96}
+                  height={96}
                   className="flex-shrink-0 opacity-75 mt-1"
                   aria-hidden="true"
                 />
@@ -242,8 +242,8 @@ export default function VisitPage() {
                 <Image
                   src="/mascot/pickleball.svg"
                   alt=""
-                  width={72}
-                  height={72}
+                  width={96}
+                  height={96}
                   className="flex-shrink-0 opacity-75 mt-1"
                   aria-hidden="true"
                 />
@@ -274,9 +274,8 @@ export default function VisitPage() {
                 <p className="text-espresso font-medium mb-1">Loved your visit?</p>
                 <p className="text-espresso/55 text-sm">Tell us about it. It helps more people find the cafe.</p>
               </div>
-              {/* TODO: Replace href with real Google Maps review link from Shishir's Google Business Profile */}
               <a
-                href="https://maps.google.com/?q=The+11th+Bean+Basavanagudi"
+                href="https://www.google.com/maps/place/The+11th+Bean+Cafe/@12.936961,77.5745351,17z/data=!3m1!4b1!4m6!3m5!1s0x3bae15ab6ebd6483:0xdc1670ff44fbac9e!8m2!3d12.936961!4d77.57711!16s%2Fg%2F11mk9gnck3?entry=ttu"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-shrink-0 px-6 py-2.5 bg-caramel text-cream text-sm font-medium rounded-full hover:opacity-90 transition-opacity"

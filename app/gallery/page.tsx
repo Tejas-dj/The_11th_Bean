@@ -47,7 +47,7 @@ export default function GalleryPage() {
             >
               A place worth<br />looking at
             </h1>
-            <p className="text-cream/50 text-base md:text-lg max-w-xl leading-relaxed">
+            <p className="text-cream/50 text-base md:text-lg max-w-xl leading-relaxed pr-28 md:pr-0 relative z-20">
               Photographs from the cafe. Real ones, eventually. For now: the light is right, the coffee is going,
               and someone left a book open on table four.
             </p>
@@ -56,14 +56,14 @@ export default function GalleryPage() {
 
         {/* Tasting mascot — bottom-right, cream-tinted */}
         <div
-          className="absolute bottom-0 right-6 md:right-14 z-10 w-24 md:w-32 pointer-events-none select-none"
+          className="absolute bottom-0 right-6 md:right-14 z-10 w-32 md:w-44 pointer-events-none select-none"
           aria-hidden="true"
         >
           <Image
             src="/mascot/tasting.svg"
             alt=""
-            width={128}
-            height={128}
+            width={176}
+            height={176}
             className="w-full h-auto opacity-65"
             style={{ filter: 'brightness(0) invert(1)' }}
           />

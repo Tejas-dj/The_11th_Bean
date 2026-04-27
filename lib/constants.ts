@@ -23,6 +23,6 @@ export const NAV_LINKS = [
   { label: 'The Cafe',   href: '/the-cafe' },
   { label: 'Menu',       href: '/menu' },
   { label: 'Podcast',    href: '/podcast' },
-  { label: 'Watch',      href: '/watch' },
+  { label: 'Events',     href: '/events' },
   { label: 'Gallery',    href: '/gallery' },
 ] as const;

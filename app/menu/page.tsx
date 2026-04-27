@@ -4,21 +4,15 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { MenuTabs }    from '@/components/menu/MenuTabs';
 import { MenuCard }    from '@/components/menu/MenuCard';
-import { ShishirPick } from '@/components/menu/ShishirPick';
 import { SectionReveal } from '@/components/shared/SectionReveal';
 import { menuItems, menuCategories } from '@/data/menu';
 
 type CategoryId = (typeof menuCategories)[number]['id'];
 
 export default function MenuPage() {
-  const [activeCategory, setActiveCategory] = useState<CategoryId>('hot-coffee');
+  const [activeCategory, setActiveCategory] = useState<CategoryId>('signature-brews');
 
-  const filtered = menuItems.filter(
-    (item) => item.category === activeCategory && !item.isShishirsPick
-  );
-
-  // Show flip hint only on the first coffee card with origin reveal
-  const firstOriginIdx = filtered.findIndex((i) => i.hasOriginReveal);
+  const filtered = menuItems.filter((item) => item.category === activeCategory);
 
   return (
     <div className="min-h-screen bg-cream pt-28 pb-20 px-6">
@@ -36,16 +30,16 @@ export default function MenuPage() {
                 Short menu.<br />Every item earned its spot.
               </h1>
               <p className="text-espresso/55 text-base md:text-lg max-w-xl mt-4 leading-relaxed">
-                Everything here exists because Shishir couldn't stop tinkering. Cards with a{' '}
-                <span className="text-caramel">bean icon</span> flip to reveal the origin story.
+                Everything here exists because Shishir couldn't stop tinkering.
+                Customizations available on request.
               </p>
             </div>
-            <div className="flex-shrink-0 w-24 md:w-32 opacity-70 mt-2 hidden sm:block" aria-hidden="true">
+            <div className="flex-shrink-0 w-32 md:w-40 opacity-70 mt-2 hidden sm:block" aria-hidden="true">
               <Image
                 src="/mascot/pour_over.svg"
                 alt=""
-                width={128}
-                height={128}
+                width={160}
+                height={160}
                 className="w-full h-auto"
               />
             </div>
@@ -72,27 +66,24 @@ export default function MenuPage() {
                 <Image
                   src="/mascot/empty_cup.svg"
                   alt=""
-                  width={100}
-                  height={100}
+                  width={130}
+                  height={130}
                   className="opacity-50"
                   aria-hidden="true"
                 />
                 <p className="text-espresso/40 text-base">Nothing here yet. Shishir's still tinkering.</p>
               </div>
             ) : (
-              filtered.map((item, i) => (
+              filtered.map((item) => (
                 <MenuCard
                   key={item.id}
                   item={item}
-                  showFlipHint={i === firstOriginIdx}
+                  showFlipHint={false}
                 />
               ))
             )}
           </motion.div>
         </AnimatePresence>
-
-        {/* Shishir's Pick */}
-        <ShishirPick />
       </div>
     </div>
   );

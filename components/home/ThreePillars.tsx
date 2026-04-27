@@ -37,8 +37,8 @@ export function ThreePillars() {
             <Image
               src="/mascot/pour_over.svg"
               alt=""
-              width={52}
-              height={52}
+              width={68}
+              height={68}
               className="opacity-55"
             />
           </div>

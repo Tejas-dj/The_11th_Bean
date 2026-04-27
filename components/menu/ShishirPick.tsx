@@ -27,8 +27,8 @@ export function ShishirPick() {
                 <Image
                   src="/mascot/tasting.svg"
                   alt=""
-                  width={48}
-                  height={48}
+                  width={64}
+                  height={64}
                   className="opacity-50"
                   style={{ filter: 'brightness(0) invert(1)' }}
                 />

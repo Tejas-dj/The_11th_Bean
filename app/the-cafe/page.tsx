@@ -39,8 +39,8 @@ export default function TheCafePage() {
               <Image
                 src="/mascot/morning.svg"
                 alt=""
-                width={64}
-                height={64}
+                width={84}
+                height={84}
                 className="opacity-65"
               />
             </div>
@@ -99,8 +99,8 @@ export default function TheCafePage() {
                 <Image
                   src="/mascot/game_night.svg"
                   alt=""
-                  width={96}
-                  height={96}
+                  width={124}
+                  height={124}
                   className="opacity-65"
                 />
               </div>

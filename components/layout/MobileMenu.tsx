@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -19,14 +19,22 @@ const SOCIAL_LINKS = [
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const pathname = usePathname();
 
+  const firstRender = useRef(true);
+
   // Lock body scroll while menu is open
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
-  // Close on route change
-  useEffect(() => { onClose(); }, [pathname, onClose]);
+  // Close on route change (skip the initial mount)
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    onClose();
+  }, [pathname, onClose]);
 
   return (
     <AnimatePresence>
@@ -36,7 +44,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-[998] flex flex-col"
+          className="fixed inset-0 z-[1000] flex flex-col"
           style={{ backgroundColor: 'rgba(139,109,74,0.96)' }}
           aria-modal="true"
           role="dialog"
@@ -53,15 +61,15 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
           {/* Namaste mascot — large background decoration, bottom-right */}
           <div
-            className="absolute bottom-20 right-4 w-32 pointer-events-none select-none"
+            className="absolute bottom-20 right-4 w-40 pointer-events-none select-none"
             aria-hidden="true"
             style={{ opacity: 0.18 }}
           >
             <Image
               src="/mascot/namaste.svg"
               alt=""
-              width={128}
-              height={128}
+              width={160}
+              height={160}
               className="w-full h-auto"
               style={{ filter: 'brightness(0) invert(1)' }}
             />

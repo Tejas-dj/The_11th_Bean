@@ -67,13 +67,24 @@ body {
   top: 0;
 }
 
-/* ─── Bean mascot idle animation ─── */
+/* ─── Bean mascot idle float animation ─── */
 @keyframes bean-bob {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-6px); }
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  30%       { transform: translateY(-7px) rotate(-1deg); }
+  70%       { transform: translateY(-4px) rotate(1deg); }
 }
 .animate-bean-bob {
   animation: bean-bob 3s ease-in-out infinite;
+}
+
+/* Alias used in Hero for the morning mascot */
+@keyframes mascot-float {
+  0%, 100% { transform: translateY(0px); }
+  40%       { transform: translateY(-8px); }
+  75%       { transform: translateY(-4px); }
+}
+.animate-mascot-float {
+  animation: mascot-float 4s ease-in-out infinite;
 }
 
 /* ─── Underline draw animation (used on CTA text links) ─── */
@@ -96,8 +107,36 @@ body {
   width: 100%;
 }
 
+/* ─── Upcoming event card: rattan gold pulse glow ─── */
+@keyframes upcoming-glow {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1.5px #C8A96E,
+      0 0 14px rgba(200,169,110,0.30),
+      0 4px 20px rgba(42,35,32,0.08);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1.5px #C8A96E,
+      0 0 28px rgba(200,169,110,0.55),
+      0 8px 28px rgba(42,35,32,0.10);
+  }
+}
+.event-card-upcoming {
+  animation: upcoming-glow 2.8s ease-in-out infinite;
+}
+
+/* Pulsing dot on the "Upcoming" badge */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.45; transform: scale(0.7); }
+}
+.upcoming-dot {
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+
 /* ─── Reduced motion overrides ─── */
 @media (prefers-reduced-motion: reduce) {
-  .animate-bean-bob { animation: none; }
+  .animate-bean-bob, .event-card-upcoming, .upcoming-dot { animation: none; }
   * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }

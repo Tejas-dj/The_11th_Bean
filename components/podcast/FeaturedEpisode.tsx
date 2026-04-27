@@ -32,8 +32,8 @@ export function FeaturedEpisode({ onPlay }: FeaturedEpisodeProps) {
                 <Image
                   src="/mascot/podcast_host.svg"
                   alt=""
-                  width={160}
-                  height={160}
+                  width={200}
+                  height={200}
                   className="opacity-60"
                   style={{ filter: 'brightness(0) invert(1)' }}
                 />

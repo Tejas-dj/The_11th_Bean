@@ -65,14 +65,14 @@ export default function ManifestoPage() {
       >
         {/* Namaste mascot — right side of hero, welcoming before the manifesto */}
         <div
-          className="absolute bottom-0 right-4 md:right-16 w-36 md:w-52 pointer-events-none select-none z-10"
+          className="absolute bottom-0 right-4 md:right-16 w-48 md:w-64 pointer-events-none select-none z-10"
           aria-hidden="true"
         >
           <Image
             src="/mascot/namaste.svg"
             alt=""
-            width={208}
-            height={208}
+            width={256}
+            height={256}
             className="w-full h-auto opacity-50"
             style={{ filter: 'brightness(0) invert(1)' }}
           />
@@ -133,8 +133,8 @@ export default function ManifestoPage() {
               <Image
                 src="/mascot/blessed.svg"
                 alt=""
-                width={88}
-                height={88}
+                width={112}
+                height={112}
                 className="opacity-80"
               />
             </div>

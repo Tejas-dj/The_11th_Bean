@@ -44,7 +44,7 @@ export function NeighborhoodMap() {
                 style={{ border: 0, filter: 'sepia(0.25) saturate(1.15) hue-rotate(8deg) brightness(0.97)' }}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                src="https://maps.google.com/maps?q=Basavanagudi+Bengaluru&output=embed&z=15"
+                src="https://maps.google.com/maps?q=12.936961,77.57711&output=embed&z=16"
                 aria-label="Map of Basavanagudi neighborhood showing The 11th Bean location"
               />
             </div>

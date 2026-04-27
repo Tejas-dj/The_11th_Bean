@@ -15,14 +15,14 @@ export function PodcastHero() {
 
       {/* Podcast host mascot — large, right side */}
       <div
-        className="absolute bottom-0 right-2 md:right-12 z-10 w-44 md:w-64 lg:w-72 pointer-events-none select-none"
+        className="absolute bottom-0 -right-4 md:right-12 z-10 w-44 md:w-80 lg:w-96 pointer-events-none select-none"
         aria-hidden="true"
       >
         <Image
           src="/mascot/podcast_host.svg"
           alt=""
-          width={288}
-          height={288}
+          width={384}
+          height={384}
           className="w-full h-auto opacity-80"
           style={{ filter: 'brightness(0) invert(1)' }}
         />
@@ -49,7 +49,7 @@ export function PodcastHero() {
             Conversations at<br />The 11<sup className="text-2xl not-italic align-super">th</sup> Bean
           </h1>
 
-          <p className="text-cream/55 text-base md:text-lg max-w-xl leading-relaxed">
+          <p className="text-cream/55 text-base md:text-lg max-w-xl leading-relaxed pr-32 md:pr-0 relative z-20">
             {/* TODO: Replace with real podcast description from Shishir */}
             Shishir talks to interesting people over coffee. Sometimes the machine drowns them out.
             Recorded at the cafe, usually on a Tuesday evening.

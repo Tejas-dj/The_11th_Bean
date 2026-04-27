@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -8,11 +8,15 @@ import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { MobileMenu } from './MobileMenu';
 import { NAV_LINKS } from '@/lib/constants';
 
+const LIGHT_BG_ROUTES = ['/menu', '/visit'];
+
 export function Navbar() {
   const pathname = usePathname();
   const scrollDir = useScrollDirection();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
+  const toggleMenu = useCallback(() => setMenuOpen((o) => !o), []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -20,7 +24,8 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const isHidden = scrollDir === 'down' && scrolled;
+  const showBg = scrolled || LIGHT_BG_ROUTES.includes(pathname) || menuOpen;
+  const isHidden = scrollDir === 'down' && scrolled && !menuOpen;
 
   return (
     <>
@@ -30,9 +35,10 @@ export function Navbar() {
         transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         className="fixed top-0 left-0 right-0 z-[999]"
         style={{
-          backgroundColor: scrolled ? 'rgba(139,109,74,0.97)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(8px)' : 'none',
+          backgroundColor: showBg ? 'rgba(139,109,74,0.97)' : 'transparent',
+          backdropFilter: showBg ? 'blur(8px)' : 'none',
           transition: 'background-color 0.4s ease, backdrop-filter 0.4s ease',
+          pointerEvents: 'auto',
         }}
         aria-label="Main navigation"
       >
@@ -88,8 +94,8 @@ export function Navbar() {
 
           {/* Mobile hamburger */}
           <button
-            className="lg:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5 z-[999]"
-            onClick={() => setMenuOpen((o) => !o)}
+            className="lg:hidden relative flex flex-col justify-center items-center w-10 h-10 gap-1.5 z-[1001]"
+            onClick={toggleMenu}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
@@ -100,7 +106,7 @@ export function Navbar() {
       </motion.header>
 
       <div id="mobile-menu">
-        <MobileMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+        <MobileMenu isOpen={menuOpen} onClose={closeMenu} />
       </div>
     </>
   );
@@ -119,8 +125,8 @@ function LogoLockup({ scrolled }: { scrolled: boolean }) {
         <Image
           src="/mascot/blessed.svg"
           alt=""
-          width={46}
-          height={46}
+          width={56}
+          height={56}
           style={{ filter: 'brightness(0) invert(1)' }}
         />
       </motion.div>

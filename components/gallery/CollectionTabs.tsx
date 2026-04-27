@@ -1,5 +1,6 @@
 'use client';
 import { useRef } from 'react';
+import { useNavbarHidden } from '@/hooks/useNavbarHidden';
 import type { GalleryCollection } from '@/data/gallery';
 
 interface CollectionTabsProps {
@@ -10,9 +11,10 @@ interface CollectionTabsProps {
 
 export function CollectionTabs({ collections, active, onChange }: CollectionTabsProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const navHidden = useNavbarHidden();
 
   return (
-    <div className="sticky top-16 lg:top-20 z-40 bg-cream border-b border-sage/20">
+    <div className={`sticky ${navHidden ? 'top-0' : 'top-16 lg:top-20'} z-40 bg-cream border-b border-sage/20 transition-[top] duration-[350ms] ease-[cubic-bezier(0.16,1,0.3,1)]`}>
       <div className="max-w-[1400px] mx-auto px-4 md:px-6">
         {/* Scrollable on mobile, flex on desktop */}
         <div
