@@ -45,7 +45,7 @@ const TOUR_BLOCKS = [
 ] as const;
 
 // Scale-down reveal: image starts at 1.03, settles to 1.0 — feels like "focusing in"
-const scaleReveal = { initial: { opacity: 0, scale: 1.03 }, whileInView: { opacity: 1, scale: 1 }, viewport: { once: true, margin: '-80px' }, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as unknown as string } };
+const scaleReveal = { initial: { opacity: 0, scale: 1.03 }, whileInView: { opacity: 1, scale: 1 }, viewport: { once: true, margin: '-80px' }, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } };
 
 export function InteriorTour() {
   return (
