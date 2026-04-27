@@ -50,11 +50,9 @@ The website is built to reflect that same deliberate, unhurried care:
 
 ---
 
-## Live Site🌐
+## Live Site 🌐
 
-**UNDER DEVELOPMENT🚧**
-
-> **[https://the11thbean.com](https://the11thbean.com)**
+> **[https://the-11th-bean-biz4.vercel.app/](https://the-11th-bean-biz4.vercel.app/)**
 
 ---
 
