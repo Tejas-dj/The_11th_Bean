@@ -24,9 +24,18 @@ export function PodcastTeaser() {
         <SectionReveal delay={0.1}>
           {/* Wide card — caramel inverted bg as per brief */}
           <div
-            className="rounded-2xl overflow-hidden"
+            className="rounded-2xl overflow-hidden relative"
             style={{ backgroundColor: '#8B6D4A' }}
           >
+            {/* Grain texture overlay — coffee-bag tactile feel */}
+            <div
+              className="absolute inset-0 pointer-events-none z-[1] opacity-[0.07]"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+                backgroundSize: '200px 200px',
+              }}
+              aria-hidden="true"
+            />
             <div className="flex flex-col lg:flex-row">
               {/* Episode artwork — 40% on desktop */}
               <div
@@ -94,6 +103,7 @@ export function PodcastTeaser() {
 function InlinePlayer({ duration, episodeId }: { duration: string; episodeId: string }) {
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [hovering, setHovering] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const toggle = useCallback(() => {
@@ -113,19 +123,22 @@ function InlinePlayer({ duration, episodeId }: { duration: string; episodeId: st
     >
       <div className="flex items-center gap-4">
         {/* Play/Pause button */}
-        <button
+        <motion.button
           onClick={toggle}
-          className="w-11 h-11 rounded-full bg-rattan flex items-center justify-center flex-shrink-0 hover:opacity-90 transition-opacity"
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.94 }}
+          className="w-11 h-11 rounded-full bg-rattan flex items-center justify-center flex-shrink-0"
           aria-label={playing ? 'Pause episode' : 'Play episode'}
         >
           {playing ? <PauseIcon /> : <PlayIcon />}
-        </button>
+        </motion.button>
 
-        {/* Progress bar */}
+        {/* Progress bar with thumb */}
         <div className="flex-1 space-y-1">
           <div
-            className="w-full h-1 rounded-full overflow-hidden cursor-pointer"
-            style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}
+            className="relative w-full cursor-pointer py-2 -my-2"
+            onMouseEnter={() => setHovering(true)}
+            onMouseLeave={() => setHovering(false)}
             role="slider"
             aria-label="Seek"
             aria-valuenow={Math.round(progress)}
@@ -136,10 +149,25 @@ function InlinePlayer({ duration, episodeId }: { duration: string; episodeId: st
               setProgress(((e.clientX - rect.left) / rect.width) * 100);
             }}
           >
+            {/* Track */}
             <motion.div
-              className="h-full rounded-full bg-rattan"
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.1 }}
+              className="w-full rounded-full overflow-hidden relative"
+              animate={{ height: hovering ? '8px' : '4px' }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}
+            >
+              <motion.div
+                className="h-full rounded-full bg-rattan"
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.1 }}
+              />
+            </motion.div>
+            {/* Scrubber thumb — visible on hover */}
+            <motion.div
+              className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-rattan shadow-sm pointer-events-none"
+              style={{ left: `calc(${progress}% - 6px)` }}
+              animate={{ opacity: hovering ? 1 : 0, scale: hovering ? 1 : 0.6 }}
+              transition={{ duration: 0.2 }}
             />
           </div>
           <div className="flex justify-between text-cream/40 font-mono text-[11px]">

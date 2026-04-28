@@ -1,9 +1,9 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring, useAnimationControls } from 'framer-motion';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { MobileMenu } from './MobileMenu';
 import { NAV_LINKS } from '@/lib/constants';
@@ -47,14 +47,19 @@ export function Navbar() {
           Skip to main content
         </a>
 
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center justify-between h-16 lg:h-20">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center justify-between overflow-hidden"
+          style={{
+            height: scrolled ? '56px' : '80px',
+            transition: 'height 0.35s cubic-bezier(0.16,1,0.3,1)',
+          }}
+        >
           {/* Logo */}
           <Link
             href="/"
             className="flex-shrink-0 focus-visible:outline-rattan"
             aria-label="The 11th Bean, home"
           >
-            <LogoLockup scrolled={scrolled} />
+            <LogoLockup scrolled={scrolled} pathname={pathname} />
           </Link>
 
           {/* Desktop nav */}
@@ -83,13 +88,7 @@ export function Navbar() {
               );
             })}
 
-            <Link
-              href="/visit"
-              className="ml-4 px-5 py-2 bg-rattan text-espresso text-sm font-semibold rounded-full hover:opacity-90 transition-opacity"
-              aria-current={pathname === '/visit' ? 'page' : undefined}
-            >
-              Visit Us
-            </Link>
+            <MagneticButton href="/visit" active={pathname === '/visit'} />
           </nav>
 
           {/* Mobile hamburger */}
@@ -113,10 +112,24 @@ export function Navbar() {
 }
 
 /* ─── Logo lockup — blessed mascot mark + wordmark ─── */
-function LogoLockup({ scrolled }: { scrolled: boolean }) {
+function LogoLockup({ scrolled, pathname }: { scrolled: boolean; pathname: string }) {
+  const controls = useAnimationControls();
+  const isFirst = useRef(true);
+
+  useEffect(() => {
+    // Skip the very first mount — only animate on subsequent route changes.
+    if (isFirst.current) { isFirst.current = false; return; }
+    controls.start({
+      scale: [1, 1.22, 0.88, 1.08, 1],
+      rotate: [0, -8, 6, -3, 0],
+      transition: { duration: 0.55, ease: 'easeInOut' },
+    });
+  }, [pathname, controls]);
+
   return (
     <span className="flex items-center gap-3 select-none">
       <motion.div
+        animate={controls}
         whileHover={{ rotate: 14, scale: 1.12 }}
         transition={{ type: 'spring', stiffness: 380, damping: 14 }}
         aria-hidden="true"
@@ -161,5 +174,40 @@ function HamburgerIcon({ open, scrolled }: { open: boolean; scrolled: boolean })
         className={`block h-[2px] w-full ${color} rounded-full origin-center`}
       />
     </span>
+  );
+}
+
+/* ─── Magnetic "Visit Us" CTA ─── */
+function MagneticButton({ href, active }: { href: string; active: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const sx = useSpring(x, { stiffness: 200, damping: 18 });
+  const sy = useSpring(y, { stiffness: 200, damping: 18 });
+
+  const handleMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    x.set((e.clientX - rect.left - rect.width / 2) * 0.35);
+    y.set((e.clientY - rect.top - rect.height / 2) * 0.35);
+  }, [x, y]);
+
+  const handleLeave = useCallback(() => {
+    x.set(0);
+    y.set(0);
+  }, [x, y]);
+
+  return (
+    <div ref={ref} onMouseMove={handleMove} onMouseLeave={handleLeave} className="ml-4">
+      <motion.div style={{ x: sx, y: sy }}>
+        <Link
+          href={href}
+          className="inline-block px-5 py-2 bg-rattan text-espresso text-sm font-semibold rounded-full hover:opacity-90 transition-opacity"
+          aria-current={active ? 'page' : undefined}
+        >
+          Visit Us
+        </Link>
+      </motion.div>
+    </div>
   );
 }

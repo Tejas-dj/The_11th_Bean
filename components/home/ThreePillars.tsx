@@ -1,5 +1,5 @@
 'use client';
-import { useRef } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { SectionReveal } from '@/components/shared/SectionReveal';
@@ -67,12 +67,28 @@ export function ThreePillars() {
 type Pillar = (typeof PILLARS)[number];
 
 function PillarCard({ pillar }: { pillar: Pillar }) {
+  const cardRef = useRef<HTMLElement>(null);
+  const [spotlight, setSpotlight] = useState({ x: 50, y: 50 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    setSpotlight({
+      x: ((e.clientX - rect.left) / rect.width) * 100,
+      y: ((e.clientY - rect.top) / rect.height) * 100,
+    });
+  }, []);
+
   return (
     <motion.article
+      ref={cardRef}
       whileHover="hovered"
       initial="idle"
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className="group relative overflow-hidden flex flex-col justify-end min-h-[420px] cursor-default"
-      // Arch top border-radius — mirrors the cafe's physical alcove shape
       style={{ borderRadius: '110px 110px 16px 16px' }}
       aria-label={pillar.title}
     >
@@ -89,6 +105,17 @@ function PillarCard({ pillar }: { pillar: Pillar }) {
         </div>
       </div>
 
+      {/* Cursor spotlight — radial glow that follows the mouse */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none z-[1]"
+        animate={{ opacity: isHovered ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
+        style={{
+          background: `radial-gradient(circle 180px at ${spotlight.x}% ${spotlight.y}%, rgba(255,255,255,0.12) 0%, transparent 70%)`,
+        }}
+        aria-hidden="true"
+      />
+
       {/* Sage wash — clears on hover to reveal the image */}
       <motion.div
         className="absolute inset-0 bg-sage/55"
@@ -100,22 +127,39 @@ function PillarCard({ pillar }: { pillar: Pillar }) {
       {/* Gradient for text readability */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: 'linear-gradient(to top, rgba(42,35,32,0.75) 0%, transparent 55%)' }}
+        style={{ background: 'linear-gradient(to top, rgba(42,35,32,0.80) 0%, rgba(42,35,32,0.20) 55%, transparent 100%)' }}
         aria-hidden="true"
       />
 
-      {/* Content */}
-      <div className="relative z-10 p-8">
-        <h3
+      {/* Content — slides up on hover */}
+      <motion.div
+        className="relative z-10 p-8"
+        variants={{
+          idle:    { y: 0 },
+          hovered: { y: -10 },
+        }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <motion.h3
           className="text-cream text-2xl font-medium mb-3"
           style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}
+          variants={{
+            idle:    { opacity: 0.9 },
+            hovered: { opacity: 1 },
+          }}
         >
           {pillar.title}
-        </h3>
-        <p className="text-cream/80 text-sm leading-relaxed">{pillar.body}</p>
-      </div>
-
-      {/* Scale sibling cards on hover — handled by group context in the parent grid */}
+        </motion.h3>
+        <motion.p
+          className="text-cream/80 text-sm leading-relaxed"
+          variants={{
+            idle:    { opacity: 0.75 },
+            hovered: { opacity: 1 },
+          }}
+        >
+          {pillar.body}
+        </motion.p>
+      </motion.div>
     </motion.article>
   );
 }

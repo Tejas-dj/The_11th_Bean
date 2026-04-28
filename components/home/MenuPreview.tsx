@@ -115,12 +115,24 @@ function MenuCard({ item, active, onClick }: { item: MenuItem; active: boolean; 
   return (
     <motion.div
       role="listitem"
-      animate={{ opacity: active ? 1 : 0.65, scale: active ? 1 : 0.95 }}
-      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      animate={{
+        opacity: active ? 1 : 0.6,
+        scale: active ? 1 : 0.94,
+        filter: active ? 'blur(0px)' : 'blur(1.5px)',
+      }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
       onClick={onClick}
       className="snap-center flex-shrink-0 cursor-pointer w-[280px] md:w-[300px]"
     >
-      <div className="bg-cream-light rounded-2xl overflow-hidden border border-sage/30 shadow-sm">
+      <motion.div
+        animate={{
+          boxShadow: active
+            ? '0 8px 32px rgba(139,109,74,0.22), 0 2px 8px rgba(42,35,32,0.08)'
+            : '0 1px 4px rgba(42,35,32,0.06)',
+        }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        className="bg-cream-light rounded-2xl overflow-hidden border border-sage/30"
+      >
         {/* Square image placeholder */}
         {/* TODO: Replace with real item photo from Shishir */}
         <div
@@ -150,16 +162,19 @@ function MenuCard({ item, active, onClick }: { item: MenuItem; active: boolean; 
             <span className="font-mono text-sm text-espresso/50 ml-2">₹{item.price}</span>
           </div>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 }
 
 function ArrowBtn({ dir, onClick, hidden }: { dir: 'left' | 'right'; onClick: () => void; hidden: boolean }) {
   return (
-    <button
+    <motion.button
       onClick={onClick}
-      className={`absolute top-[40%] z-10 w-10 h-10 rounded-full bg-cream shadow-md border border-sage/30 flex items-center justify-center transition-opacity duration-200 hover:border-rattan ${hidden ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${dir === 'left' ? 'left-4' : 'right-4'}`}
+      whileHover={{ scale: 1.12, backgroundColor: 'var(--c-rattan)', color: 'var(--c-cream)' }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ type: 'spring', stiffness: 380, damping: 18 }}
+      className={`absolute top-[40%] z-10 w-10 h-10 rounded-full bg-cream shadow-md border border-sage/30 flex items-center justify-center transition-opacity duration-200 ${hidden ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${dir === 'left' ? 'left-4' : 'right-4'}`}
       aria-label={dir === 'left' ? 'Previous item' : 'Next item'}
     >
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -168,6 +183,6 @@ function ArrowBtn({ dir, onClick, hidden }: { dir: 'left' | 'right'; onClick: ()
           stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
         />
       </svg>
-    </button>
+    </motion.button>
   );
 }

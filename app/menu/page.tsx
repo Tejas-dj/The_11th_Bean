@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { MenuTabs }    from '@/components/menu/MenuTabs';
@@ -11,6 +11,20 @@ type CategoryId = (typeof menuCategories)[number]['id'];
 
 export default function MenuPage() {
   const [activeCategory, setActiveCategory] = useState<CategoryId>('signature-brews');
+  const [tabsFloating, setTabsFloating] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  // Shadow appears on the sticky tab bar as soon as it detaches from the header
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setTabsFloating(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '-1px 0px 0px 0px' }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   const filtered = menuItems.filter((item) => item.category === activeCategory);
 
@@ -46,10 +60,18 @@ export default function MenuPage() {
           </div>
         </SectionReveal>
 
-        {/* Category tabs */}
+        {/* Sentinel — sits just above the tab bar, observed by IntersectionObserver */}
+        <div ref={sentinelRef} className="h-px" aria-hidden="true" />
+
+        {/* Category tabs — sticky with floating shadow */}
+        <div
+          className="sticky top-16 lg:top-14 z-30 bg-cream transition-shadow duration-300"
+          style={{ boxShadow: tabsFloating ? '0 4px 16px rgba(42,35,32,0.08)' : 'none' }}
+        >
         <SectionReveal delay={0.1} className="mb-10">
           <MenuTabs active={activeCategory} onChange={setActiveCategory} />
         </SectionReveal>
+        </div>
 
         {/* Items grid — crossfade on category change */}
         <AnimatePresence mode="wait">

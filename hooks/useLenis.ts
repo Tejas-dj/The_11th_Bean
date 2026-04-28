@@ -7,8 +7,16 @@ export function useLenis() {
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      // lerp is the sole easing controller — DO NOT set duration alongside it,
+      // as duration overrides lerp and causes rapid trackpad input to queue up
+      // and freeze. 0.1 = 10% of remaining distance per frame = smooth glide.
+      lerp: 0.1,
+      // Reduce wheel overshoot on trackpads (default 1.0 is too aggressive).
+      wheelMultiplier: 0.85,
+      // Touch-like trackpad gestures need a slightly higher multiplier.
+      touchMultiplier: 1.8,
+      // Ensures Lenis respects native scroll inertia on trackpads.
+      syncTouch: false,
     });
 
     lenisRef.current = lenis;

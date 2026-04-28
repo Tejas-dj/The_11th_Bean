@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, LayoutGroup } from 'framer-motion';
 import { useNavbarHidden } from '@/hooks/useNavbarHidden';
 import { SectionReveal } from '@/components/shared/SectionReveal';
 import { events } from '@/data/events';
@@ -55,6 +55,7 @@ export default function EventsPage() {
       </section>
 
       {/* Sticky Tabs */}
+      <LayoutGroup id="events-tabs">
       <div className={`sticky ${navHidden ? 'top-0' : 'top-16 lg:top-20'} z-40 bg-cream border-b border-sage/20 transition-[top] duration-[350ms] ease-[cubic-bezier(0.16,1,0.3,1)]`}>
         <div className="max-w-[1400px] mx-auto px-4 md:px-6">
           <div className="flex gap-0 overflow-x-auto" role="tablist" aria-label="Event categories">
@@ -65,13 +66,22 @@ export default function EventsPage() {
                   className="relative flex-shrink-0 px-4 md:px-5 py-4 text-xs md:text-sm transition-colors whitespace-nowrap"
                   style={{ color: isActive ? 'var(--c-espresso)' : 'rgba(42,35,32,0.45)', fontFamily: isActive ? 'var(--font-lora), Georgia, serif' : undefined, fontStyle: isActive ? 'italic' : undefined }}>
                   {tab.label}
-                  {isActive && <span className="absolute bottom-0 left-4 right-4 h-[2px] rounded-full" style={{ backgroundColor: 'var(--c-rattan)' }} />}
+                  {/* Animated sliding pill underline */}
+                  {isActive && (
+                    <motion.span
+                      layoutId="events-tab-pill"
+                      className="absolute bottom-0 left-2 right-2 h-[2px] rounded-full"
+                      style={{ backgroundColor: 'var(--c-rattan)' }}
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
                 </button>
               );
             })}
           </div>
         </div>
       </div>
+      </LayoutGroup>
 
       {/* Grid */}
       <section className="px-4 md:px-6 py-12 bg-cream" aria-label="Event listings">
