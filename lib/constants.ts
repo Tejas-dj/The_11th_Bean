@@ -20,9 +20,9 @@ export const BREAKPOINTS = {
 export const NAV_LINKS = [
   { label: 'Home',       href: '/' },
   { label: 'Our Story',  href: '/our-story' },
-  { label: 'The Cafe',   href: '/the-cafe' },
   { label: 'Menu',       href: '/menu' },
-  { label: 'Podcast',    href: '/podcast' },
   { label: 'Events',     href: '/events' },
+  { label: 'The Cafe',   href: '/the-cafe' },
+  { label: 'Podcast',    href: '/podcast' },
   { label: 'Gallery',    href: '/gallery' },
 ] as const;
