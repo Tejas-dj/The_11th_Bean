@@ -17,12 +17,21 @@ export const BREAKPOINTS = {
   desktop: 1440,
 } as const;
 
-export const NAV_LINKS = [
-  { label: 'Home',        href: '/' },
-  { label: 'Our Story',   href: '/our-story' },
-  { label: 'Menu',        href: '/menu' },
-  { label: 'Events',      href: '/events' },
-  { label: 'The Cafe',    href: '/the-cafe' },
-  { label: 'Podcast',     href: '/podcast' },
-  { label: 'The Circle',  href: '/the-circle' },
-] as const;
+export type SimpleNavLink    = { type: 'link';     label: string; href: string }
+export type DropdownNavGroup = { type: 'dropdown'; label: string; children: { label: string; href: string }[] }
+export type NavItem = SimpleNavLink | DropdownNavGroup
+
+export const NAV_LINKS: NavItem[] = [
+  { type: 'link',     label: 'Home',      href: '/' },
+  { type: 'dropdown', label: 'About',     children: [
+    { label: 'Our Story', href: '/our-story' },
+    { label: 'The Cafe',  href: '/the-cafe'  },
+  ]},
+  { type: 'link',     label: 'Menu',      href: '/menu' },
+  { type: 'link',     label: 'Events',    href: '/events' },
+  { type: 'dropdown', label: 'Community', children: [
+    { label: 'Podcast',    href: '/podcast'    },
+    { label: 'The Circle', href: '/the-circle' },
+    { label: 'Blog',       href: '/blog'       },
+  ]},
+]

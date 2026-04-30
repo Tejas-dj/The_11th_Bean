@@ -6,15 +6,17 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence, useMotionValue, useSpring, useAnimationControls } from 'framer-motion';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { MobileMenu } from './MobileMenu';
-import { NAV_LINKS } from '@/lib/constants';
+import { NAV_LINKS, type NavItem } from '@/lib/constants';
 
 const LIGHT_BG_ROUTES = ['/menu', '/visit'];
+const LIGHT_BG_PREFIXES = ['/blog'];
 
 export function Navbar() {
   const pathname = usePathname();
   const scrollDir = useScrollDirection();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const closeMenu = useCallback(() => setMenuOpen(false), []);
   const toggleMenu = useCallback(() => setMenuOpen((o) => !o), []);
 
@@ -24,7 +26,7 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const showBg = scrolled || LIGHT_BG_ROUTES.includes(pathname) || menuOpen;
+  const showBg = scrolled || LIGHT_BG_ROUTES.includes(pathname) || LIGHT_BG_PREFIXES.some(p => pathname.startsWith(p)) || menuOpen;
   const isHidden = scrollDir === 'down' && scrolled && !menuOpen;
 
   return (
@@ -47,7 +49,8 @@ export function Navbar() {
           Skip to main content
         </a>
 
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center justify-between overflow-hidden"
+        <div
+          className="max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center justify-between overflow-visible"
           style={{
             height: scrolled ? '56px' : '80px',
             transition: 'height 0.35s cubic-bezier(0.16,1,0.3,1)',
@@ -67,24 +70,36 @@ export function Navbar() {
             className="hidden lg:flex items-center gap-8"
             aria-label="Site navigation"
           >
-            {NAV_LINKS.map((link) => {
-              const active = pathname === link.href;
+            {NAV_LINKS.map((item) => {
+              if (item.type === 'link') {
+                const active = pathname === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="relative text-cream/90 hover:text-cream text-sm font-medium tracking-wide transition-colors duration-200 pb-1"
+                    aria-current={active ? 'page' : undefined}
+                  >
+                    {item.label}
+                    {active && (
+                      <motion.span
+                        layoutId="nav-dot"
+                        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-rattan"
+                      />
+                    )}
+                  </Link>
+                );
+              }
+
               return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="relative text-cream/90 hover:text-cream text-sm font-medium tracking-wide transition-colors duration-200 pb-1"
-                  aria-current={active ? 'page' : undefined}
-                >
-                  {link.label}
-                  {/* Active dot */}
-                  {active && (
-                    <motion.span
-                      layoutId="nav-dot"
-                      className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-rattan"
-                    />
-                  )}
-                </Link>
+                <DesktopDropdown
+                  key={item.label}
+                  item={item}
+                  pathname={pathname}
+                  isOpen={openDropdown === item.label}
+                  onOpen={() => setOpenDropdown(item.label)}
+                  onClose={() => setOpenDropdown(null)}
+                />
               );
             })}
 
@@ -111,13 +126,96 @@ export function Navbar() {
   );
 }
 
+/* ─── Desktop dropdown group ─── */
+function DesktopDropdown({
+  item,
+  pathname,
+  isOpen,
+  onOpen,
+  onClose,
+}: {
+  item: Extract<NavItem, { type: 'dropdown' }>;
+  pathname: string;
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}) {
+  const isChildActive = item.children.some((c) => pathname === c.href);
+
+  return (
+    <div
+      className="relative"
+      onMouseEnter={onOpen}
+      onMouseLeave={onClose}
+    >
+      {/* Trigger */}
+      <button
+        className="relative flex items-center gap-1 text-cream/90 hover:text-cream text-sm font-medium tracking-wide transition-colors duration-200 pb-1 cursor-default"
+        aria-haspopup="true"
+        aria-expanded={isOpen}
+      >
+        {item.label}
+        {/* Chevron */}
+        <motion.svg
+          width="10"
+          height="6"
+          viewBox="0 0 10 6"
+          fill="none"
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="text-cream/70"
+        >
+          <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </motion.svg>
+        {/* Active dot when a child route is current */}
+        {isChildActive && (
+          <motion.span
+            layoutId="nav-dot"
+            className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-rattan"
+          />
+        )}
+      </button>
+
+      {/* Dropdown panel */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute top-full left-0 mt-2 min-w-[160px] py-2 rounded-lg z-50"
+            style={{
+              backgroundColor: 'rgba(42,35,32,0.97)',
+              backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(200,169,110,0.2)',
+            }}
+            role="menu"
+          >
+            {item.children.map((child) => (
+              <Link
+                key={child.href}
+                href={child.href}
+                role="menuitem"
+                className="block px-4 py-2 text-sm text-cream/80 hover:text-rattan transition-colors duration-150"
+                aria-current={pathname === child.href ? 'page' : undefined}
+              >
+                {child.label}
+              </Link>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 /* ─── Logo lockup — official Main_Logo.svg with route-change bounce + hover spring ─── */
 function LogoLockup({ scrolled, pathname }: { scrolled: boolean; pathname: string }) {
   const controls = useAnimationControls();
   const isFirst = useRef(true);
 
   useEffect(() => {
-    // Skip the very first mount — only animate on subsequent route changes.
     if (isFirst.current) { isFirst.current = false; return; }
     controls.start({
       scale: [1, 1.22, 0.88, 1.08, 1],

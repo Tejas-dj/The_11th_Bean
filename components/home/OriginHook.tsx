@@ -17,7 +17,7 @@ export function OriginHook() {
     // Slight background warmth shift signals the story section
     <section
       ref={sectionRef}
-      className="py-20 lg:py-28 px-6"
+      className="py-20 lg:py-28 px-6 overflow-hidden"
       style={{ backgroundColor: '#EAE0CE' }}
       aria-labelledby="story-hook-heading"
     >
@@ -51,31 +51,34 @@ export function OriginHook() {
           {/* Text — 45% on desktop */}
           <SectionReveal direction="right" delay={0.1} className="w-full lg:w-[45%]">
             <div className="space-y-6 relative">
-              {/* Stressed mascot — hover jiggles to show personality */}
-              <motion.div
-                className="absolute -top-4 -right-2 w-28 md:w-32 opacity-55 select-none cursor-default"
-                aria-hidden="true"
-                whileHover={{
-                  rotate: [0, -8, 8, -6, 6, 0],
-                  scale: [1, 1.05, 1.05, 1.05, 1.05, 1],
-                  transition: { duration: 0.5, ease: 'easeInOut' },
-                }}
-              >
-                <Image
-                  src="/mascot/stressed.svg"
-                  alt=""
-                  width={128}
-                  height={128}
-                  className="w-full h-auto"
-                />
-              </motion.div>
-              <h2
-                id="story-hook-heading"
-                className="text-espresso text-3xl md:text-4xl lg:text-[2.6rem] leading-[1.15] tracking-tight pr-24 md:pr-0 relative z-20"
-                style={{ fontFamily: 'var(--font-lora), Georgia, serif', fontStyle: 'italic' }}
-              >
-                Before this café, life looked very different.
-              </h2>
+              {/* Heading + mascot row — on mobile mascot sits inline to the right of the title */}
+              <div className="flex items-start gap-3">
+                <h2
+                  id="story-hook-heading"
+                  className="flex-1 text-espresso text-3xl md:text-4xl lg:text-[2.6rem] leading-[1.15] tracking-tight relative z-20"
+                  style={{ fontFamily: 'var(--font-lora), Georgia, serif', fontStyle: 'italic' }}
+                >
+                  Before this café, life looked very different.
+                </h2>
+                {/* Stressed mascot — hover jiggles to show personality */}
+                <motion.div
+                  className="flex-shrink-0 w-20 md:w-28 lg:w-32 opacity-55 select-none cursor-default self-start"
+                  aria-hidden="true"
+                  whileHover={{
+                    rotate: [0, -8, 8, -6, 6, 0],
+                    scale: [1, 1.05, 1.05, 1.05, 1.05, 1],
+                    transition: { duration: 0.5, ease: 'easeInOut' },
+                  }}
+                >
+                  <Image
+                    src="/mascot/stressed.svg"
+                    alt=""
+                    width={128}
+                    height={128}
+                    className="w-full h-auto"
+                  />
+                </motion.div>
+              </div>
 
               <p className="text-espresso/70 text-base md:text-lg leading-relaxed">
                 I spent over 15 years in the IT industry, working across India, France and Germany. It was stable, structured and rewarding in many ways.

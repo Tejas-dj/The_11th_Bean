@@ -1,10 +1,10 @@
 'use client';
-import { useRef, useState, useCallback } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
 import { SectionReveal } from '@/components/shared/SectionReveal';
 import { latestEpisode } from '@/data/episodes';
+
+// YouTube video ID for the latest episode
+const YOUTUBE_VIDEO_ID = 'ndgXfaAHD9g';
 
 export function PodcastTeaser() {
   return (
@@ -37,31 +37,24 @@ export function PodcastTeaser() {
               aria-hidden="true"
             />
             <div className="flex flex-col lg:flex-row">
-              {/* Episode artwork — 40% on desktop */}
-              <div
-                className="w-full lg:w-[40%] aspect-square lg:aspect-auto lg:min-h-[340px] flex items-center justify-center"
-                style={{ backgroundColor: '#7A5E3A' }}
-                role="img"
-                aria-label="Podcast episode artwork — placeholder"
-              >
-                {/* TODO: Replace with real episode artwork or recording still from Shishir */}
-                <div className="flex flex-col items-center justify-center h-full p-8 gap-3">
-                  <Image
-                    src="/mascot/podcast_host.svg"
-                    alt=""
-                    width={175}
-                    height={175}
-                    className="opacity-55"
-                    style={{ filter: 'brightness(0) invert(1)' }}
-                  />
-                  <p className="text-xs uppercase tracking-widest text-cream/30">Episode artwork</p>
-                </div>
+              {/* YouTube embed — 45% on desktop, full width + aspect-video on mobile */}
+              <div className="w-full lg:w-[45%] flex-shrink-0 bg-black aspect-video lg:aspect-auto lg:min-h-[320px]">
+                <iframe
+                  className="w-full h-full"
+                  style={{ minHeight: '220px', display: 'block' }}
+                  src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?si=5mMbN0tm6i4BKef8`}
+                  title={latestEpisode.title}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                />
               </div>
 
-              {/* Content — 60% on desktop */}
-              <div className="w-full lg:w-[60%] p-8 lg:p-10 flex flex-col justify-between gap-8">
+              {/* Content — 55% on desktop */}
+              <div className="w-full lg:w-[55%] p-8 lg:p-10 flex flex-col justify-between gap-8">
                 <div className="space-y-4">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 flex-wrap">
                     <span className="text-rattan text-xs font-mono">
                       EP. {String(latestEpisode.number).padStart(2, '0')}
                     </span>
@@ -69,6 +62,9 @@ export function PodcastTeaser() {
                     <span className="text-cream/50 text-xs">
                       {new Date(latestEpisode.date).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}
                     </span>
+                    {latestEpisode.isLatest && (
+                      <span className="text-[10px] bg-red-800/80 text-cream px-2 py-0.5 rounded-full">New</span>
+                    )}
                   </div>
 
                   <h3
@@ -81,9 +77,10 @@ export function PodcastTeaser() {
                   <p className="text-cream/70 text-sm leading-relaxed">
                     {latestEpisode.description}
                   </p>
+                  {latestEpisode.guest && (
+                    <p className="text-rattan text-xs">With {latestEpisode.guest}</p>
+                  )}
                 </div>
-
-                <InlinePlayer duration={latestEpisode.duration} episodeId={latestEpisode.id} />
 
                 <Link
                   href="/podcast"
@@ -97,113 +94,5 @@ export function PodcastTeaser() {
         </SectionReveal>
       </div>
     </section>
-  );
-}
-
-function InlinePlayer({ duration, episodeId }: { duration: string; episodeId: string }) {
-  const [playing, setPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [hovering, setHovering] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const toggle = useCallback(() => {
-    // TODO: Wire to real audio URL from Shishir's podcast
-    setPlaying((p) => !p);
-  }, []);
-
-  const [mins, secs] = duration.split(':');
-  const currentSecs = Math.floor((progress / 100) * (parseInt(mins) * 60 + parseInt(secs)));
-  const display = `${String(Math.floor(currentSecs / 60)).padStart(2, '0')}:${String(currentSecs % 60).padStart(2, '0')}`;
-
-  return (
-    <div
-      className="space-y-3"
-      role="region"
-      aria-label={`Audio player for episode`}
-    >
-      <div className="flex items-center gap-4">
-        {/* Play/Pause button */}
-        <motion.button
-          onClick={toggle}
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.94 }}
-          className="w-11 h-11 rounded-full bg-rattan flex items-center justify-center flex-shrink-0"
-          aria-label={playing ? 'Pause episode' : 'Play episode'}
-        >
-          {playing ? <PauseIcon /> : <PlayIcon />}
-        </motion.button>
-
-        {/* Progress bar with thumb */}
-        <div className="flex-1 space-y-1">
-          <div
-            className="relative w-full cursor-pointer py-2 -my-2"
-            onMouseEnter={() => setHovering(true)}
-            onMouseLeave={() => setHovering(false)}
-            role="slider"
-            aria-label="Seek"
-            aria-valuenow={Math.round(progress)}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            onClick={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              setProgress(((e.clientX - rect.left) / rect.width) * 100);
-            }}
-          >
-            {/* Track */}
-            <motion.div
-              className="w-full rounded-full overflow-hidden relative"
-              animate={{ height: hovering ? '8px' : '4px' }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
-              style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}
-            >
-              <motion.div
-                className="h-full rounded-full bg-rattan"
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.1 }}
-              />
-            </motion.div>
-            {/* Scrubber thumb — visible on hover */}
-            <motion.div
-              className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-rattan shadow-sm pointer-events-none"
-              style={{ left: `calc(${progress}% - 6px)` }}
-              animate={{ opacity: hovering ? 1 : 0, scale: hovering ? 1 : 0.6 }}
-              transition={{ duration: 0.2 }}
-            />
-          </div>
-          <div className="flex justify-between text-cream/40 font-mono text-[11px]">
-            <span aria-live="polite">{display}</span>
-            <span>{duration}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function PlayIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-      <path d="M3 2L12 7L3 12V2Z" fill="#2A2320" />
-    </svg>
-  );
-}
-
-function PauseIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-      <rect x="2" y="2" width="4" height="10" rx="1" fill="#2A2320" />
-      <rect x="8" y="2" width="4" height="10" rx="1" fill="#2A2320" />
-    </svg>
-  );
-}
-
-function MicIcon() {
-  return (
-    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-cream/40" aria-hidden="true">
-      <rect x="9" y="2" width="6" height="12" rx="3"/>
-      <path d="M5 10a7 7 0 0 0 14 0"/>
-      <line x1="12" y1="19" x2="12" y2="22"/>
-      <line x1="8" y1="22" x2="16" y2="22"/>
-    </svg>
   );
 }

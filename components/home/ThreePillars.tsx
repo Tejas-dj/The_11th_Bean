@@ -37,6 +37,7 @@ export function ThreePillars() {
               width={68}
               height={68}
               className="opacity-55"
+              style={{ width: '68px', height: 'auto' }}
             />
           </div>
           <h2

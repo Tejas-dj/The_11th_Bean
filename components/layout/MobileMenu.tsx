@@ -1,10 +1,10 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
-import { NAV_LINKS } from '@/lib/constants';
+import { NAV_LINKS, type NavItem } from '@/lib/constants';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -18,8 +18,8 @@ const SOCIAL_LINKS = [
 
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const pathname = usePathname();
-
   const firstRender = useRef(true);
+  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
 
   // Lock body scroll while menu is open
   useEffect(() => {
@@ -27,14 +27,24 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
-  // Close on route change (skip the initial mount)
+  // Close on route change (skip the initial mount); also reset accordion
   useEffect(() => {
     if (firstRender.current) {
       firstRender.current = false;
       return;
     }
     onClose();
+    setOpenAccordion(null);
   }, [pathname, onClose]);
+
+  // Reset accordion when the menu is closed
+  useEffect(() => {
+    if (!isOpen) setOpenAccordion(null);
+  }, [isOpen]);
+
+  const toggleAccordion = (label: string) => {
+    setOpenAccordion((prev) => (prev === label ? null : label));
+  };
 
   return (
     <AnimatePresence>
@@ -76,26 +86,93 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           </div>
 
           {/* Nav items */}
-          <nav className="flex-1 flex flex-col items-center justify-center gap-2 px-8">
-            {NAV_LINKS.map((link, i) => (
-              <motion.div
-                key={link.href}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ delay: 0.05 + i * 0.08, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <Link
-                  href={link.href}
-                  onClick={onClose}
-                  className="block text-cream text-4xl font-serif font-medium tracking-tight py-3 hover:text-rattan transition-colors duration-200"
-                  style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}
-                  aria-current={pathname === link.href ? 'page' : undefined}
+          <nav className="flex-1 flex flex-col items-center justify-center gap-1 px-8">
+            {NAV_LINKS.map((item, i) => {
+              if (item.type === 'link') {
+                return (
+                  <motion.div
+                    key={item.href}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    transition={{ delay: 0.05 + i * 0.08, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <Link
+                      href={item.href}
+                      onClick={onClose}
+                      className="block text-center text-cream text-4xl font-serif font-medium tracking-tight py-3 hover:text-rattan transition-colors duration-200"
+                      style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}
+                      aria-current={pathname === item.href ? 'page' : undefined}
+                    >
+                      {item.label}
+                    </Link>
+                  </motion.div>
+                );
+              }
+
+              // Dropdown → accordion
+              const isOpen = openAccordion === item.label;
+              const isChildActive = item.children.some((c) => pathname === c.href);
+
+              return (
+                <motion.div
+                  key={item.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ delay: 0.05 + i * 0.08, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  className="w-full max-w-[280px]"
                 >
-                  {link.label}
-                </Link>
-              </motion.div>
-            ))}
+                  <button
+                    onClick={() => toggleAccordion(item.label)}
+                    className="flex items-center justify-center gap-3 text-cream text-4xl font-serif font-medium tracking-tight py-3 hover:text-rattan transition-colors duration-200 w-full text-center"
+                    style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}
+                    aria-expanded={isOpen}
+                  >
+                    <span className={isChildActive ? 'text-rattan' : ''}>{item.label}</span>
+                    {/* Chevron */}
+                    <motion.svg
+                      width="16"
+                      height="10"
+                      viewBox="0 0 10 6"
+                      fill="none"
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                      className="text-cream/70 mt-1 flex-shrink-0"
+                    >
+                      <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </motion.svg>
+                  </button>
+
+                  {/* Accordion children */}
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                        style={{ overflow: 'hidden' }}
+                      >
+                        <div className="pb-2 flex flex-col items-center gap-1">
+                          {item.children.map((child) => (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              onClick={onClose}
+                              className="block text-center text-xl font-sans text-cream/80 hover:text-rattan py-2 transition-colors duration-200"
+                              aria-current={pathname === child.href ? 'page' : undefined}
+                            >
+                              {child.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              );
+            })}
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}

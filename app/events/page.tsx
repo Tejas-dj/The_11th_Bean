@@ -292,11 +292,11 @@ function EventModal({ event, onClose }: { event: EventEntry; onClose: () => void
         initial={{ opacity: 0, scale: 0.93, y: 28 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.93, y: 28 }}
         transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-4xl max-h-[90vh] rounded-2xl overflow-hidden flex flex-col md:flex-row"
+        className="w-full max-w-4xl max-h-[92vh] rounded-2xl overflow-hidden overflow-x-hidden flex flex-col md:flex-row"
         style={{ backgroundColor: '#F2E8D9' }}
       >
         {/* ── LEFT: Poster panel ── */}
-        <div className="relative flex-shrink-0 w-full md:w-[42%] h-72 md:h-auto overflow-hidden" style={{ backgroundColor: event.accentColor }}>
+        <div className="relative flex-shrink-0 w-full md:w-[42%] h-56 md:h-auto overflow-hidden" style={{ backgroundColor: event.accentColor }}>
           {/* Grain fallback texture */}
           <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: GRAIN, backgroundSize: '200px 200px' }} aria-hidden="true" />
 
@@ -339,7 +339,7 @@ function EventModal({ event, onClose }: { event: EventEntry; onClose: () => void
         </div>
 
         {/* ── RIGHT: Details panel ── */}
-        <div className="flex-1 flex flex-col min-h-0">
+        <div className="flex-1 flex flex-col min-h-0 overflow-x-hidden overflow-y-auto md:overflow-hidden">
           {/* Close */}
           <div className="flex justify-end p-4 flex-shrink-0">
             <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center text-espresso/40 hover:text-espresso hover:bg-sage/20 transition-colors" aria-label="Close">
