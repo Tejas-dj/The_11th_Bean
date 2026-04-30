@@ -10,7 +10,7 @@ import { getCircleMembers } from '@/lib/parseCircle';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'The Circle | The 11th Bean, Basavanagudi',
+  title: 'The First Circle | The 11th Bean, Basavanagudi',
   description:
     'The people who drink here. The businesses we back. A curated circle of regulars whose work Shishir personally endorses.',
 };
@@ -79,6 +79,7 @@ export default function TheCirclePage() {
               }}
             >
               The<br />
+              First<br />
               <span style={{ color: '#C8A96E' }}>Circle</span>
             </h1>
 

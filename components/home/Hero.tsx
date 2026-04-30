@@ -51,16 +51,24 @@ export function Hero() {
           Basavanagudi · Bengaluru
         </motion.p>
 
-        {/* Main title — cinematic scale + slide up */}
-        <motion.h1
+        {/* Main title — logo image replaces text */}
+        <motion.div
           initial={reduced ? {} : { opacity: 0, y: 36, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 1.1, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-          className="text-cream text-[clamp(3.5rem,10vw,8rem)] leading-[0.9] mb-8 tracking-tight"
-          style={{ fontFamily: 'var(--font-lora), Georgia, serif', fontStyle: 'italic' }}
+          className="mb-8"
         >
-          The 11<sup className="text-[0.35em] not-italic align-super">th</sup>{' '}Bean
-        </motion.h1>
+          <h1 className="sr-only">The 11th Bean</h1>
+          <Image
+            src="/Main_Logo.svg"
+            alt="The 11th Bean"
+            width={480}
+            height={200}
+            priority
+            className="mx-auto w-[clamp(350px,80vw,648px)] h-auto"
+            style={{ filter: 'brightness(0) invert(1)' }}
+          />
+        </motion.div>
 
         {/* Subtitle — softer fade after title settles */}
         <motion.p

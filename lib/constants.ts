@@ -31,7 +31,7 @@ export const NAV_LINKS: NavItem[] = [
   { type: 'link',     label: 'Events',    href: '/events' },
   { type: 'dropdown', label: 'Community', children: [
     { label: 'Podcast',    href: '/podcast'    },
-    { label: 'The Circle', href: '/the-circle' },
+    { label: 'The First Circle', href: '/the-circle' },
     { label: 'Blog',       href: '/blog'       },
   ]},
 ]

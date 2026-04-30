@@ -33,7 +33,7 @@ export const menuItems: MenuItem[] = [
   // ── Signature Brews & Coffee ──────────────────────────────────────────────
   {
     id: 'eleventh-bean-drip',
-    name: 'The Eleventh Bean Drip',
+    name: 'The 11ᵗʰ Bean Drip',
     description: 'Our "Eureka!" blend — bold, balanced, and born after ten trials.',
     price: 121,
     category: 'signature-brews',

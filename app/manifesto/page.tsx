@@ -15,7 +15,7 @@ const SECTIONS = [
     number: '01',
     heading: 'Coffee is treated as craft.',
     body: [
-      "At The Eleventh Bean, coffee is treated the same way Maison Aranya treats materials. With respect, precision and patience.",
+      "At The 11ᵗʰ Bean, coffee is treated the same way Maison Aranya treats materials. With respect, precision and patience.",
       "We serve only Specialty Coffee because it represents the highest standard of this craft. It rewards discipline. It respects the farmer. It preserves the true character of the bean.",
     ],
   },

@@ -86,13 +86,13 @@ export default function OurStoryPage() {
           {/* TODO: Replace with Shishir's exact words — recorded and transcribed */}
           <PullQuote
             quote="Finding this path did not happen early. It happened after years of doing something else well. But once it became clear, it also became obvious."
-            attribution="Shishir, The Eleventh Bean"
+            attribution="Shishir, The 11<sup>th</sup> Bean"
           />
 
           <div className="max-w-2xl mx-auto pb-16">
             <SectionReveal>
               <p className="text-espresso/70 text-base md:text-lg leading-relaxed text-center">
-                We began with a simple pursuit. To find a coffee that felt complete. Ten beans brought us close. The eleventh brought clarity. It was not just better. It felt right. That decision became our identity.
+                We began with a simple pursuit. To find a coffee that felt complete. Ten beans brought us close. The 11<sup>th</sup> brought clarity. It was not just better. It felt right. That decision became our identity.
               </p>
             </SectionReveal>
           </div>
@@ -115,8 +115,8 @@ export default function OurStoryPage() {
             <NarrativeBlock
               headline="Our Beginning"
               paragraphs={[
-                "We began with a simple pursuit. To find a coffee that felt complete. Ten beans brought us close. The eleventh brought clarity. It was not just better. It felt right.",
-                "That decision became our identity. And our standard. Maison Aranya represents Indian craftsmanship across categories. The Eleventh Bean Café is its coffee expression. It is where craft becomes something you can taste and experience in real time.",
+                "We began with a simple pursuit. To find a coffee that felt complete. Ten beans brought us close. The 11ᵗʰ brought clarity. It was not just better. It felt right.",
+                "That decision became our identity. And our standard. Maison Aranya represents Indian craftsmanship across categories. The 11ᵗʰ Bean Café is its coffee expression. It is where craft becomes something you can taste and experience in real time.",
               ]}
               imageBg="#8B6D4A"
               imageLabel="[Photo of the space during renovation / the street on Tata Silk Farm]"
