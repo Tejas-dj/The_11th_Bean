@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { BLOG_POSTS } from '@/data/blog';
 
 export const metadata: Metadata = {
@@ -26,19 +27,36 @@ export default function BlogPage() {
     <div className="bg-cream min-h-screen pt-32 pb-24">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
         {/* Page header */}
-        <div className="mb-16">
-          <p className="text-caramel text-xs tracking-[0.22em] uppercase mb-3 font-sans">
-            The 11th Bean
-          </p>
-          <h1
-            className="text-espresso text-5xl lg:text-6xl font-serif leading-tight"
-            style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}
+        <div className="mb-16 flex items-center justify-between gap-8">
+          {/* Text — left side */}
+          <div>
+            <p className="text-caramel text-xs tracking-[0.22em] uppercase mb-3 font-sans">
+              The 11th Bean
+            </p>
+            <h1
+              className="text-espresso text-5xl lg:text-6xl font-serif leading-tight"
+              style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}
+            >
+              From the Brew Room
+            </h1>
+            <p className="mt-4 text-espresso/60 font-sans text-base max-w-lg leading-relaxed">
+              Sourcing stories, craft notes, and guides for anyone who wants to understand their cup a little better.
+            </p>
+          </div>
+
+          {/* Blog writer mascot — fills the empty right space */}
+          <div
+            className="hidden md:block flex-shrink-0 w-48 lg:w-64 select-none pointer-events-none"
+            aria-hidden="true"
           >
-            From the Brew Room
-          </h1>
-          <p className="mt-4 text-espresso/60 font-sans text-base max-w-lg leading-relaxed">
-            Sourcing stories, craft notes, and guides for anyone who wants to understand their cup a little better.
-          </p>
+            <Image
+              src="/mascot/blog_writer.svg"
+              alt=""
+              width={256}
+              height={256}
+              className="w-full h-auto opacity-70"
+            />
+          </div>
         </div>
 
         {/* Post grid */}
