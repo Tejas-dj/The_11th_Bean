@@ -63,17 +63,17 @@ export default function ManifestoPage() {
         style={{ backgroundColor: '#2A2320' }}
         aria-labelledby="manifesto-heading"
       >
-        {/* Namaste mascot — right side of hero, welcoming before the manifesto */}
+        {/* Blog writer mascot — right side of hero */}
         <div
           className="absolute bottom-0 right-4 md:right-16 w-48 md:w-64 pointer-events-none select-none z-10"
           aria-hidden="true"
         >
           <Image
-            src="/mascot/namaste.svg"
+            src="/mascot/blog_writer.svg"
             alt=""
             width={256}
             height={256}
-            className="w-full h-auto opacity-50"
+            className="w-full h-auto opacity-60"
             style={{ filter: 'brightness(0) invert(1)' }}
           />
         </div>
