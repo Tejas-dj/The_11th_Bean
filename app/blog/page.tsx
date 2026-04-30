@@ -27,8 +27,8 @@ export default function BlogPage() {
     <div className="bg-cream min-h-screen pt-32 pb-24">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
         {/* Page header */}
-        <div className="mb-16 flex items-center justify-between gap-8">
-          {/* Text — left side */}
+        <div className="mb-16 flex flex-col md:flex-row md:items-center md:justify-between gap-6 md:gap-8">
+          {/* Text */}
           <div>
             <p className="text-caramel text-xs tracking-[0.22em] uppercase mb-3 font-sans">
               The 11th Bean
@@ -44,9 +44,9 @@ export default function BlogPage() {
             </p>
           </div>
 
-          {/* Blog writer mascot — fills the empty right space */}
+          {/* Blog writer mascot — below text on mobile, right side on desktop */}
           <div
-            className="hidden md:block flex-shrink-0 w-48 lg:w-64 select-none pointer-events-none"
+            className="flex-shrink-0 w-32 md:w-48 lg:w-64 select-none pointer-events-none self-start md:self-center"
             aria-hidden="true"
           >
             <Image
