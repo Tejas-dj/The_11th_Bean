@@ -33,9 +33,9 @@
 
 /* ─── Base styles ─── */
 html {
-  scroll-behavior: auto; /* Lenis handles smooth scrolling */
-  /* NOTE: Do NOT set overflow-x: hidden on html — it breaks Lenis smooth scroll
-     by destroying the native scroll container. Use overflow-x: clip on body only. */
+  scroll-behavior: smooth; /* Native smooth scroll — Lenis removed (caused trackpad halt) */
+  /* NOTE: Do NOT set overflow-x: hidden on html — it breaks the native scroll
+     container. Use overflow-x: clip on body only. */
 }
 
 body {

@@ -4,9 +4,9 @@ import { lora, dmSans } from '@/lib/fonts';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { ScrollProgress } from '@/components/layout/ScrollProgress';
-import { LenisProvider } from '@/components/layout/LenisProvider';
 import { PageLoader } from '@/components/shared/PageLoader';
 import { EventAnnouncement } from '@/components/shared/EventAnnouncement';
+import { Analytics } from "@vercel/analytics/react"
 
 
 export const metadata: Metadata = {
@@ -31,17 +31,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${lora.variable} ${dmSans.variable} h-full`}
     >
       <body className="min-h-full flex flex-col bg-cream text-espresso antialiased" suppressHydrationWarning>
-        <LenisProvider>
-          <PageLoader />
-
-          <ScrollProgress />
-          <Navbar />
-          <main id="main-content" className="flex-1" tabIndex={-1}>
-            {children}
-          </main>
-          <Footer />
-          <EventAnnouncement />
-        </LenisProvider>
+        <PageLoader />
+        <ScrollProgress />
+        <Navbar />
+        <main id="main-content" className="flex-1" tabIndex={-1}>
+          {children}
+        </main>
+        <Footer />
+        <EventAnnouncement />
+        <Analytics />
       </body>
     </html>
   );
