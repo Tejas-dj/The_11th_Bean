@@ -57,7 +57,7 @@ export function Navbar() {
           <Link
             href="/"
             className="flex-shrink-0 focus-visible:outline-rattan"
-            aria-label="The 11th Bean, home"
+            aria-label="The Eleventh Bean Café, home"
           >
             <LogoLockup scrolled={scrolled} pathname={pathname} />
           </Link>
@@ -111,7 +111,7 @@ export function Navbar() {
   );
 }
 
-/* ─── Logo lockup — blessed mascot mark + wordmark ─── */
+/* ─── Logo lockup — official Main_Logo.svg with route-change bounce + hover spring ─── */
 function LogoLockup({ scrolled, pathname }: { scrolled: boolean; pathname: string }) {
   const controls = useAnimationControls();
   const isFirst = useRef(true);
@@ -127,29 +127,27 @@ function LogoLockup({ scrolled, pathname }: { scrolled: boolean; pathname: strin
   }, [pathname, controls]);
 
   return (
-    <span className="flex items-center gap-3 select-none">
-      <motion.div
-        animate={controls}
-        whileHover={{ rotate: 14, scale: 1.12 }}
-        transition={{ type: 'spring', stiffness: 380, damping: 14 }}
-        aria-hidden="true"
-        className="flex-shrink-0"
-      >
-        <Image
-          src="/mascot/blessed.svg"
-          alt=""
-          width={56}
-          height={56}
-          style={{ filter: 'brightness(0) invert(1)' }}
-        />
-      </motion.div>
-      <span
-        className="text-cream font-serif italic font-medium text-xl tracking-tight"
-        style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}
-      >
-        The 11<sup className="text-xs not-italic font-normal">th</sup> Bean
-      </span>
-    </span>
+    <motion.div
+      animate={controls}
+      whileHover={{ rotate: 6, scale: 1.06 }}
+      transition={{ type: 'spring', stiffness: 380, damping: 14 }}
+      aria-hidden="true"
+      className="flex-shrink-0 select-none"
+    >
+      <Image
+        src="/Main_Logo.svg"
+        alt="The Eleventh Bean Café"
+        width={200}
+        height={100}
+        priority
+        style={{
+          filter: 'brightness(0) invert(1)',
+          width: scrolled ? '150px' : '200px',
+          height: 'auto',
+          transition: 'width 0.35s cubic-bezier(0.16,1,0.3,1)',
+        }}
+      />
+    </motion.div>
   );
 }
 

@@ -42,7 +42,7 @@ export function StoryHero() {
           className="text-cream text-4xl md:text-6xl lg:text-7xl leading-[1.1] tracking-tight"
           style={{ fontFamily: 'var(--font-lora), Georgia, serif', fontStyle: 'italic' }}
         >
-          Before the first cup,<br />there was a cubicle.
+          Before this café, life looked very different.
         </motion.h1>
       </motion.div>
 
@@ -53,7 +53,7 @@ export function StoryHero() {
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         aria-hidden="true"
       >
-        <span className="text-cream/30 text-[10px] tracking-[0.25em] uppercase">His story</span>
+        <span className="text-cream/30 text-[10px] tracking-[0.25em] uppercase">The founders</span>
         <div className="w-px h-12 relative overflow-hidden">
           <motion.div
             className="absolute top-0 left-0 w-full h-[40%] bg-cream/40 rounded-full"

@@ -8,47 +8,47 @@ export const metadata: Metadata = {
   description: 'The philosophy behind The 11th Bean. Why Shishir built it, what it stands for, and what we believe a cafe should be.',
 };
 
-// TODO: Replace with Shishir's actual words after interview — this is a draft framework
+// Sourced directly from Shishir's cafe info document
 
 const SECTIONS = [
   {
     number: '01',
-    heading: 'Coffee is the excuse.',
+    heading: 'Coffee is treated as craft.',
     body: [
-      "The 11th Bean is not a coffee shop that happens to have seating. It is a place that happens to serve coffee. The distinction matters more than it sounds.",
-      "People come here because they needed somewhere to be. The coffee is very good. But the reason they stay, and come back, and bring someone else the next time — that is not the coffee.",
+      "At The Eleventh Bean, coffee is treated the same way Maison Aranya treats materials. With respect, precision and patience.",
+      "We serve only Specialty Coffee because it represents the highest standard of this craft. It rewards discipline. It respects the farmer. It preserves the true character of the bean.",
     ],
   },
   {
     number: '02',
-    heading: 'We believe in the slow.',
+    heading: 'Craft is built through decisions.',
     body: [
-      "Everything in this city moves fast. The traffic, the sprints, the lunch breaks timed to the minute. We are not a stop. We are not optimised for throughput.",
-      "A pour over takes three minutes. We will not apologise for it. If you have three minutes, sit down. If you don't, we would gently suggest that is the problem.",
+      "Small details define the final cup. Consistency builds trust. Simplicity requires discipline.",
+      "We do not complicate coffee. We refine it. This is how Maison Aranya thinks. This is how we brew.",
     ],
   },
   {
     number: '03',
-    heading: 'This city already has chains.',
+    heading: 'Good coffee is repeatable.',
     body: [
-      "Basavanagudi does not need another logo. It does not need another identical menu or another app-based loyalty programme. It needs what it has always had: a neighbourhood place, run by someone who lives nearby and cares about the outcome.",
-      "Shishir grew up here. He knows the light at 8am. He knows which table gets the best of it. This cafe is not a concept. It is a commitment.",
+      "Our standards include freshly roasted Specialty beans, precise grind size, controlled water temperature, calibrated extraction and clean and maintained equipment.",
+      "These are not enhancements. They are the foundation. Every cup is brewed with the same intent.",
     ],
   },
   {
     number: '04',
-    heading: 'The bookshelves are real.',
+    heading: 'The space is built for presence.',
     body: [
-      "Nothing in this space was chosen by an interior designer trying to look like a cafe that wasn't designed by an interior designer. The books are here because Shishir ran out of room at home. The guitar is here because a friend left it. The Catan set is missing two roads.",
-      "This is not a vibe. It is a room that people actually use.",
+      "Designed under the philosophy of Maison Aranya, this café reflects material honesty, calm and clarity.",
+      "A place to slow down. A place to think clearly. A place to feel at ease. No pressure to leave. No pressure to order more.",
     ],
   },
   {
     number: '05',
-    heading: 'One cup at a time.',
+    heading: 'We are not built for volume.',
     body: [
-      "We will not scale. There will not be a second location in Koramangala with the same menu and a slightly different logo. There is one machine, one person who knows how to use it, and one counter.",
-      "That is enough. That is the whole point.",
+      "We are built for consistency, clarity and craft. Every cup reflects discipline. Every decision reflects intention.",
+      "We do not get everything perfect. But we care enough to keep improving every single day.",
     ],
   },
 ] as const;
@@ -89,8 +89,7 @@ export default function ManifestoPage() {
               Why we exist.
             </h1>
             <p className="text-cream/45 text-sm md:text-base leading-relaxed max-w-lg">
-              This is not a mission statement. Mission statements are for decks.
-              This is just what we believe, written down.
+              Not as a mission statement. As a belief system. This is what we stand for, written down.
             </p>
           </SectionReveal>
         </div>

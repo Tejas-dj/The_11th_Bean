@@ -8,7 +8,6 @@ export function PodcastHero() {
       className="relative pt-24 pb-16 px-6 overflow-hidden"
       style={{ backgroundColor: '#2A2320' }}
     >
-      {/* TODO: Replace with bookshelf nook or La Carimali background photo from Shishir */}
       <div className="absolute inset-0 opacity-20 pointer-events-none" aria-hidden="true"
         style={{ background: 'radial-gradient(ellipse at 70% 50%, #C8A96E 0%, transparent 65%)' }}
       />
@@ -30,7 +29,6 @@ export function PodcastHero() {
 
       <div className="max-w-[1400px] mx-auto relative z-10">
         <SectionReveal>
-          {/* Podcast name lockup — TODO: Update with real podcast name from Shishir */}
           <div className="flex items-center gap-4 mb-6">
             <div className="w-10 h-10 rounded-full bg-rattan flex items-center justify-center flex-shrink-0" aria-hidden="true">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2A2320" strokeWidth="1.5">
@@ -39,7 +37,7 @@ export function PodcastHero() {
                 <line x1="12" y1="19" x2="12" y2="22"/>
               </svg>
             </div>
-            <span className="text-cream/50 text-xs tracking-[0.2em] uppercase">A podcast</span>
+            <span className="text-cream/50 text-xs tracking-[0.2em] uppercase">The Chronicles</span>
           </div>
 
           <h1
@@ -50,9 +48,7 @@ export function PodcastHero() {
           </h1>
 
           <p className="text-cream/55 text-base md:text-lg max-w-xl leading-relaxed pr-32 md:pr-0 relative z-20">
-            {/* TODO: Replace with real podcast description from Shishir */}
-            Shishir talks to interesting people over coffee. Sometimes the machine drowns them out.
-            Recorded at the cafe, usually on a Tuesday evening.
+            Shishir talks to interesting people over coffee. Real conversations with indie creators, storytellers, and friends of the café.
           </p>
         </SectionReveal>
       </div>

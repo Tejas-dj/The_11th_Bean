@@ -44,8 +44,8 @@ export default function MenuPage() {
                 Short menu.<br />Every item earned its spot.
               </h1>
               <p className="text-espresso/55 text-base md:text-lg max-w-xl mt-4 leading-relaxed">
-                Everything here exists because Shishir couldn't stop tinkering.
-                Customizations available on request.
+                Our menu is intentionally focused. Every item exists because it meets our standard.
+                If you are unsure what to order, ask us.
               </p>
             </div>
             <div className="flex-shrink-0 w-32 md:w-40 opacity-70 mt-2 hidden sm:block" aria-hidden="true">

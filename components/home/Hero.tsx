@@ -70,9 +70,7 @@ export function Hero() {
           className="text-cream/85 text-xl md:text-2xl leading-relaxed max-w-xl mx-auto"
           style={{ fontFamily: 'var(--font-lora), Georgia, serif', fontStyle: 'italic' }}
         >
-          He counted ten beans. None were right.
-          <br />
-          Then came the eleventh.
+          A Coffee Expression of Maison Aranya
         </motion.p>
       </div>
 

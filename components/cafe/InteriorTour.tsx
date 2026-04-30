@@ -13,7 +13,7 @@ const TOUR_BLOCKS = [
   {
     type: 'callout' as const,
     text: 'The bar is where everything begins.',
-    sub: "Shishir's world is about 4 square metres of counter, a La Carimali, and the next order. Watch him work and you'll understand what the name means.",
+    sub: "With respect, precision and patience. Watch the process and you will understand what the name means. Every cup brewed with the same intent.",
   },
   {
     type: 'split' as const,
@@ -22,8 +22,8 @@ const TOUR_BLOCKS = [
   },
   {
     type: 'callout' as const,
-    text: 'Black chairs, wooden tables, too many books, one guitar nobody plays.',
-    sub: 'Every piece was chosen to say: stay as long as you want.',
+    text: 'A space designed for calm, clarity and comfort.',
+    sub: 'Every piece was chosen to say: slow down. Stay as long as you want. No pressure to leave. No pressure to order more.',
   },
   {
     type: 'full' as const,

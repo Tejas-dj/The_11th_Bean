@@ -18,11 +18,11 @@ export const BREAKPOINTS = {
 } as const;
 
 export const NAV_LINKS = [
-  { label: 'Home',       href: '/' },
-  { label: 'Our Story',  href: '/our-story' },
-  { label: 'Menu',       href: '/menu' },
-  { label: 'Events',     href: '/events' },
-  { label: 'The Cafe',   href: '/the-cafe' },
-  { label: 'Podcast',    href: '/podcast' },
-  { label: 'Gallery',    href: '/gallery' },
+  { label: 'Home',        href: '/' },
+  { label: 'Our Story',   href: '/our-story' },
+  { label: 'Menu',        href: '/menu' },
+  { label: 'Events',      href: '/events' },
+  { label: 'The Cafe',    href: '/the-cafe' },
+  { label: 'Podcast',     href: '/podcast' },
+  { label: 'The Circle',  href: '/the-circle' },
 ] as const;

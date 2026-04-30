@@ -1,20 +1,37 @@
-import type { Metadata } from 'next';
+'use client';
+import { useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { InteriorTour }    from '@/components/cafe/InteriorTour';
 import { AmbientPlayer }   from '@/components/cafe/AmbientPlayer';
 import { NeighborhoodMap } from '@/components/cafe/NeighborhoodMap';
 import { SectionReveal }   from '@/components/shared/SectionReveal';
 import { ArchDivider }     from '@/components/shared/ArchDivider';
-
-export const metadata: Metadata = {
-  title: 'The Cafe | The 11th Bean, Basavanagudi',
-  description: 'Step inside The 11th Bean. Books, brews, and a space that feels like the living room you always wanted. Basavanagudi, Bengaluru.',
-};
+import { CollectionTabs }  from '@/components/gallery/CollectionTabs';
+import { MasonryGrid }     from '@/components/gallery/MasonryGrid';
+import { Lightbox }        from '@/components/gallery/Lightbox';
+import { collections, galleryImages } from '@/data/gallery';
+import type { GalleryImage } from '@/data/gallery';
 
 export default function TheCafePage() {
+  const [activeCollection, setActiveCollection] = useState(collections[0].id);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const activeImages = galleryImages.filter((img) => img.collection === activeCollection);
+  const activeDesc = collections.find((c) => c.id === activeCollection)?.description ?? '';
+
+  const handleImageClick = (_img: GalleryImage, index: number) => {
+    setLightboxIndex(index);
+  };
+
+  const handleCollectionChange = (id: string) => {
+    setActiveCollection(id);
+    setLightboxIndex(null);
+  };
+
   return (
     <div className="bg-cream">
-      {/* ── Entrance ── hero starts at top-0 so the transparent navbar has caramel bg behind it */}
+      {/* ── Entrance ── */}
       <section aria-label="Cafe entrance" className="relative">
         {/* TODO: Replace with real exterior / entrance photo from Shishir (70vh min-height recommended) */}
         <div
@@ -51,7 +68,8 @@ export default function TheCafePage() {
               The Cafe
             </h1>
             <p className="text-espresso/60 text-base md:text-xl max-w-xl leading-relaxed">
-              42, Tata Silk Farm. The blue gate. Walk in. There's usually a seat near the window.
+              Designed under the philosophy of Maison Aranya. Material honesty, calm and clarity.
+              A place to slow down. A place to think clearly. A place to feel at ease.
             </p>
           </SectionReveal>
         </div>
@@ -105,10 +123,10 @@ export default function TheCafePage() {
                 />
               </div>
               <p className="text-espresso/70 text-base md:text-lg leading-relaxed">
-                The bookshelves didn't come from a designer. Shishir just kept adding books. There's no system. Fiction next to coffee theory next to the Catan rules nobody reads. That's the point.
+                A neighbourhood café designed for slow mornings, long work sessions and conversations that run longer than expected.
               </p>
               <p className="text-espresso/70 text-base md:text-lg leading-relaxed">
-                There's also a guitar. It belongs to whoever picks it up.
+                No pressure to leave. No pressure to order more. Just a space that lets you stay.
               </p>
 
               {/* Games available */}
@@ -129,6 +147,65 @@ export default function TheCafePage() {
           </div>
         </div>
       </section>
+
+      <ArchDivider color="#F2E8D9" />
+
+      {/* ── Gallery ── embedded, no separate page */}
+      <section aria-labelledby="gallery-heading" className="py-20 lg:py-28 bg-cream">
+        <div className="max-w-[1400px] mx-auto px-6 mb-10">
+          <SectionReveal>
+            <p className="text-espresso/40 text-[10px] tracking-[0.2em] uppercase mb-2">A place worth looking at</p>
+            <h2
+              id="gallery-heading"
+              className="text-espresso text-3xl md:text-4xl"
+              style={{ fontFamily: 'var(--font-lora), Georgia, serif', fontStyle: 'italic' }}
+            >
+              Through the lens
+            </h2>
+          </SectionReveal>
+        </div>
+
+        {/* Collection tabs */}
+        <CollectionTabs
+          collections={collections}
+          active={activeCollection}
+          onChange={handleCollectionChange}
+        />
+
+        {/* Collection description */}
+        <div className="max-w-[1400px] mx-auto px-6 pt-8 pb-3">
+          <SectionReveal>
+            <p
+              className="text-espresso/45 text-sm"
+              style={{ fontFamily: 'var(--font-lora), Georgia, serif', fontStyle: 'italic' }}
+            >
+              {activeDesc}
+            </p>
+          </SectionReveal>
+        </div>
+
+        {/* Masonry grid */}
+        <div className="max-w-[1400px] mx-auto px-4 md:px-6 pb-4">
+          <MasonryGrid
+            key={activeCollection}
+            images={activeImages}
+            collectionId={activeCollection}
+            onImageClick={handleImageClick}
+          />
+        </div>
+      </section>
+
+      {/* Lightbox */}
+      <AnimatePresence>
+        {lightboxIndex !== null && (
+          <Lightbox
+            images={activeImages}
+            index={lightboxIndex}
+            onClose={() => setLightboxIndex(null)}
+            onNavigate={setLightboxIndex}
+          />
+        )}
+      </AnimatePresence>
 
       <ArchDivider color="#F2E8D9" />
 

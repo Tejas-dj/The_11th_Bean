@@ -29,28 +29,26 @@ export default function OurStoryPage() {
           </SectionReveal>
 
           <NarrativeBlock
-            headline="The Corporate Life"
+            headline="The IT Years"
             paragraphs={[
-              // TODO: Replace with Shishir's actual story — record a 30-60 min conversation
-              "For nearly a decade, Shishir Narayan moved through the rhythms of Bengaluru's IT world. Standups at 9, Jira boards by 10. The work wasn't bad. The pay was fine. But somewhere between the sprint reviews and the team lunches, he started noticing how much of his day he spent not quite present.",
-              "Coffee was the ritual that bookended everything. The terrible office filter brew at 8am. The decent third-wave cup during the lunch break that felt like a small act of rebellion. He didn't know it yet, but he was already paying attention to the wrong thing. Or the right thing, depending on how you look at it.",
+              "I spent over 15 years in the IT industry, working across India, France and Germany. It was stable, structured and rewarding in many ways. Priya was on a similar path before choosing to step away and pursue a Master's in Psychology.",
+              "On paper, everything made sense. In reality, it did not. Coming back to India brought a different perspective. The work felt distant from what I wanted to build. The frustration was not sudden. It built slowly, until it became clear that something had to change.",
             ]}
             imageBg="#8B6D4A"
-            imageLabel="[Office / IT park atmosphere photo]"
-            imageAlt="Placeholder for Shishir's corporate life — Bengaluru IT park or office setting"
+            imageLabel="[Portrait of the founders]"
+            imageAlt="The founders of The Eleventh Bean Café"
             flip={false}
           />
 
           <NarrativeBlock
-            headline="The Breaking Point"
+            headline="Finding Coffee Again"
             paragraphs={[
-              // TODO: Ask Shishir — was there a specific day, conversation, or cup of coffee?
-              "There wasn't a dramatic moment. No desk-flipping resignation, no argument with a manager. It was quieter than that. It was a Tuesday afternoon, a cup of coffee from a new roastery near his office, and the sudden awareness that he'd been tasting coffee differently for months. Comparing. Wondering. Imagining.",
-              "He drove home that evening and told his wife he wanted to open a cafe. She asked him if he'd thought about it. He said he'd been thinking about nothing else for two years.",
+              "Coffee was always present. I have been drinking it since the age of six. But it was only when I began studying it seriously that things shifted.",
+              "I approached coffee academically. Understanding espresso, extraction, why it is served at a certain temperature, why Indian filter coffee behaves differently, why froth forms, how milk interacts with coffee, how flavour is built and lost. What was once habit became curiosity. Curiosity became understanding. Understanding became respect.",
             ]}
             imageBg="#B8B394"
-            imageLabel="[Atmospheric photo — rainy evening, a cup of coffee, a quiet moment]"
-            imageAlt="Placeholder for the breaking point — atmospheric, quiet, introspective"
+            imageLabel="[Coffee brewing close-up]"
+            imageAlt="Close-up of coffee brewing at The Eleventh Bean"
             flip={true}
           />
         </div>
@@ -85,16 +83,16 @@ export default function OurStoryPage() {
             </p>
           </SectionReveal>
 
-          {/* TODO: Replace with Shishir's exact words — record and transcribe */}
+          {/* TODO: Replace with Shishir's exact words — recorded and transcribed */}
           <PullQuote
-            quote="I didn't quit to follow a passion. I quit because I couldn't keep pretending the spreadsheet was enough."
-            attribution="Shishir, The 11th Bean"
+            quote="Finding this path did not happen early. It happened after years of doing something else well. But once it became clear, it also became obvious."
+            attribution="Shishir, The Eleventh Bean"
           />
 
           <div className="max-w-2xl mx-auto pb-16">
             <SectionReveal>
               <p className="text-espresso/70 text-base md:text-lg leading-relaxed text-center">
-                He left in March. The space on Tata Silk Farm in Basavanagudi took six months to find. Another four to set up. He did most of it himself: the paint, the shelves, the sourcing trips to Chikmagalur. He wasn't in a hurry. That was the whole point.
+                We began with a simple pursuit. To find a coffee that felt complete. Ten beans brought us close. The eleventh brought clarity. It was not just better. It felt right. That decision became our identity.
               </p>
             </SectionReveal>
           </div>
@@ -115,14 +113,14 @@ export default function OurStoryPage() {
           {/* Block with draggable artifact */}
           <div className="relative">
             <NarrativeBlock
-              headline="Finding the Space"
+              headline="Our Beginning"
               paragraphs={[
-                "Basavanagudi wasn't an accident. Shishir grew up nearby, spent weekends at Lalbagh, ate idli at Brahmin's Coffee Bar before it was on any 'best of' list. The neighborhood has a particular pace. Slower than Koramangala, less self-conscious than Indiranagar. A cafe here would have to earn its place, not just lease it.",
-                "The Tata Silk Farm address carries history most people in the city have forgotten: JRD Tata started a silk cultivation venture here in 1896. The mulberry trees are gone, but the name stayed. Shishir liked the idea of building something new in a place that had always been about making things.",
+                "We began with a simple pursuit. To find a coffee that felt complete. Ten beans brought us close. The eleventh brought clarity. It was not just better. It felt right.",
+                "That decision became our identity. And our standard. Maison Aranya represents Indian craftsmanship across categories. The Eleventh Bean Café is its coffee expression. It is where craft becomes something you can taste and experience in real time.",
               ]}
               imageBg="#8B6D4A"
               imageLabel="[Photo of the space during renovation / the street on Tata Silk Farm]"
-              imageAlt="Placeholder for the cafe space during renovation"
+              imageAlt="The café space during renovation"
               flip={false}
             />
             <Artifact
@@ -149,15 +147,14 @@ export default function OurStoryPage() {
 
           <div className="relative">
             <NarrativeBlock
-              headline="The First Cup"
+              headline="Why This Exists"
               paragraphs={[
-                // TODO: Ask Shishir — who was the first customer? What was the first compliment?
-                "The cafe opened on a Thursday. There was no launch event, no Instagram announcement. Shishir opened the door at 8am, turned on the La Carimali, and made himself an espresso. The first customer walked in ten minutes later, a woman who lived three streets away and had been watching the renovation with curiosity.",
-                "She asked for a cappuccino. He made it. She said nothing for a while, then: 'This is very good.' That was enough.",
+                "We did not want to build a café that felt transactional. We wanted a place where the coffee is taken seriously, but the people are not rushed.",
+                "Where regulars feel at home, and first-time visitors do not feel out of place. That is what we continue to build, every day.",
               ]}
               imageBg="#C8A96E"
               imageLabel="[Photo of the La Carimali machine / opening day]"
-              imageAlt="Placeholder for the cafe's opening day"
+              imageAlt="The Eleventh Bean Café espresso machine"
               flip={true}
             />
             <Artifact
@@ -199,12 +196,15 @@ export default function OurStoryPage() {
               className="text-espresso text-3xl md:text-4xl leading-snug"
               style={{ fontFamily: 'var(--font-lora), Georgia, serif', fontStyle: 'italic' }}
             >
-              The cafe Shishir imagined is the cafe you walk into today.
+              A café built on craft, clarity and the discipline of doing things right.
             </h2>
           </SectionReveal>
           <SectionReveal delay={0.2}>
             <p className="text-espresso/65 text-base md:text-lg leading-relaxed">
-              There are regulars now. People who bring laptops and stay all afternoon. People who come for the single origin on the weekend and the podcast recording on Tuesday evenings. The bookshelves got fuller. The guitar is still there, still barely in tune. Shishir still makes every cup himself.
+              We are not built for volume. We are built for consistency, clarity and craft. Every cup reflects discipline. Every decision reflects intention.
+            </p>
+            <p className="text-espresso/65 text-base md:text-lg leading-relaxed mt-4">
+              We do not get everything perfect. But we care enough to keep improving every single day.
             </p>
           </SectionReveal>
           <SectionReveal delay={0.3}>

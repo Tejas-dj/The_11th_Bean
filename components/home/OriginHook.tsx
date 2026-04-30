@@ -74,15 +74,14 @@ export function OriginHook() {
                 className="text-espresso text-3xl md:text-4xl lg:text-[2.6rem] leading-[1.15] tracking-tight pr-24 md:pr-0 relative z-20"
                 style={{ fontFamily: 'var(--font-lora), Georgia, serif', fontStyle: 'italic' }}
               >
-                Before the first cup, there was a cubicle.
+                Before this café, life looked very different.
               </h2>
 
-              {/* TODO: Replace with Shishir's actual story — 30–60 min interview needed */}
               <p className="text-espresso/70 text-base md:text-lg leading-relaxed">
-                Shishir spent years in IT, chasing deadlines and standups. Then one afternoon, somewhere between a bad coffee and a good conversation, something shifted. He didn't quit to "follow his passion". He quit because the alternative was to keep pretending.
+                I spent over 15 years in the IT industry, working across India, France and Germany. It was stable, structured and rewarding in many ways.
               </p>
               <p className="text-espresso/70 text-base md:text-lg leading-relaxed">
-                The 11th Bean isn't his second career. It's his first honest one.
+                Coming back to India brought a different perspective. The work felt distant from what I wanted to build. The frustration built slowly, until it became clear that something had to change.
               </p>
 
               <Link

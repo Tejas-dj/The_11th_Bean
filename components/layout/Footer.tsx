@@ -43,24 +43,16 @@ export function Footer() {
 
           {/* Column 1: Branding */}
           <div className="flex flex-col gap-3">
-            <div aria-hidden="true">
-              <Image
-                src="/mascot/pour_over.svg"
-                alt=""
-                width={84}
-                height={84}
-                className="mb-1 animate-bean-bob"
-                style={{ filter: 'brightness(0) invert(1)', opacity: 0.7 }}
-              />
-            </div>
-            <span
-              className="font-serif italic font-medium text-2xl"
-              style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}
-            >
-              The 11<sup className="text-sm not-italic font-normal">th</sup> Bean
-            </span>
+            <Image
+              src="/Main_Logo.svg"
+              alt="The Eleventh Bean Café"
+              width={220}
+              height={110}
+              style={{ filter: 'brightness(0) invert(1)', opacity: 0.85, width: '200px', height: 'auto' }}
+            />
             <p className="text-cream/70 text-sm leading-relaxed max-w-[220px]">
-              An artisanal cafe in the heart of Basavanagudi. Come for the coffee. Stay for everything else.
+              A unit of Maison Aranya. Built on Indian craftsmanship.
+              Run with intention.
             </p>
           </div>
 

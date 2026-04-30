@@ -56,7 +56,7 @@ export function MenuPreview() {
             </h2>
           </div>
           <p className="text-espresso/50 text-sm max-w-xs">
-            Short menu. Every item earned its spot.
+            We do not expand for the sake of variety. We refine for the sake of quality.
           </p>
         </SectionReveal>
       </div>

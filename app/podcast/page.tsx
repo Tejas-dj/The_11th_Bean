@@ -1,34 +1,21 @@
 'use client';
-import { useState } from 'react';
 import Image from 'next/image';
 import { PodcastHero }      from '@/components/podcast/PodcastHero';
 import { FeaturedEpisode }  from '@/components/podcast/FeaturedEpisode';
-import { EpisodeList }      from '@/components/podcast/EpisodeList';
-import { PersistentPlayer } from '@/components/podcast/PersistentPlayer';
 import { SectionReveal }    from '@/components/shared/SectionReveal';
 import type { Episode } from '@/data/episodes';
 
 const PLATFORMS = [
-  { name: 'Spotify',        href: '#', icon: '🎵' }, // TODO: Real URLs from Shishir
+  { name: 'Spotify',        href: '#', icon: '🎵' },
   { name: 'Apple Podcasts', href: '#', icon: '🎙️' },
-  { name: 'YouTube',        href: '#', icon: '▶️' },
-  { name: 'RSS',            href: '#', icon: '📡' },
+  { name: 'YouTube',        href: 'https://youtube.com/@the11thbean', icon: '▶️' },
 ] as const;
 
 export default function PodcastPage() {
-  const [nowPlaying, setNowPlaying] = useState<Episode | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const handlePlay = (ep: Episode) => {
-    setNowPlaying(ep);
-    setIsPlaying(true);
-  };
-
   return (
     <>
       <PodcastHero />
-      <FeaturedEpisode onPlay={handlePlay} />
-      <EpisodeList nowPlayingId={nowPlaying?.id} onPlay={handlePlay} />
+      <FeaturedEpisode />
 
       {/* Where to subscribe */}
       <section aria-labelledby="subscribe-heading" className="py-16 px-6 bg-cream">
@@ -74,13 +61,6 @@ export default function PodcastPage() {
           </SectionReveal>
         </div>
       </section>
-
-      <PersistentPlayer
-        episode={nowPlaying}
-        playing={isPlaying}
-        onToggle={setIsPlaying}
-        onClose={() => { setNowPlaying(null); setIsPlaying(false); }}
-      />
     </>
   );
 }

@@ -132,88 +132,43 @@ Everything below is a placeholder on the live site. Shoot these and drop the fil
 
 ---
 
-## GALLERY PAGE (36 photos across 6 collections)
+## THE CAFE PAGE — Embedded Gallery (12 photos across 3 collections)
 
-All gallery photos: **minimum 800 px wide.** The height depends on the collection — details below.
-Save all files in `/public/gallery/` with the exact filenames listed.
+The gallery is now part of The Cafe page — there is no separate Gallery subpage.
+All gallery photos: **minimum 800 px wide.** Save all files in `/public/gallery/` with the exact filenames listed.
 
 ---
 
-### Collection: Morning Light (`/public/gallery/ml-1.jpg` to `ml-6.jpg`)
+### Collection: Morning Light (`/public/gallery/ml-1.jpg` to `ml-4.jpg`)
 
 | File | Dimensions | What to shoot |
 |---|---|---|
 | ml-1.jpg | 800 × 1120 | Morning light coming through the cafe window — golden hour, dust in the air |
 | ml-2.jpg | 800 × 800 | Empty tables right at opening — no customers yet, chairs still tucked in |
 | ml-3.jpg | 800 × 600 | Steam rising from a fresh espresso shot, close-up |
-| ml-4.jpg | 800 × 960 | Rattan pendant lamp in morning light, slightly warm, slightly backlit |
-| ml-5.jpg | 800 × 680 | Pastry display case — croissants in, looking fresh |
-| ml-6.jpg | 800 × 1200 | Wide interior shot of the whole cafe room, morning, quiet |
+| ml-4.jpg | 800 × 1200 | Wide interior shot of the whole cafe room, morning, quiet |
 
 ---
 
-### Collection: The Craft (`/public/gallery/tc-1.jpg` to `tc-6.jpg`)
+### Collection: The Craft (`/public/gallery/tc-1.jpg` to `tc-4.jpg`)
 
 | File | Dimensions | What to shoot |
 |---|---|---|
 | tc-1.jpg | 800 × 800 | La Carimali espresso machine — clean, full front view |
 | tc-2.jpg | 800 × 1040 | Shishir doing a pour-over, hands in frame, V60 visible |
 | tc-3.jpg | 800 × 640 | Latte art close-up — the finished cup from directly above |
-| tc-4.jpg | 800 × 800 | Coffee beans in the grinder hopper, close-up |
-| tc-5.jpg | 800 × 1280 | Shishir adjusting the grinder dial — side profile, concentrating |
-| tc-6.jpg | 800 × 720 | Espresso extraction — the shot pulling, golden crema forming |
+| tc-4.jpg | 800 × 1280 | Shishir adjusting the grinder dial — side profile, concentrating |
 
 ---
 
-### Collection: Faces of The 11th (`/public/gallery/fa-1.jpg` to `fa-6.jpg`)
-
-| File | Dimensions | What to shoot |
-|---|---|---|
-| fa-1.jpg | 800 × 960 | Shishir behind the counter, not posing — candid, mid-task |
-| fa-2.jpg | 800 × 600 | A regular customer reading a book or newspaper at their table |
-| fa-3.jpg | 800 × 800 | Two people mid-conversation over coffee — shoot from a distance |
-| fa-4.jpg | 800 × 1120 | Person on a laptop at a table, coffee beside them |
-| fa-5.jpg | 800 × 720 | Group at a table — board game, people laughing |
-| fa-6.jpg | 800 × 880 | Close-up of hands wrapped around a coffee cup — warmth, comfort |
-
----
-
-### Collection: After Dark (`/public/gallery/ad-1.jpg` to `ad-6.jpg`)
+### Collection: After Dark (`/public/gallery/ad-1.jpg` to `ad-4.jpg`)
 
 | File | Dimensions | What to shoot |
 |---|---|---|
 | ad-1.jpg | 800 × 600 | Edison bulbs close-up in the evening — glowing, warm, slightly blown out |
 | ad-2.jpg | 800 × 1040 | Cafe interior at night — full room, everyone lit by warm light |
 | ad-3.jpg | 800 × 800 | Single rattan lamp glowing against a dark wall |
-| ad-4.jpg | 800 × 1200 | Wide evening shot — tables occupied, ambient warm light throughout |
-| ad-5.jpg | 800 × 680 | Books on a shelf with a coffee cup in the foreground, evening light |
-| ad-6.jpg | 800 × 960 | Cafe exterior at night — the blue gate, warm glow from inside |
-
----
-
-### Collection: Behind the Counter (`/public/gallery/bc-1.jpg` to `bc-6.jpg`)
-
-| File | Dimensions | What to shoot |
-|---|---|---|
-| bc-1.jpg | 800 × 800 | Barista in motion behind the counter — the workflow, not a pose |
-| bc-2.jpg | 800 × 1120 | Exposed brick wall behind the counter — detail shot |
-| bc-3.jpg | 800 × 640 | Pastry display case close-up — croissants, labels visible |
-| bc-4.jpg | 800 × 880 | Coffee tools laid out neatly — tamper, portafilter, scale, timer |
-| bc-5.jpg | 800 × 1280 | Wide shot of the entire counter from customer side |
-| bc-6.jpg | 800 × 720 | Close-up of hands tamping espresso into the portafilter |
-
----
-
-### Collection: The Neighborhood (`/public/gallery/nb-1.jpg` to `nb-6.jpg`)
-
-| File | Dimensions | What to shoot |
-|---|---|---|
-| nb-1.jpg | 800 × 600 | S End Road / Tata Silk Farm street — shoot from in front of the cafe looking out |
-| nb-2.jpg | 800 × 960 | Basavanagudi street scene — morning, vendors, slow pace |
-| nb-3.jpg | 800 × 800 | Lalbagh Botanical Garden — a path, trees, peaceful |
-| nb-4.jpg | 800 × 1120 | Gandhi Bazaar on a Saturday — the market, people, colour |
-| nb-5.jpg | 800 × 720 | The blue gate of the cafe from outside — iconic, recognisable |
-| nb-6.jpg | 800 × 1040 | The Tata Silk Farm signboard or the street from a historical angle |
+| ad-4.jpg | 800 × 960 | Cafe exterior at night — the blue gate, warm glow from inside |
 
 ---
 
@@ -268,6 +223,30 @@ The YouTube ID is the part after `?v=` in the video URL.
 | Tour — Detail | 960×672 JPEG | `/public/images/tour_detail.jpg` |
 | Tour — Window Out | 960×672 JPEG | `/public/images/tour_window_out.jpg` |
 | Tour — Window In | 960×672 JPEG | `/public/images/tour_window_in.jpg` |
-| Gallery photos (36 total) | min 800px wide, height varies | `/public/gallery/[id].jpg` |
+| Gallery photos (12 total, on The Cafe page) | min 800px wide, height varies | `/public/gallery/[id].jpg` |
 | Podcast artwork (3 eps) | 1400×1400 JPEG | `/public/podcast/ep_0X_artwork.jpg` |
 | Event posters (new events) | 1080×720 JPEG | `/public/event_posters/[name].jpg` |
+| The Circle — member portraits | 800×1000 JPEG (portrait) | `/public/circle/[member-id].jpg` |
+
+---
+
+## THE CIRCLE PAGE (client/regular business portraits)
+
+One portrait per person in the circle. Shoot with a consistent style — warm, candid, not a headshot.
+Save files in `/public/circle/` using the member `id` from `data/circle.ts` as the filename.
+
+### General style guide for all Circle portraits
+- **Vibe:** Natural and candid. Caught in the act of doing what they do, ideally at The 11th Bean or their own space.
+- **Background:** Can be the cafe interior, their studio, or a simple neutral. Avoid white studio backgrounds.
+- **Crop:** Portrait orientation, face in upper third, room to breathe at bottom.
+- **Size needed:** 800 × 1000 px JPEG per person
+
+### Members list (update as Shishir adds people)
+
+| Member ID | Name | File path |
+|---|---|---|
+| dj-placeholder | [DJ Name — TBD] | `/public/circle/dj-placeholder.jpg` |
+
+> **To add a new Circle member:** Open `data/circle.ts`, add a new entry to the `circleMembers` array, shoot their portrait, and drop the image at `/public/circle/[their-id].jpg`. That's it — the page updates automatically.
+
+---

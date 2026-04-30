@@ -6,25 +6,22 @@ import { SectionReveal } from '@/components/shared/SectionReveal';
 
 const PILLARS = [
   {
-    title: 'Books & Brews',
-    body: "A guitar nobody plays but everybody loves. A bookshelf with no system. Catan sets with missing pieces. This corner isn't curated. It's lived in.",
-    // TODO: Replace with actual photo of the bookshelf nook / reading corner
+    title: 'Specialty Coffee',
+    body: "Coffee graded above global quality standards. Traceable origins. Clean and distinct flavour profiles. Careful processing and roasting. Every cup brewed with precision and patience.",
     bgColor: '#B8B394',
-    imageLabel: '[Bookshelf nook — reading corner photo]',
-  },
-  {
-    title: 'Craft, Not Corporate',
-    body: "Shishir traded Jira tickets for espresso shots. The La Carimali machine isn't a prop. It's his desk now.",
-    // TODO: Replace with photo of the La Carimali machine / counter area
-    bgColor: '#8B6D4A',
     imageLabel: '[La Carimali machine / counter photo]',
   },
   {
-    title: 'Your Other Living Room',
-    body: "Bring your laptop. Or don't. Stay for one cup or five. The WiFi password is on the wall and nobody's watching the clock.",
-    // TODO: Replace with photo of seating area showing open laptops
-    bgColor: '#A0674B',
+    title: 'Designed for Calm',
+    body: "A space designed for slow mornings, long work sessions and conversations that run longer than expected. No pressure to leave. No pressure to order more. Just a space that lets you stay.",
+    bgColor: '#8B6D4A',
     imageLabel: '[Seating area with laptops photo]',
+  },
+  {
+    title: 'Built with Intention',
+    body: "Our menu is intentionally focused. We do not expand for the sake of variety. We refine for the sake of quality. Every item exists because it meets our standard.",
+    bgColor: '#A0674B',
+    imageLabel: '[Bookshelf nook — reading corner photo]',
   },
 ] as const;
 
@@ -47,7 +44,7 @@ export function ThreePillars() {
             className="text-espresso text-3xl md:text-4xl tracking-tight"
             style={{ fontFamily: 'var(--font-lora), Georgia, serif', fontStyle: 'italic' }}
           >
-            What we believe in
+            What you will experience
           </h2>
         </SectionReveal>
 

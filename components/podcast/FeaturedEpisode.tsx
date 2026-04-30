@@ -1,14 +1,7 @@
-import Image from 'next/image';
-import { AudioPlayer } from './AudioPlayer';
 import { SectionReveal } from '@/components/shared/SectionReveal';
 import { latestEpisode } from '@/data/episodes';
-import type { Episode } from '@/data/episodes';
 
-interface FeaturedEpisodeProps {
-  onPlay: (ep: Episode) => void;
-}
-
-export function FeaturedEpisode({ onPlay }: FeaturedEpisodeProps) {
+export function FeaturedEpisode() {
   const ep = latestEpisode;
 
   return (
@@ -20,25 +13,17 @@ export function FeaturedEpisode({ onPlay }: FeaturedEpisodeProps) {
 
         <SectionReveal delay={0.1}>
           <div className="flex flex-col lg:flex-row rounded-2xl overflow-hidden" style={{ backgroundColor: '#1e1a17' }}>
-            {/* Artwork — 40% */}
-            <div
-              className="w-full lg:w-[40%] aspect-square lg:aspect-auto lg:min-h-[360px] flex items-center justify-center flex-shrink-0"
-              style={{ backgroundColor: '#3a3028' }}
-              role="img"
-              aria-label="Episode artwork placeholder"
-            >
-              {/* TODO: Replace with real episode artwork or recording still from Shishir */}
-              <div className="flex flex-col items-center justify-center h-full gap-3 p-8">
-                <Image
-                  src="/mascot/podcast_host.svg"
-                  alt=""
-                  width={200}
-                  height={200}
-                  className="opacity-60"
-                  style={{ filter: 'brightness(0) invert(1)' }}
-                />
-                <p className="text-[10px] uppercase tracking-widest text-cream/20">Episode artwork</p>
-              </div>
+            {/* Video Player — 50% */}
+            <div className="w-full lg:w-[50%] flex-shrink-0 bg-black flex items-center justify-center">
+              <iframe 
+                className="w-full h-full aspect-video"
+                src="https://www.youtube.com/embed/ndgXfaAHD9g?si=5mMbN0tm6i4BKef8" 
+                title="YouTube video player" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerPolicy="strict-origin-when-cross-origin" 
+                allowFullScreen
+              />
             </div>
 
             {/* Content — 60% */}
@@ -64,12 +49,6 @@ export function FeaturedEpisode({ onPlay }: FeaturedEpisodeProps) {
                 <p className="text-cream/55 text-sm leading-relaxed">{ep.description}</p>
                 {ep.guest && <p className="text-rattan text-xs mt-2">With {ep.guest}</p>}
               </div>
-
-              <AudioPlayer
-                duration={ep.duration}
-                audioUrl={ep.audioUrl}
-                onPlay={() => onPlay(ep)}
-              />
             </div>
           </div>
         </SectionReveal>

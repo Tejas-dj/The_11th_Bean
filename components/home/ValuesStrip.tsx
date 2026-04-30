@@ -2,9 +2,9 @@ import Image from 'next/image';
 import { SectionReveal } from '@/components/shared/SectionReveal';
 
 const VALUES = [
-  { word: 'Slow.',   subtext: 'Nothing here is rushed.' },
-  { word: 'Honest.', subtext: 'The coffee, the space, the people.' },
-  { word: 'Yours.',  subtext: 'Stay as long as you need.' },
+  { word: 'Craft.',       subtext: 'Every cup reflects discipline.' },
+  { word: 'Clarity.',     subtext: 'Nothing rushed. Nothing accidental.' },
+  { word: 'Consistency.', subtext: 'We care enough to keep improving.' },
 ] as const;
 
 export function ValuesStrip() {

@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={`${lora.variable} ${dmSans.variable} h-full`}
     >
-      <body className="min-h-full flex flex-col bg-cream text-espresso antialiased">
+      <body className="min-h-full flex flex-col bg-cream text-espresso antialiased" suppressHydrationWarning>
         <LenisProvider>
           <PageLoader />
 
