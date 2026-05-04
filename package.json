@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
-    "@studio-freight/lenis": "^1.0.42",
     "@supabase/supabase-js": "^2.105.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/recharts": "^1.8.29",

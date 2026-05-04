@@ -26,6 +26,7 @@ shishir_says: Write what Shishir would actually say about this person. No quotes
 **Category options:** Music · Photography · Design · Food · Tech · Art · Other
 
 **Color options (pick one for the photo placeholder):**
+
 - Dark espresso (default): `#2A2320`
 - Caramel: `#8B6D4A`
 - Rattan: `#C8A96E`
@@ -38,15 +39,30 @@ shishir_says: Write what Shishir would actually say about this person. No quotes
 
 <!-- MEMBERS_START -->
 
-## DJ Name
-id: dj-placeholder
-category: Music
-handle: @djhandle
-url: https://instagram.com/djhandle
-tagline: Sets the mood at The 11th Bean.
+## Irfan Pasha
+
+id: irfan-pasha
+category: Finance
+handle: -
+url: -
+tagline: Scaling high-net-worth portfolios through market precision while driving real-world social impact.
+since: 2026
+color: #2A2320
+photo:
+shishir_says: Irfan Pasha is a Bengaluru-based wealth manager with over seven years of expertise in equity trading, HNI portfolio advisory, and algorithmic trading, currently with Anand Rathi. Known for disciplined execution and tailored financial strategies, he excels at driving high-performance results for ultra-HNI clients. Beyond the markets, Irfan is the founder of 'One Last Desire,' an animal welfare initiative. He balances aggressive financial ambition with genuine social impact and community leadership.
+
+---
+
+## Keira Shah
+
+id: keira-shah
+category: Other
+handle: -
+url: -
+tagline: Co-Founder
 since: 2023
 color: #2A2320
 photo:
-shishir_says: Some people come here to work. He comes here and makes everyone else's night better.
+shishir_says: 20 year old, BSC Psychology student, currently a Co-founder of Event company Scalable and Founder of a DIY kits company.
 
 ---
