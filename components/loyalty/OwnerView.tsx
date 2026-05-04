@@ -199,21 +199,31 @@ export default function OwnerView({ onLogout }: Props) {
           }}
         >
           {/* Owner badge row */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 16px 6px' }}>
-            <span
-              style={{
-                fontSize: '10px',
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                padding: '2px 10px',
-                borderRadius: '20px',
-                background: 'rgba(200,169,110,0.15)',
-                color: '#C8A96E',
-                border: '1px solid rgba(200,169,110,0.35)',
-              }}
-            >
-              Owner
-            </span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px 8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Image
+                src="/Main_Logo.svg"
+                alt="The 11th Bean"
+                width={100}
+                height={30}
+                style={{ filter: 'brightness(0) invert(1)', opacity: 0.9, objectFit: 'contain' }}
+                priority
+              />
+              <span
+                style={{
+                  fontSize: '10px',
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  padding: '2px 8px',
+                  borderRadius: '20px',
+                  background: 'rgba(200,169,110,0.15)',
+                  color: '#C8A96E',
+                  border: '1px solid rgba(200,169,110,0.35)',
+                }}
+              >
+                Owner
+              </span>
+            </div>
             <button
               onClick={onLogout}
               style={{ background: 'none', border: 'none', color: 'rgba(242,232,217,0.4)', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}

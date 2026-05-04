@@ -8,7 +8,7 @@ import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { MobileMenu } from './MobileMenu';
 import { NAV_LINKS, type NavItem } from '@/lib/constants';
 
-const LIGHT_BG_ROUTES = ['/menu', '/visit'];
+const LIGHT_BG_ROUTES = ['/menu', '/visit', '/loyalty'];
 const LIGHT_BG_PREFIXES = ['/blog'];
 
 export function Navbar() {

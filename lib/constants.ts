@@ -33,5 +33,6 @@ export const NAV_LINKS: NavItem[] = [
     { label: 'Podcast',    href: '/podcast'    },
     { label: 'The First Circle', href: '/the-circle' },
     { label: 'Blog',       href: '/blog'       },
+    { label: 'The Bean Club', href: '/loyalty' },
   ]},
 ]

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import CustomerSearch from './CustomerSearch';
 import BillingForm from './BillingForm';
 import PointsManager from './PointsManager';
@@ -44,7 +45,14 @@ export default function CashierView({ pinLevel, onLogout }: Props) {
         style={{ background: 'rgba(42,35,32,0.95)', borderBottom: '1px solid rgba(200,169,110,0.15)', backdropFilter: 'blur(8px)' }}
       >
         <div className="flex items-center gap-3">
-          <span className="text-sm font-medium" style={{ color: '#F2E8D9' }}>The 11th Bean</span>
+          <Image
+            src="/Main_Logo.svg"
+            alt="The 11th Bean"
+            width={110}
+            height={32}
+            style={{ filter: 'brightness(0) invert(1)', opacity: 0.9, objectFit: 'contain' }}
+            priority
+          />
           <span
             className="text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider"
             style={{ background: 'rgba(200,169,110,0.15)', color: '#C8A96E', border: '1px solid rgba(200,169,110,0.25)' }}
