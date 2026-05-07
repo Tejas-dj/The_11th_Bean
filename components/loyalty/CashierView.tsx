@@ -23,7 +23,7 @@ export default function CashierView({ pinLevel, onLogout }: Props) {
   const [resumingParkedBillId, setResumingParkedBillId] = useState<string | null>(null);
   const [resumingLineItems, setResumingLineItems]       = useState<any[]>([]);
 
-  const handleCustomerSelected = async (c: Customer, parkedBillId?: string, parkedLineItems?: any[]) => {
+  const handleCustomerSelected = (c: Customer, parkedBillId?: string, parkedLineItems?: any[]) => {
     setCustomer(c);
     if (parkedBillId && parkedLineItems) {
       setResumingParkedBillId(parkedBillId);
@@ -32,16 +32,21 @@ export default function CashierView({ pinLevel, onLogout }: Props) {
       setResumingParkedBillId(null);
       setResumingLineItems([]);
     }
-    // Fetch last 5 transactions for "the usual" hint
-    const { data } = await supabase
+    
+    // Switch immediately for speed
+    setScreen('pos');
+
+    // Fetch last 5 transactions for "the usual" hint in background
+    supabase
       .from('transactions')
       .select('*')
       .eq('customer_id', c.id)
       .eq('type', 'earn')
       .order('created_at', { ascending: false })
-      .limit(5);
-    setRecentTxns((data as Transaction[]) ?? []);
-    setScreen('pos');
+      .limit(5)
+      .then(({ data }) => {
+        setRecentTxns((data as Transaction[]) ?? []);
+      });
   };
 
   const handleNewCustomer = () => {

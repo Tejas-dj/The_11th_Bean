@@ -84,10 +84,13 @@ interface Props {
   initialLineItems?: BillLineItem[];
 }
 
+// Cache menu items in memory so they only load once per session
+let cachedMenuItems: MenuItem[] | null = null;
+
 export default function POSView({ 
   customer, pinLevel, onNewCustomer, onLogout, recentTransactions = [], onShowEod, parkedBillId, initialLineItems 
 }: Props) {
-  const [menuItems, setMenuItems]     = useState<MenuItem[]>([]);
+  const [menuItems, setMenuItems]     = useState<MenuItem[]>(cachedMenuItems || []);
   const [lineItems, setLineItems]     = useState<BillLineItem[]>(initialLineItems || []);
   const [query, setQuery]             = useState('');
   const [suggestions, setSuggestions] = useState<MenuItem[]>([]);
@@ -107,6 +110,12 @@ export default function POSView({
   const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    if (cachedMenuItems) {
+      setMenuItems(cachedMenuItems);
+      fuseRef.current = new Fuse(cachedMenuItems, { keys: ['name'], threshold: 0.4, minMatchCharLength: 1 });
+      return;
+    }
+
     supabase.from('menu_items').select('*').eq('is_active', true).order('name')
       .then(({ data }) => {
         if (data) {
@@ -117,6 +126,7 @@ export default function POSView({
               category: item.category || localMatch?.category || 'other'
             };
           });
+          cachedMenuItems = augmentedData;
           setMenuItems(augmentedData);
           fuseRef.current = new Fuse(augmentedData, { keys: ['name'], threshold: 0.4, minMatchCharLength: 1 });
         }
