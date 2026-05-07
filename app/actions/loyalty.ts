@@ -2,10 +2,38 @@
 
 import { createAdminClient } from '@/lib/supabase-admin';
 import bcrypt from 'bcryptjs';
-import type { PinLevel, Customer, MenuItem, Reward, BillLineItem } from '@/lib/loyalty-types';
+import type { PinLevel, Customer, MenuItem, Reward, BillLineItem, Expense, RegisterClosure } from '@/lib/loyalty-types';
 
 function normalizePhone(raw: string): string {
   return raw.replace(/\D/g, '').replace(/^91/, '').slice(-10);
+}
+
+/**
+ * Helper to determine the "Business Day".
+ * The cafe operates from 9 AM to 1 AM (or later). 
+ * We consider a day to start at 5:00 AM and end at 4:59 AM the next day.
+ */
+function getBusinessDayBounds(dateOverride?: Date) {
+  const now = dateOverride || new Date();
+  // Subtract 5 hours so anything before 5 AM is considered the previous day
+  const adjusted = new Date(now.getTime() - 5 * 60 * 60 * 1000);
+  
+  const y = adjusted.getFullYear();
+  const m = adjusted.getMonth();
+  const d = adjusted.getDate();
+  
+  const start = new Date(y, m, d, 5, 0, 0); 
+  const end = new Date(y, m, d + 1, 4, 59, 59, 999);
+  
+  const dateStr = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  
+  return { 
+    startStr: start.toISOString(), 
+    endStr: end.toISOString(), 
+    dateStr,
+    startDate: start,
+    endDate: end
+  };
 }
 
 // ── PIN verification ─────────────────────────────────────────
@@ -40,6 +68,19 @@ export async function findCustomerByPhone(
   return { customer: data as Customer };
 }
 
+export async function searchCustomersByName(
+  query: string
+): Promise<{ customers: Customer[] }> {
+  if (!query || query.length < 2) return { customers: [] };
+  const supabase = createAdminClient();
+  const { data } = await supabase
+    .from('customers')
+    .select('*')
+    .ilike('name', `%${query}%`)
+    .limit(10);
+  return { customers: (data as Customer[]) || [] };
+}
+
 export async function createCustomer(
   name: string,
   rawPhone: string,
@@ -63,8 +104,9 @@ export async function submitBill(params: {
   customerId: string;
   pinLevel: PinLevel;
   lineItems: BillLineItem[];
-}): Promise<{ ok: true; pointsEarned: number; billAmount: number } | { error: string }> {
-  const { customerId, pinLevel, lineItems } = params;
+  paymentMode?: 'cash' | 'upi' | 'card';
+}): Promise<{ ok: true; pointsEarned: number; billAmount: number; billNumber: number | null } | { error: string }> {
+  const { customerId, pinLevel, lineItems, paymentMode } = params;
 
   const billAmount = lineItems.reduce(
     (sum, li) => sum + li.menuItem.price * li.quantity,
@@ -82,6 +124,7 @@ export async function submitBill(params: {
       points: pointsEarned,
       bill_amount: billAmount,
       pin_level: pinLevel,
+      payment_mode: paymentMode ?? null,
     })
     .select()
     .single();
@@ -118,7 +161,7 @@ export async function submitBill(params: {
       .eq('id', customerId);
   }
 
-  return { ok: true, pointsEarned, billAmount };
+  return { ok: true, pointsEarned, billAmount, billNumber: txn?.bill_number ?? null };
 }
 
 // ── Manual points adjustment ─────────────────────────────────
@@ -212,11 +255,12 @@ export async function redeemReward(params: {
 export async function createMenuItem(
   name: string,
   price: number,
+  category = 'Other',
 ): Promise<{ item: MenuItem } | { error: string }> {
   const supabase = createAdminClient();
   const { data, error } = await supabase
     .from('menu_items')
-    .insert({ name: name.trim(), price })
+    .insert({ name: name.trim(), price, category })
     .select()
     .single();
   if (error) return { error: error.message };
@@ -225,7 +269,7 @@ export async function createMenuItem(
 
 export async function updateMenuItem(
   id: string,
-  patch: Partial<Pick<MenuItem, 'name' | 'price' | 'is_active'>>,
+  patch: Partial<Pick<MenuItem, 'name' | 'price' | 'is_active' | 'category'>>,
 ): Promise<{ item: MenuItem } | { error: string }> {
   const supabase = createAdminClient();
   const { data, error } = await supabase
@@ -236,6 +280,13 @@ export async function updateMenuItem(
     .single();
   if (error) return { error: error.message };
   return { item: data as MenuItem };
+}
+
+export async function deleteMenuItem(id: string): Promise<{ ok: true } | { error: string }> {
+  const supabase = createAdminClient();
+  const { error } = await supabase.from('menu_items').delete().eq('id', id);
+  if (error) return { error: error.message };
+  return { ok: true };
 }
 
 // ── Reward management (owner only) ───────────────────────────
@@ -282,11 +333,10 @@ export async function deleteReward(id: string): Promise<{ ok: true } | { error: 
 export async function fetchAnalytics() {
   const supabase = createAdminClient();
 
-  const now = new Date();
-  const todayStart = new Date(now); todayStart.setHours(0, 0, 0, 0);
-  const yesterdayStart = new Date(todayStart); yesterdayStart.setDate(yesterdayStart.getDate() - 1);
+  const { startDate: todayStart } = getBusinessDayBounds();
+  const yesterdayStart = new Date(todayStart.getTime() - 24 * 60 * 60 * 1000);
 
-  const [allCustomers, transactions, itemTotals] = await Promise.all([
+  const [allCustomers, transactions, itemTotals, expensesData] = await Promise.all([
     supabase
       .from('customers')
       .select('id, name, phone, total_points, lifetime_points, created_at')
@@ -299,14 +349,21 @@ export async function fetchAnalytics() {
     supabase
       .from('transaction_items')
       .select('quantity, unit_price, menu_items(name)'),
+    supabase
+      .from('expenses')
+      .select('*')
+      .order('created_at', { ascending: false }),
   ]);
 
   const custs = allCustomers.data ?? [];
   const txns  = transactions.data ?? [];
+  const exps  = expensesData.data ?? [];
 
   // Revenue aggregates
   const earnTxns     = txns.filter((t: { type: string; bill_amount: number | null }) => t.type === 'earn' && t.bill_amount != null);
   const totalRevenue = earnTxns.reduce((s: number, t: { bill_amount: number }) => s + t.bill_amount, 0);
+  const totalExpenses = exps.reduce((s: number, e: { amount: number }) => s + e.amount, 0);
+  const netProfit    = totalRevenue - totalExpenses;
   const avgBill      = earnTxns.length > 0 ? totalRevenue / earnTxns.length : 0;
 
   const todayEarns      = earnTxns.filter((t: { created_at: string }) => new Date(t.created_at) >= todayStart);
@@ -314,8 +371,12 @@ export async function fetchAnalytics() {
     const d = new Date(t.created_at);
     return d >= yesterdayStart && d < todayStart;
   });
+  
+  const todayExps = exps.filter((e: { created_at: string }) => new Date(e.created_at) >= todayStart);
+  const todayExpenses = todayExps.reduce((s: number, e: { amount: number }) => s + e.amount, 0);
 
   const todayRevenue     = todayEarns.reduce((s: number, t: { bill_amount: number }) => s + t.bill_amount, 0);
+  const todayNetProfit   = todayRevenue - todayExpenses;
   const yesterdayRevenue = yesterdayEarns.reduce((s: number, t: { bill_amount: number }) => s + t.bill_amount, 0);
   const todayTxnCount    = todayEarns.length;
   const newCustomersToday = custs.filter((c: { created_at: string }) => new Date(c.created_at) >= todayStart).length;
@@ -341,16 +402,227 @@ export async function fetchAnalytics() {
     topCustomers: custs.slice(0, 10),
     transactions: txns,
     transactionItems: itemTotals.data ?? [],
+    expenses: exps,
     pointsEconomy: { totalCirculating, totalEverIssued, totalRedeemed },
     summary: {
       totalRevenue,
+      totalExpenses,
+      netProfit,
       totalCustomers: custs.length,
       avgBill,
       todayRevenue,
+      todayExpenses,
+      todayNetProfit,
       todayTxnCount,
       newCustomersToday,
       yesterdayRevenue,
     },
     peakHours,
   };
+}
+
+// ── EOD and Expenses ──────────────────────────────────────────
+
+export async function logExpense(
+  amount: number,
+  description: string,
+  pinLevel: PinLevel
+): Promise<{ expense: Expense } | { error: string }> {
+  const supabase = createAdminClient();
+  const { data, error } = await supabase
+    .from('expenses')
+    .insert({ amount, description, logged_by: pinLevel })
+    .select()
+    .single();
+  
+  if (error) return { error: error.message };
+  return { expense: data as Expense };
+}
+export async function getTodayExpenses(): Promise<{ expenses: Expense[] } | { error: string }> {
+  const supabase = createAdminClient();
+  const { startStr, endStr } = getBusinessDayBounds();
+
+  const { data, error } = await supabase
+    .from('expenses')
+    .select('*')
+    .gte('created_at', startStr)
+    .lt('created_at', endStr)
+    .order('created_at', { ascending: false });
+
+  if (error) return { error: error.message };
+  return { expenses: data as Expense[] };
+}
+
+export async function updateExpense(
+  id: string,
+  amount: number,
+  description: string
+): Promise<{ success: boolean } | { error: string }> {
+  const supabase = createAdminClient();
+  const { error } = await supabase
+    .from('expenses')
+    .update({ amount, description })
+    .eq('id', id);
+  if (error) return { error: error.message };
+  return { success: true };
+}
+
+export async function deleteExpense(id: string): Promise<{ success: boolean } | { error: string }> {
+  const supabase = createAdminClient();
+  const { error } = await supabase
+    .from('expenses')
+    .delete()
+    .eq('id', id);
+  if (error) return { error: error.message };
+  return { success: true };
+}
+export async function closeRegister(
+  expectedCash: number,
+  actualCash: number,
+  notes: string | null,
+  pinLevel: PinLevel
+): Promise<{ registerClosure: RegisterClosure } | { error: string }> {
+  const supabase = createAdminClient();
+  const difference = actualCash - expectedCash;
+  const { data, error } = await supabase
+    .from('register_closures')
+    .insert({
+      expected_cash: expectedCash,
+      actual_cash: actualCash,
+      difference,
+      closed_by: pinLevel,
+      notes
+    })
+    .select()
+    .single();
+    
+  if (error) return { error: error.message };
+  return { registerClosure: data as RegisterClosure };
+}
+
+export async function getTodayCashSummary(): Promise<{ cashSales: number; expenses: number } | { error: string }> {
+  const supabase = createAdminClient();
+  const { startStr, endStr } = getBusinessDayBounds();
+
+  const { data: sales, error: salesErr } = await supabase
+    .from('transactions')
+    .select('bill_amount')
+    .eq('type', 'earn')
+    .eq('payment_mode', 'cash')
+    .gte('created_at', startStr)
+    .lt('created_at', endStr);
+    
+  if (salesErr) return { error: salesErr.message };
+
+  const { data: exp, error: expErr } = await supabase
+    .from('expenses')
+    .select('amount')
+    .gte('created_at', startStr)
+    .lt('created_at', endStr);
+    
+  if (expErr) return { error: expErr.message };
+
+  const cashSales = (sales as { bill_amount: number | null }[]).reduce((sum, s) => sum + (s.bill_amount || 0), 0);
+  const expenses = (exp as { amount: number }[]).reduce((sum, e) => sum + Number(e.amount), 0);
+
+  return { cashSales, expenses };
+}
+
+export async function startShift(startingFloat: number, pinLevel: PinLevel): Promise<{ success: boolean } | { error: string }> {
+  const supabase = createAdminClient();
+  const { dateStr } = getBusinessDayBounds();
+  
+  // We insert a new shift for today. If it fails due to unique constraint, it means one already exists.
+  const { error } = await supabase
+    .from('daily_shifts')
+    .insert({ starting_float: startingFloat, opened_by: pinLevel, shift_date: dateStr });
+  
+  if (error) {
+    // If it's a unique violation, update it instead
+    if (error.code === '23505') {
+      const { error: updErr } = await supabase
+        .from('daily_shifts')
+        .update({ starting_float: startingFloat, opened_by: pinLevel })
+        .eq('shift_date', dateStr);
+      if (updErr) return { error: updErr.message };
+    } else {
+      return { error: error.message };
+    }
+  }
+  return { success: true };
+}
+
+export async function getTodayShift(): Promise<{ startingFloat: number | null } | { error: string }> {
+  const supabase = createAdminClient();
+  const { dateStr } = getBusinessDayBounds();
+  const { data, error } = await supabase
+    .from('daily_shifts')
+    .select('starting_float')
+    .eq('shift_date', dateStr)
+    .single();
+
+  if (error && error.code !== 'PGRST116') return { error: error.message };
+  return { startingFloat: data ? data.starting_float : null };
+}
+
+export async function getYesterdayClosure(): Promise<{ actualCash: number | null }> {
+  const supabase = createAdminClient();
+  const { data } = await supabase
+    .from('register_closures')
+    .select('actual_cash')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single();
+  return { actualCash: data ? data.actual_cash : null };
+}
+
+// ── Parked Bills ──────────────────────────────────────────────
+
+export async function getParkedBills(): Promise<{ parkedBills: any[] } | { error: string }> {
+  const supabase = createAdminClient();
+  const { data, error } = await supabase
+    .from('parked_bills')
+    .select('id, customer_id, cashier_pin_level, line_items, created_at, customers(name, phone, total_points)')
+    .order('created_at', { ascending: true });
+
+  if (error) return { error: error.message };
+  return { parkedBills: data || [] };
+}
+
+export async function parkBill(
+  customerId: string,
+  lineItems: any[],
+  pinLevel: string
+): Promise<{ success: boolean } | { error: string }> {
+  const supabase = createAdminClient();
+  
+  // Enforce limit
+  const { count, error: countErr } = await supabase
+    .from('parked_bills')
+    .select('*', { count: 'exact', head: true });
+    
+  if (countErr) return { error: countErr.message };
+  if (count && count >= 3) return { error: 'Maximum of 3 bills can be parked at a time.' };
+
+  const { error } = await supabase
+    .from('parked_bills')
+    .insert({
+      customer_id: customerId,
+      line_items: lineItems,
+      cashier_pin_level: pinLevel
+    });
+
+  if (error) return { error: error.message };
+  return { success: true };
+}
+
+export async function deleteParkedBill(id: string): Promise<{ success: boolean } | { error: string }> {
+  const supabase = createAdminClient();
+  const { error } = await supabase
+    .from('parked_bills')
+    .delete()
+    .eq('id', id);
+
+  if (error) return { error: error.message };
+  return { success: true };
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
   AreaChart, Area,
-  BarChart, Bar,
+  BarChart, Bar, Cell,
   XAxis, YAxis, Tooltip, ResponsiveContainer,
   CartesianGrid,
 } from 'recharts';
@@ -15,46 +15,67 @@ type Period = 'day' | 'week' | 'month';
 interface ItemCount { name: string; count: number }
 
 /* ─── Helpers ────────────────────────────────────────────── */
-function groupRevenueByPeriod(
+function groupFinancialsByPeriod(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  transactions: { type: string; bill_amount: number | null; created_at: string }[],
+  transactions: any[],
+  expenses: any[],
   period: Period,
-): { label: string; revenue: number }[] {
-  const earns = transactions.filter(
-    (t): t is typeof t & { bill_amount: number } =>
-      t.type === 'earn' && t.bill_amount != null,
-  );
-  const map = new Map<string, number>();
-  earns.forEach((t) => {
-    const d = new Date(t.created_at);
-    let key: string;
-    if (period === 'day') {
-      key = d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
-    } else if (period === 'week') {
+): { label: string; revenue: number; profit: number; expenses: number }[] {
+  const earns = transactions.filter(t => t.type === 'earn' && t.bill_amount != null);
+  
+  const map = new Map<string, { revenue: number, expenses: number, timestamp: number }>();
+  
+  const getKey = (d: Date) => {
+    if (period === 'day') return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+    if (period === 'week') {
       const s = new Date(d);
       s.setDate(d.getDate() - d.getDay());
-      key = s.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
-    } else {
-      key = d.toLocaleDateString('en-IN', { month: 'short', year: '2-digit' });
+      return s.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
     }
-    map.set(key, (map.get(key) ?? 0) + t.bill_amount);
+    return d.toLocaleDateString('en-IN', { month: 'short', year: '2-digit' });
+  };
+
+  earns.forEach(t => {
+    const d = new Date(t.created_at);
+    const key = getKey(d);
+    const entry = map.get(key) ?? { revenue: 0, expenses: 0, timestamp: d.getTime() };
+    entry.revenue += t.bill_amount;
+    map.set(key, entry);
   });
+  
+  expenses.forEach(e => {
+    const d = new Date(e.created_at);
+    const key = getKey(d);
+    const entry = map.get(key) ?? { revenue: 0, expenses: 0, timestamp: d.getTime() };
+    entry.expenses += Number(e.amount);
+    map.set(key, entry);
+  });
+
   return Array.from(map.entries())
-    .map(([label, revenue]) => ({ label, revenue }))
+    .sort((a, b) => a[1].timestamp - b[1].timestamp)
+    .map(([label, data]) => ({ 
+      label, 
+      revenue: data.revenue, 
+      expenses: data.expenses, 
+      profit: data.revenue - data.expenses 
+    }))
     .slice(-14);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function topItems(transactionItems: any[]): ItemCount[] {
+function getProductPerformance(transactionItems: any[]): { stars: ItemCount[], deadStock: ItemCount[] } {
   const map = new Map<string, number>();
   transactionItems.forEach((ti) => {
     const name = ti.menu_items?.name ?? 'Unknown';
     map.set(name, (map.get(name) ?? 0) + ti.quantity);
   });
-  return Array.from(map.entries())
+  const sorted = Array.from(map.entries())
     .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 8);
+    .sort((a, b) => b.count - a.count);
+  
+  return {
+    stars: sorted.slice(0, 5),
+    deadStock: sorted.slice(-5).reverse(),
+  };
 }
 
 function initials(name: string) {
@@ -149,6 +170,18 @@ const IconStar = () => (
     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
   </svg>
 );
+const IconTrendDown = () => (
+  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+    <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+    <polyline points="17 18 23 18 23 12"></polyline>
+  </svg>
+);
+const IconTrendUp = () => (
+  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+    <polyline points="17 6 23 6 23 12"></polyline>
+  </svg>
+);
 
 /* ─── Points economy bar ─────────────────────────────────── */
 function EcoBar({ value, max, color }: { value: number; max: number; color: string }) {
@@ -183,13 +216,13 @@ export default function AnalyticsDashboard() {
   if (!data) return null;
 
   const {
-    summary: { totalRevenue, totalCustomers, avgBill, todayRevenue, yesterdayRevenue, todayTxnCount, newCustomersToday },
+    summary: { totalRevenue, totalExpenses, netProfit, totalCustomers, avgBill, todayRevenue, todayExpenses, todayNetProfit, yesterdayRevenue, todayTxnCount, newCustomersToday },
     pointsEconomy: { totalCirculating, totalEverIssued, totalRedeemed },
-    topCustomers, transactions, transactionItems, peakHours,
+    topCustomers, transactions, transactionItems, peakHours, expenses,
   } = data;
 
-  const revenueData = groupRevenueByPeriod(transactions, period);
-  const itemData    = topItems(transactionItems);
+  const chartData = groupFinancialsByPeriod(transactions, expenses, period);
+  const { stars, deadStock } = getProductPerformance(transactionItems);
   const maxPeakCount = Math.max(...peakHours.map((h) => h.count), 1);
 
   const revDelta = todayRevenue !== yesterdayRevenue
@@ -230,8 +263,20 @@ export default function AnalyticsDashboard() {
         <KpiCard
           label="Total Revenue"
           value={`₹${totalRevenue.toLocaleString('en-IN')}`}
-          sub="All-time revenue"
+          sub="Gross Sales"
           icon={<IconMoney />}
+        />
+        <KpiCard
+          label="Total Expenses"
+          value={`₹${totalExpenses.toLocaleString('en-IN')}`}
+          sub="Logged expenses"
+          icon={<IconTrendDown />}
+        />
+        <KpiCard
+          label="Net Profit"
+          value={`₹${netProfit.toLocaleString('en-IN')}`}
+          sub="Revenue - Expenses"
+          icon={<IconTrendUp />}
           delta={revDelta}
         />
         <KpiCard
@@ -240,19 +285,47 @@ export default function AnalyticsDashboard() {
           sub="Registered members"
           icon={<IconPeople />}
         />
-        <KpiCard
-          label="Avg Bill Size"
-          value={`₹${avgBill.toFixed(0)}`}
-          sub="Per transaction"
-          icon={<IconReceipt />}
-        />
-        <KpiCard
-          label="Points Circulating"
-          value={`${totalCirculating.toLocaleString('en-IN')}`}
-          sub="Current balance (all)"
-          icon={<IconStar />}
-        />
       </div>
+
+      {/* ── Payment Mode Breakdown ───────────────────────── */}
+      {(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const earnTxnsAll = transactions.filter((t: any) => t.type === 'earn' && t.bill_amount != null) as any[];
+        const modes = { cash: 0, upi: 0, card: 0, unknown: 0 };
+        let totalCount = 0;
+        earnTxnsAll.forEach((t: { payment_mode: string | null; bill_amount: number }) => {
+          totalCount++;
+          const m = t.payment_mode as keyof typeof modes;
+          if (m && m in modes) modes[m] += t.bill_amount;
+          else modes.unknown += t.bill_amount;
+        });
+        const modeRows = [
+          { label: 'UPI', color: '#6EC8A0', value: modes.upi },
+          { label: 'Card', color: '#6E98C8', value: modes.card },
+          { label: 'Cash', color: '#C8A96E', value: modes.cash },
+          { label: 'Unknown', color: 'rgba(242,232,217,0.15)', value: modes.unknown },
+        ].filter((r) => r.value > 0);
+        const maxMode = Math.max(...modeRows.map((r) => r.value), 1);
+        if (totalCount === 0) return null;
+        return (
+          <div style={card}>
+            <p style={{ fontSize: '12px', fontWeight: 500, color: CREAM, marginBottom: '14px' }}>Revenue by Payment Mode</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {modeRows.map((row) => (
+                <div key={row.label}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                    <span style={{ fontSize: '11px', color: MUTED }}>{row.label}</span>
+                    <span style={{ fontSize: '12px', fontWeight: 600, color: CREAM }}>₹{row.value.toLocaleString('en-IN')}</span>
+                  </div>
+                  <div style={{ height: '6px', background: 'rgba(255,255,255,0.07)', borderRadius: '4px', overflow: 'hidden' }}>
+                    <div style={{ width: `${(row.value / maxMode) * 100}%`, height: '100%', background: row.color, borderRadius: '4px', transition: 'width 0.6s ease' }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* ── Row 2: Revenue chart + Today at a glance ────── */}
       <div style={{ display: 'grid', gridTemplateColumns: '60fr 40fr', gap: '16px', minWidth: 0 }}>
@@ -260,7 +333,7 @@ export default function AnalyticsDashboard() {
         {/* Revenue over time */}
         <div style={card}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-            <p style={{ fontSize: '12px', fontWeight: 500, color: CREAM, margin: 0 }}>Revenue Over Time</p>
+            <p style={{ fontSize: '12px', fontWeight: 500, color: CREAM, margin: 0 }}>Financials Over Time (Net Profit)</p>
             <div style={{ display: 'flex', gap: '4px' }}>
               {(['day', 'week', 'month'] as Period[]).map((p) => (
                 <button
@@ -279,12 +352,16 @@ export default function AnalyticsDashboard() {
               ))}
             </div>
           </div>
-          {revenueData.length === 0 ? EMPTY_MSG : (
+          {chartData.length === 0 ? EMPTY_MSG : (
             <ResponsiveContainer width="100%" height={200}>
-              <AreaChart data={revenueData} margin={{ left: -10, right: 4 }}>
+              <AreaChart data={chartData} margin={{ left: -10, right: 4 }}>
                 <defs>
+                  <linearGradient id="profitGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#6EC87E" stopOpacity={0.35} />
+                    <stop offset="100%" stopColor="#6EC87E" stopOpacity={0} />
+                  </linearGradient>
                   <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="rgba(200,169,110,0.35)" />
+                    <stop offset="0%" stopColor="rgba(200,169,110,0.15)" />
                     <stop offset="100%" stopColor="rgba(200,169,110,0)" />
                   </linearGradient>
                 </defs>
@@ -292,14 +369,23 @@ export default function AnalyticsDashboard() {
                 <YAxis tick={{ fill: MUTED, fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={(v) => `₹${v}`} width={52} />
                 <Tooltip
                   contentStyle={TOOLTIP_STYLE}
-                  formatter={(v: unknown) => [`₹${(v as number).toLocaleString('en-IN')}`, 'Revenue']}
+                  itemStyle={{ fontSize: '12px' }}
+                  formatter={(v: unknown, name: string) => [`₹${(v as number).toLocaleString('en-IN')}`, name === 'profit' ? 'Net Profit' : 'Gross Revenue']}
                 />
                 <Area
                   type="monotone"
                   dataKey="revenue"
-                  stroke={GOLD}
-                  strokeWidth={2}
+                  stroke={MUTED}
+                  strokeWidth={1}
                   fill="url(#revenueGrad)"
+                  dot={false}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="profit"
+                  stroke="#6EC87E"
+                  strokeWidth={2}
+                  fill="url(#profitGrad)"
                   dot={false}
                 />
               </AreaChart>
@@ -318,6 +404,8 @@ export default function AnalyticsDashboard() {
                 ? { text: `${revDelta.positive ? '▲' : '▼'} ₹${Math.abs(revDelta.amount).toLocaleString('en-IN')} vs yesterday`, positive: revDelta.positive }
                 : { text: 'Same as yesterday', positive: null },
             },
+            { label: 'Expenses Today', value: `₹${todayExpenses.toLocaleString('en-IN')}`, chip: null },
+            { label: 'Net Profit Today', value: `₹${todayNetProfit.toLocaleString('en-IN')}`, chip: null },
             { label: 'Bills Processed', value: `${todayTxnCount}`, chip: null },
             { label: 'New Customers', value: `${newCustomersToday}`, chip: null },
           ].map((row, i) => (
@@ -325,8 +413,8 @@ export default function AnalyticsDashboard() {
               key={i}
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                padding: '14px 0',
-                borderBottom: i < 2 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+                padding: '10px 0',
+                borderBottom: i < 4 ? '1px solid rgba(255,255,255,0.06)' : 'none',
               }}
             >
               <div>
@@ -340,50 +428,75 @@ export default function AnalyticsDashboard() {
                   </span>
                 )}
               </div>
-              <p style={{ fontSize: '20px', fontWeight: 600, color: CREAM }}>{row.value}</p>
+              <p style={{ fontSize: '18px', fontWeight: 600, color: CREAM }}>{row.value}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ── Row 3: Most ordered + Peak hours ────────────── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '55fr 45fr', gap: '16px', minWidth: 0 }}>
+      {/* ── Row 3: Product Performance + Peak hours Heatmap ────────────── */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', minWidth: 0 }}>
 
-        {/* Most ordered items */}
+        {/* Product Performance */}
         <div style={card}>
-          <p style={{ fontSize: '12px', fontWeight: 500, color: CREAM, marginBottom: '16px' }}>Most Ordered Items</p>
-          {itemData.length === 0 ? EMPTY_MSG : (
-            <ResponsiveContainer width="100%" height={Math.max(itemData.length * 36, 120)}>
-              <BarChart data={itemData} layout="vertical" margin={{ left: 0, right: 12 }}>
-                <XAxis type="number" tick={{ fill: MUTED, fontSize: 10 }} axisLine={false} tickLine={false} />
-                <YAxis type="category" dataKey="name" tick={{ fill: 'rgba(242,232,217,0.65)', fontSize: 11 }} axisLine={false} tickLine={false} width={130} />
-                <CartesianGrid stroke="rgba(255,255,255,0.04)" horizontal={false} />
-                <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: unknown) => [v as number, 'Qty sold']} />
-                <Bar dataKey="count" fill={GOLD} radius={[0, 4, 4, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+          <p style={{ fontSize: '12px', fontWeight: 500, color: CREAM, marginBottom: '16px' }}>Product Performance</p>
+          {stars.length === 0 ? EMPTY_MSG : (
+            <div style={{ display: 'flex', gap: '20px' }}>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: '11px', color: '#6EC87E', marginBottom: '8px', fontWeight: 600 }}>★ Stars (Top Sellers)</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {stars.map((item, i) => (
+                    <div key={`star-${i}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.03)', padding: '6px 10px', borderRadius: '6px' }}>
+                      <span style={{ fontSize: '12px', color: CREAM }}>{item.name}</span>
+                      <span style={{ fontSize: '12px', color: GOLD, fontWeight: 500 }}>{item.count}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: '11px', color: '#C86E6E', marginBottom: '8px', fontWeight: 600 }}>⚠ Dead Stock (Low Sales)</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {deadStock.map((item, i) => (
+                    <div key={`dead-${i}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.03)', padding: '6px 10px', borderRadius: '6px' }}>
+                      <span style={{ fontSize: '12px', color: 'rgba(242,232,217,0.7)' }}>{item.name}</span>
+                      <span style={{ fontSize: '12px', color: MUTED }}>{item.count}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           )}
         </div>
 
         {/* Peak hours */}
         <div style={card}>
-          <p style={{ fontSize: '12px', fontWeight: 500, color: CREAM, marginBottom: '4px' }}>Peak Hours</p>
+          <p style={{ fontSize: '12px', fontWeight: 500, color: CREAM, marginBottom: '4px' }}>Peak Hours Heatmap</p>
           <p style={{ fontSize: '11px', color: MUTED, marginBottom: '14px' }}>Busiest times at the counter</p>
           {peakHours.every((h) => h.count === 0) ? EMPTY_MSG : (
             <>
               <ResponsiveContainer width="100%" height={160}>
                 <BarChart data={peakHours} margin={{ left: -10, right: 4 }}>
                   <XAxis dataKey="hour" tick={{ fill: MUTED, fontSize: 9 }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: unknown) => [v as number, 'Transactions']} />
-                  <Bar
-                    dataKey="count"
-                    radius={[3, 3, 0, 0]}
-                    // Color each bar individually via cell won't work simply; use gradient as fill
-                    fill="rgba(200,169,110,0.35)"
-                  />
+                  <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: unknown) => [v as number, 'Transactions']} cursor={{fill: 'rgba(255,255,255,0.05)'}} />
+                  <Bar dataKey="count" radius={[3, 3, 0, 0]}>
+                    {
+                      peakHours.map((entry, index) => {
+                        const intensity = maxPeakCount > 0 ? entry.count / maxPeakCount : 0;
+                        const color = `rgba(200, 169, 110, ${0.15 + intensity * 0.85})`;
+                        return <Cell key={`cell-${index}`} fill={color} />;
+                      })
+                    }
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
-              <p style={{ fontSize: '10px', color: 'rgba(242,232,217,0.25)', marginTop: '6px' }}>Based on all transactions</p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px' }}>
+                <p style={{ fontSize: '10px', color: 'rgba(242,232,217,0.25)' }}>Based on all transactions</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ fontSize: '9px', color: MUTED }}>Less Busy</span>
+                  <div style={{ width: '40px', height: '6px', background: 'linear-gradient(to right, rgba(200,169,110,0.15), rgba(200,169,110,1))', borderRadius: '3px' }} />
+                  <span style={{ fontSize: '9px', color: MUTED }}>Very Busy</span>
+                </div>
+              </div>
             </>
           )}
         </div>
@@ -457,7 +570,8 @@ export default function AnalyticsDashboard() {
           ) : (
             transactions.slice(0, 30).map((t, i) => {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              const txn = t as any as { id: string; type: string; points: number; bill_amount: number | null; created_at: string; customers?: { name: string; phone: string } };
+              const txn = t as any as { id: string; type: string; points: number; bill_amount: number | null; payment_mode: string | null; bill_number: number | null; created_at: string; customers?: { name: string; phone: string } };
+              const modeLabel: Record<string, string> = { cash: 'Cash', upi: 'UPI', card: 'Card' };
               return (
                 <div
                   key={txn.id}
@@ -484,9 +598,19 @@ export default function AnalyticsDashboard() {
                       <p style={{ fontSize: '13px', color: CREAM, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {txn.customers?.name ?? '—'}
                       </p>
-                      {txn.bill_amount != null && (
-                        <p style={{ fontSize: '11px', color: MUTED }}>₹{txn.bill_amount.toLocaleString('en-IN')}</p>
-                      )}
+                      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        {txn.bill_amount != null && (
+                          <p style={{ fontSize: '11px', color: MUTED }}>₹{txn.bill_amount.toLocaleString('en-IN')}</p>
+                        )}
+                        {txn.payment_mode && (
+                          <span style={{ fontSize: '10px', padding: '1px 6px', borderRadius: '8px', background: 'rgba(255,255,255,0.06)', color: MUTED }}>
+                            {modeLabel[txn.payment_mode] ?? txn.payment_mode}
+                          </span>
+                        )}
+                        {txn.bill_number && (
+                          <span style={{ fontSize: '10px', color: 'rgba(242,232,217,0.25)' }}>#{txn.bill_number}</span>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div style={{ textAlign: 'right', flexShrink: 0 }}>

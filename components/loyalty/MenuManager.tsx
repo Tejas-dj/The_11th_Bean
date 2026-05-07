@@ -2,26 +2,32 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
-import { createMenuItem, updateMenuItem } from '@/app/actions/loyalty';
+import { createMenuItem, updateMenuItem, deleteMenuItem } from '@/app/actions/loyalty';
 import type { MenuItem } from '@/lib/loyalty-types';
+import { menuCategories } from '@/data/menu';
+
+const MENU_CATEGORIES = menuCategories.map(c => c.id);
 
 interface EditState {
   id: string;
   name: string;
   price: string;
+  category: string;
 }
 
 export default function MenuManager() {
   const [items, setItems]       = useState<MenuItem[]>([]);
   const [loading, setLoading]   = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [newName, setNewName]   = useState('');
-  const [newPrice, setNewPrice] = useState('');
+  const [newName, setNewName]       = useState('');
+  const [newPrice, setNewPrice]     = useState('');
+  const [newCategory, setNewCat]    = useState(MENU_CATEGORIES[0]);
   const [saving, setSaving]     = useState(false);
   const [error, setError]       = useState('');
   const [edit, setEdit]         = useState<EditState | null>(null);
   const [editSaving, setEditSaving] = useState(false);
   const [editError, setEditError]   = useState('');
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const nameRef = useRef<HTMLInputElement>(null);
 
   const load = () => {
@@ -46,13 +52,13 @@ export default function MenuManager() {
     e.preventDefault();
     if (!newName.trim() || !newPrice) { setError('Name and price required.'); return; }
     setSaving(true); setError('');
-    const result = await createMenuItem(newName.trim(), parseFloat(newPrice));
+    const result = await createMenuItem(newName.trim(), parseFloat(newPrice), newCategory);
     setSaving(false);
     if ('error' in result) {
       setError(result.error);
     } else {
       setItems((prev) => [...prev, result.item].sort((a, b) => a.name.localeCompare(b.name)));
-      setNewName(''); setNewPrice(''); setShowForm(false);
+      setNewName(''); setNewPrice(''); setNewCat(MENU_CATEGORIES[0]); setShowForm(false);
     }
   };
 
@@ -64,8 +70,23 @@ export default function MenuManager() {
   };
 
   const startEdit = (item: MenuItem) => {
-    setEdit({ id: item.id, name: item.name, price: String(item.price) });
+    setEdit({ id: item.id, name: item.name, price: String(item.price), category: item.category || MENU_CATEGORIES[0] });
     setEditError('');
+  };
+
+  const handleDelete = async (id: string) => {
+    if (deleteConfirm !== id) {
+      setDeleteConfirm(id);
+      setTimeout(() => setDeleteConfirm(null), 3000); // reset if not confirmed in 3s
+      return;
+    }
+    const result = await deleteMenuItem(id);
+    if ('error' in result) {
+      alert(result.error);
+    } else {
+      setItems((prev) => prev.filter(i => i.id !== id));
+    }
+    setDeleteConfirm(null);
   };
 
   const cancelEdit = () => { setEdit(null); setEditError(''); };
@@ -76,7 +97,7 @@ export default function MenuManager() {
     const priceNum = parseFloat(edit.price);
     if (isNaN(priceNum) || priceNum < 0) { setEditError('Enter a valid price.'); return; }
     setEditSaving(true); setEditError('');
-    const result = await updateMenuItem(edit.id, { name: edit.name.trim(), price: priceNum });
+    const result = await updateMenuItem(edit.id, { name: edit.name.trim(), price: priceNum, category: edit.category });
     setEditSaving(false);
     if ('error' in result) {
       setEditError(result.error);
@@ -150,6 +171,13 @@ export default function MenuManager() {
               />
             </div>
           </div>
+          <select
+            value={newCategory}
+            onChange={(e) => setNewCat(e.target.value)}
+            style={{ ...inp, width: '100%' }}
+          >
+            {MENU_CATEGORIES.map((c) => <option key={c} value={c} style={{ background: '#2A2320', color: '#F2E8D9' }}>{c}</option>)}
+          </select>
           {error && <p className="text-xs" style={{ color: '#C4453A' }}>{error}</p>}
           <button
             type="submit"
@@ -202,6 +230,14 @@ export default function MenuManager() {
                         style={{ ...editInp, paddingLeft: '22px', width: '100%' }}
                       />
                     </div>
+                    {/* Category select */}
+                    <select
+                      value={edit.category}
+                      onChange={(e) => setEdit((s) => s ? { ...s, category: e.target.value } : s)}
+                      style={{ ...editInp, flex: '1 1 100px' }}
+                    >
+                      {MENU_CATEGORIES.map((c) => <option key={c} value={c} style={{ background: '#2A2320', color: '#F2E8D9' }}>{c}</option>)}
+                    </select>
                     {/* Save */}
                     <button
                       onClick={handleSaveEdit}
@@ -242,6 +278,14 @@ export default function MenuManager() {
                 <span className="flex-1 text-sm min-w-0 truncate" style={{ color: item.is_active ? '#F2E8D9' : 'rgba(242,232,217,0.5)' }}>
                   {item.name}
                 </span>
+                {item.category && (
+                  <span
+                    className="text-xs px-2 py-0.5 rounded-full flex-shrink-0"
+                    style={{ background: 'rgba(200,169,110,0.1)', color: 'rgba(200,169,110,0.7)', border: '1px solid rgba(200,169,110,0.15)' }}
+                  >
+                    {item.category}
+                  </span>
+                )}
 
                 {/* Price badge */}
                 <span
@@ -276,6 +320,19 @@ export default function MenuManager() {
                   }}
                 >
                   {item.is_active ? 'Deactivate' : 'Activate'}
+                </button>
+
+                {/* Delete button */}
+                <button
+                  onClick={() => handleDelete(item.id)}
+                  className="text-xs px-3 py-1 rounded-lg transition-opacity hover:opacity-80 flex-shrink-0"
+                  style={{
+                    background: deleteConfirm === item.id ? '#C4453A' : 'rgba(255,255,255,0.06)',
+                    color: deleteConfirm === item.id ? '#1E1916' : '#C4453A',
+                    border: '1px solid rgba(196,69,58,0.3)',
+                  }}
+                >
+                  {deleteConfirm === item.id ? 'Confirm Delete' : 'Delete'}
                 </button>
               </div>
             );

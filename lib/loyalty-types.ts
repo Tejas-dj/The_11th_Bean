@@ -14,6 +14,7 @@ export interface MenuItem {
   name: string;
   price: number;
   is_active: boolean;
+  category: string;
   created_at: string;
 }
 
@@ -24,6 +25,10 @@ export interface Transaction {
   points: number;
   bill_amount: number | null;
   pin_level: PinLevel;
+  payment_mode: 'cash' | 'upi' | 'card' | null;
+  bill_number: number | null;
+  tax_amount: number | null;
+  discount_amount: number | null;
   created_at: string;
   customers?: Pick<Customer, 'name' | 'phone'>;
 }
@@ -48,4 +53,33 @@ export interface Reward {
 export interface BillLineItem {
   menuItem: MenuItem;
   quantity: number;
+}
+
+export type PaymentMode = 'cash' | 'upi' | 'card';
+
+export interface Expense {
+  id: string;
+  amount: number;
+  description: string;
+  logged_by: PinLevel;
+  created_at: string;
+}
+
+export interface RegisterClosure {
+  id: string;
+  expected_cash: number;
+  actual_cash: number;
+  difference: number;
+  closed_by: PinLevel;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface ParkedBill {
+  id: string;
+  customer_id: string;
+  cashier_pin_level: string;
+  line_items: BillLineItem[];
+  created_at: string;
+  customers?: Pick<Customer, 'name' | 'phone' | 'total_points'>;
 }

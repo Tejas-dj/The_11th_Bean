@@ -6,8 +6,9 @@ import CashierView from './CashierView';
 import AnalyticsDashboard from './AnalyticsDashboard';
 import MenuManager from './MenuManager';
 import RewardManager from './RewardManager';
+import LedgerView from './LedgerView';
 
-type Tab = 'dashboard' | 'cashier' | 'menu' | 'rewards';
+type Tab = 'dashboard' | 'cashier' | 'financials' | 'menu' | 'rewards';
 
 interface Props {
   onLogout: () => void;
@@ -34,6 +35,16 @@ const NAV_ITEMS: { id: Tab; label: string; icon: React.ReactNode }[] = [
         <rect x="2" y="3" width="20" height="14" rx="2" />
         <line x1="8" y1="21" x2="16" y2="21" />
         <line x1="12" y1="17" x2="12" y2="21" />
+      </svg>
+    ),
+  },
+  {
+    id: 'financials',
+    label: 'Ledger & EOD',
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+        <polyline points="22,6 12,13 2,6"></polyline>
       </svg>
     ),
   },
@@ -73,6 +84,7 @@ export default function OwnerView({ onLogout }: Props) {
     switch (tab) {
       case 'dashboard': return <AnalyticsDashboard />;
       case 'cashier':   return <CashierView pinLevel="owner" onLogout={onLogout} />;
+      case 'financials':return <LedgerView />;
       case 'menu':      return <MenuManager />;
       case 'rewards':   return <RewardManager />;
     }

@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import CustomerSearch from './CustomerSearch';
-import BillingForm from './BillingForm';
-import PointsManager from './PointsManager';
-import type { Customer, PinLevel } from '@/lib/loyalty-types';
+import POSView from './POSView';
+import EodExpenses from './EodExpenses';
+import type { Customer, PinLevel, Transaction } from '@/lib/loyalty-types';
+import { supabase } from '@/lib/supabase';
 
-type Screen = 'search' | 'billing' | 'customer-detail';
+type Screen = 'search' | 'pos';
 
 interface Props {
   pinLevel: PinLevel;
@@ -15,137 +16,115 @@ interface Props {
 }
 
 export default function CashierView({ pinLevel, onLogout }: Props) {
-  const [screen, setScreen]     = useState<Screen>('search');
-  const [customer, setCustomer] = useState<Customer | null>(null);
-  const [lastBill, setLastBill] = useState<{ points: number; amount: number } | null>(null);
+  const [screen, setScreen]             = useState<Screen>('search');
+  const [customer, setCustomer]         = useState<Customer | null>(null);
+  const [recentTxns, setRecentTxns]     = useState<Transaction[]>([]);
+  const [showEod, setShowEod]           = useState(false);
+  const [resumingParkedBillId, setResumingParkedBillId] = useState<string | null>(null);
+  const [resumingLineItems, setResumingLineItems]       = useState<any[]>([]);
 
-  const handleCustomerSelected = (c: Customer) => {
+  const handleCustomerSelected = async (c: Customer, parkedBillId?: string, parkedLineItems?: any[]) => {
     setCustomer(c);
-    setLastBill(null);
-    setScreen('billing');
-  };
-
-  const handleBillSuccess = (updatedCustomer: Customer, pointsEarned: number, billAmount: number) => {
-    setCustomer(updatedCustomer);
-    setLastBill({ points: pointsEarned, amount: billAmount });
-    setScreen('customer-detail');
+    if (parkedBillId && parkedLineItems) {
+      setResumingParkedBillId(parkedBillId);
+      setResumingLineItems(parkedLineItems);
+    } else {
+      setResumingParkedBillId(null);
+      setResumingLineItems([]);
+    }
+    // Fetch last 5 transactions for "the usual" hint
+    const { data } = await supabase
+      .from('transactions')
+      .select('*')
+      .eq('customer_id', c.id)
+      .eq('type', 'earn')
+      .order('created_at', { ascending: false })
+      .limit(5);
+    setRecentTxns((data as Transaction[]) ?? []);
+    setScreen('pos');
   };
 
   const handleNewCustomer = () => {
     setCustomer(null);
-    setLastBill(null);
+    setRecentTxns([]);
+    setResumingParkedBillId(null);
+    setResumingLineItems([]);
     setScreen('search');
   };
 
   return (
-    <div className="min-h-screen" style={{ background: '#2A2320' }}>
-      {/* Top bar */}
-      <div
-        className="sticky top-0 z-10 flex items-center justify-between px-5 py-3"
-        style={{ background: 'rgba(42,35,32,0.95)', borderBottom: '1px solid rgba(200,169,110,0.15)', backdropFilter: 'blur(8px)' }}
-      >
-        <div className="flex items-center gap-3">
-          <Image
-            src="/Main_Logo.svg"
-            alt="The 11th Bean"
-            width={110}
-            height={32}
-            style={{ filter: 'brightness(0) invert(1)', opacity: 0.9, objectFit: 'contain' }}
-            priority
-          />
-          <span
-            className="text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider"
-            style={{ background: 'rgba(200,169,110,0.15)', color: '#C8A96E', border: '1px solid rgba(200,169,110,0.25)' }}
-          >
-            {pinLevel}
-          </span>
-        </div>
-        <div className="flex items-center gap-3">
-          {screen !== 'search' && (
-            <button
-              onClick={handleNewCustomer}
-              className="text-xs px-3 py-1.5 rounded-lg transition-opacity hover:opacity-70"
-              style={{ color: 'rgba(242,232,217,0.6)', border: '1px solid rgba(200,169,110,0.2)' }}
-            >
-              + New Customer
-            </button>
-          )}
-          <button
-            onClick={onLogout}
-            className="text-xs transition-opacity hover:opacity-60"
-            style={{ color: 'rgba(242,232,217,0.4)' }}
-          >
-            Sign out
-          </button>
-        </div>
-      </div>
-
-      {/* Bill success banner */}
-      {screen === 'customer-detail' && lastBill && (
+    <div style={{ minHeight: '100vh', background: '#1E1916', display: 'flex', flexDirection: 'column' }}>
+      {/* Top bar — only visible on search screen */}
+      {screen === 'search' && (
         <div
-          className="mx-4 mt-4 px-5 py-4 rounded-xl"
-          style={{ background: 'rgba(200,169,110,0.12)', border: '1px solid rgba(200,169,110,0.3)' }}
+          style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '12px 20px',
+            background: 'rgba(26,21,18,0.96)',
+            borderBottom: '1px solid rgba(200,169,110,0.12)',
+            backdropFilter: 'blur(8px)',
+          }}
         >
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium" style={{ color: '#F2E8D9' }}>
-                ✓ Bill submitted — ₹{lastBill.amount.toFixed(2)}
-              </p>
-              <p className="text-xs mt-0.5" style={{ color: '#C8A96E' }}>
-                +{lastBill.points} points added to {customer?.name}
-              </p>
-            </div>
-            <button
-              onClick={handleNewCustomer}
-              className="text-xs px-3 py-1.5 rounded-lg font-medium"
-              style={{ background: '#C8A96E', color: '#2A2320' }}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <Image
+              src="/Main_Logo.svg"
+              alt="The 11th Bean"
+              width={110}
+              height={32}
+              style={{ filter: 'brightness(0) invert(1)', opacity: 0.9, objectFit: 'contain' }}
+              priority
+            />
+            <span
+              style={{
+                fontSize: '10px', padding: '2px 10px', borderRadius: '20px',
+                background: 'rgba(200,169,110,0.15)', color: '#C8A96E',
+                border: '1px solid rgba(200,169,110,0.3)',
+                textTransform: 'uppercase', letterSpacing: '0.1em',
+              }}
             >
-              Next Customer
+              {pinLevel}
+            </span>
+          </div>
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <button
+              onClick={() => setShowEod(true)}
+              style={{ background: 'rgba(200,169,110,0.1)', border: '1px solid rgba(200,169,110,0.3)', borderRadius: '16px', padding: '6px 12px', color: '#C8A96E', fontSize: '13px', cursor: 'pointer' }}
+            >
+              EOD & Expenses
+            </button>
+            <button
+              onClick={onLogout}
+              style={{ background: 'none', border: 'none', color: 'rgba(242,232,217,0.4)', fontSize: '13px', cursor: 'pointer' }}
+            >
+              Sign out
             </button>
           </div>
+        </div>
+      )}
+
+      {/* EOD/Expenses Modal */}
+      {showEod && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 10000, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)' }}>
+          <EodExpenses pinLevel={pinLevel} onClose={() => setShowEod(false)} />
         </div>
       )}
 
       {/* Screens */}
       {screen === 'search' && (
-        <CustomerSearch onCustomerSelected={handleCustomerSelected} />
+        <CustomerSearch onCustomerSelected={handleCustomerSelected} pinLevel={pinLevel} />
       )}
 
-      {screen === 'billing' && customer && (
-        <BillingForm
+      {screen === 'pos' && customer && (
+        <POSView
           customer={customer}
           pinLevel={pinLevel}
-          onSuccess={handleBillSuccess}
-          onBack={() => setScreen('search')}
+          onNewCustomer={handleNewCustomer}
+          onLogout={onLogout}
+          recentTransactions={recentTxns}
+          onShowEod={() => setShowEod(true)}
+          parkedBillId={resumingParkedBillId || undefined}
+          initialLineItems={resumingLineItems.length > 0 ? resumingLineItems : undefined}
         />
-      )}
-
-      {screen === 'customer-detail' && customer && (
-        <div className="max-w-lg mx-auto px-4 pb-10">
-          {/* Customer card */}
-          <div className="mt-4 mb-6 flex items-center justify-between">
-            <div>
-              <p className="text-[10px] tracking-[0.2em] uppercase" style={{ color: '#C8A96E' }}>Customer</p>
-              <h2 className="text-xl font-medium" style={{ color: '#F2E8D9', fontFamily: 'var(--font-lora), Georgia, serif' }}>
-                {customer.name}
-              </h2>
-              <p className="text-sm" style={{ color: 'rgba(242,232,217,0.5)' }}>{customer.phone}</p>
-            </div>
-            <button
-              onClick={() => setScreen('billing')}
-              className="text-xs px-3 py-1.5 rounded-lg transition-opacity hover:opacity-80"
-              style={{ background: 'rgba(200,169,110,0.15)', color: '#C8A96E', border: '1px solid rgba(200,169,110,0.25)' }}
-            >
-              New Bill
-            </button>
-          </div>
-
-          <PointsManager
-            customer={customer}
-            pinLevel={pinLevel}
-            onCustomerUpdated={setCustomer}
-          />
-        </div>
       )}
     </div>
   );

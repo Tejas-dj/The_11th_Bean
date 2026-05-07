@@ -9,6 +9,7 @@ export interface MenuItem {
     | 'espresso-hot'
     | 'espresso-cold'
     | 'matcha'
+    | 'baked-items'
     | 'customizations';
   tags?: string[];
   /** Mark exactly one item as the current Shishir's Pick */
@@ -260,6 +261,53 @@ export const menuItems: MenuItem[] = [
     tags: ['Vegan'],
   },
 
+  // ── Baked Items ──────────────────────────────────────────────────────────
+  {
+    id: 'nutella-cookie',
+    name: 'Nutella Cookie',
+    description: 'Crispy edges, gooey Nutella centre — the cookie that started a debate.',
+    price: 80,
+    category: 'baked-items',
+    tags: ['Most Loved'],
+  },
+  {
+    id: 'choco-chip-cookie',
+    name: 'Choco Chip Cookie',
+    description: 'Classic, warm, unapologetically chocolatey.',
+    price: 70,
+    category: 'baked-items',
+  },
+  {
+    id: 'butter-croissant',
+    name: 'Butter Croissant',
+    description: 'Flaky, buttery, French in spirit, made right here.',
+    price: 90,
+    category: 'baked-items',
+  },
+  {
+    id: 'banana-bread',
+    name: 'Banana Bread',
+    description: 'Dense, moist, and the reason overripe bananas exist.',
+    price: 100,
+    category: 'baked-items',
+    tags: ['Popular'],
+  },
+  {
+    id: 'blueberry-muffin',
+    name: 'Blueberry Muffin',
+    description: 'Bursting with berries and baked to a golden dome.',
+    price: 90,
+    category: 'baked-items',
+  },
+  {
+    id: 'almond-biscotti',
+    name: 'Almond Biscotti',
+    description: 'Built for dunking. Double-baked and dangerously addictive.',
+    price: 60,
+    category: 'baked-items',
+    tags: ['Pairs with Coffee'],
+  },
+
   // ── Customizations ────────────────────────────────────────────────────────
   {
     id: 'milk-alternatives',
@@ -280,7 +328,7 @@ export const menuItems: MenuItem[] = [
   {
     id: 'extra-shot',
     name: 'Extra Shot of Espresso',
-    description: 'For when one shot just isn\'t enough.',
+    description: "For when one shot just isn't enough.",
     price: 41,
     category: 'customizations',
     tags: ['Add-on'],
@@ -301,6 +349,7 @@ export const menuCategories = [
   { id: 'espresso-cold',   label: 'Espresso (Cold)' },
   { id: 'matcha',          label: 'Matcha Magic' },
   { id: 'non-coffee-tea',  label: 'Tea & Non-Coffee' },
+  { id: 'baked-items',     label: 'Baked Items' },
   { id: 'customizations',  label: 'Customizations' },
 ] as const;
 
