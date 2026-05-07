@@ -21,7 +21,7 @@ export default function MenuManager() {
   const [showForm, setShowForm] = useState(false);
   const [newName, setNewName]       = useState('');
   const [newPrice, setNewPrice]     = useState('');
-  const [newCategory, setNewCat]    = useState(MENU_CATEGORIES[0]);
+  const [newCategory, setNewCat]    = useState<string>(MENU_CATEGORIES[0]);
   const [saving, setSaving]     = useState(false);
   const [error, setError]       = useState('');
   const [edit, setEdit]         = useState<EditState | null>(null);

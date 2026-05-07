@@ -370,7 +370,7 @@ export default function AnalyticsDashboard() {
                 <Tooltip
                   contentStyle={TOOLTIP_STYLE}
                   itemStyle={{ fontSize: '12px' }}
-                  formatter={(v: unknown, name: string) => [`₹${(v as number).toLocaleString('en-IN')}`, name === 'profit' ? 'Net Profit' : 'Gross Revenue']}
+                  formatter={(v: any, name: any) => [`₹${(v as number).toLocaleString('en-IN')}`, name === 'profit' ? 'Net Profit' : 'Gross Revenue']}
                 />
                 <Area
                   type="monotone"
