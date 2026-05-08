@@ -10,6 +10,7 @@ export interface MenuItem {
     | 'espresso-cold'
     | 'matcha'
     | 'baked-items'
+    | 'food'
     | 'customizations';
   tags?: string[];
   /** Mark exactly one item as the current Shishir's Pick */
@@ -350,6 +351,7 @@ export const menuCategories = [
   { id: 'matcha',          label: 'Matcha Magic' },
   { id: 'non-coffee-tea',  label: 'Tea & Non-Coffee' },
   { id: 'baked-items',     label: 'Baked Items' },
+  { id: 'food',            label: 'Food' },
   { id: 'customizations',  label: 'Customizations' },
 ] as const;
 

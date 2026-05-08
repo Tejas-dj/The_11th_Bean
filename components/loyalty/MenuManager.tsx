@@ -6,7 +6,8 @@ import { createMenuItem, updateMenuItem, deleteMenuItem } from '@/app/actions/lo
 import type { MenuItem } from '@/lib/loyalty-types';
 import { menuCategories } from '@/data/menu';
 
-const MENU_CATEGORIES = menuCategories.map(c => c.id);
+// Keep the full objects so dropdowns show human-readable labels
+const MENU_CATEGORIES = menuCategories;
 
 interface EditState {
   id: string;
@@ -21,7 +22,7 @@ export default function MenuManager() {
   const [showForm, setShowForm] = useState(false);
   const [newName, setNewName]       = useState('');
   const [newPrice, setNewPrice]     = useState('');
-  const [newCategory, setNewCat]    = useState<string>(MENU_CATEGORIES[0]);
+  const [newCategory, setNewCat]    = useState<string>(MENU_CATEGORIES[0].id);
   const [saving, setSaving]     = useState(false);
   const [error, setError]       = useState('');
   const [edit, setEdit]         = useState<EditState | null>(null);
@@ -58,7 +59,7 @@ export default function MenuManager() {
       setError(result.error);
     } else {
       setItems((prev) => [...prev, result.item].sort((a, b) => a.name.localeCompare(b.name)));
-      setNewName(''); setNewPrice(''); setNewCat(MENU_CATEGORIES[0]); setShowForm(false);
+      setNewName(''); setNewPrice(''); setNewCat(MENU_CATEGORIES[0].id); setShowForm(false);
     }
   };
 
@@ -70,7 +71,7 @@ export default function MenuManager() {
   };
 
   const startEdit = (item: MenuItem) => {
-    setEdit({ id: item.id, name: item.name, price: String(item.price), category: item.category || MENU_CATEGORIES[0] });
+    setEdit({ id: item.id, name: item.name, price: String(item.price), category: item.category || MENU_CATEGORIES[0].id });
     setEditError('');
   };
 
@@ -176,7 +177,7 @@ export default function MenuManager() {
             onChange={(e) => setNewCat(e.target.value)}
             style={{ ...inp, width: '100%' }}
           >
-            {MENU_CATEGORIES.map((c) => <option key={c} value={c} style={{ background: '#2A2320', color: '#F2E8D9' }}>{c}</option>)}
+            {MENU_CATEGORIES.map((c) => <option key={c.id} value={c.id} style={{ background: '#2A2320', color: '#F2E8D9' }}>{c.label}</option>)}
           </select>
           {error && <p className="text-xs" style={{ color: '#C4453A' }}>{error}</p>}
           <button
@@ -236,7 +237,7 @@ export default function MenuManager() {
                       onChange={(e) => setEdit((s) => s ? { ...s, category: e.target.value } : s)}
                       style={{ ...editInp, flex: '1 1 100px' }}
                     >
-                      {MENU_CATEGORIES.map((c) => <option key={c} value={c} style={{ background: '#2A2320', color: '#F2E8D9' }}>{c}</option>)}
+                      {MENU_CATEGORIES.map((c) => <option key={c.id} value={c.id} style={{ background: '#2A2320', color: '#F2E8D9' }}>{c.label}</option>)}
                     </select>
                     {/* Save */}
                     <button

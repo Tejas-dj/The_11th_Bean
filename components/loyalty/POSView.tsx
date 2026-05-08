@@ -23,6 +23,7 @@ const CATEGORIES = [
   { id: 'matcha',          label: 'Matcha' },
   { id: 'non-coffee-tea',  label: 'Tea & More' },
   { id: 'baked-items',     label: 'Baked Items' },
+  { id: 'food',            label: 'Food' },
   { id: 'customizations',  label: 'Add-ons' },
 ];
 
