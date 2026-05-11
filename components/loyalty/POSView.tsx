@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Fuse from 'fuse.js';
-import { supabase } from '@/lib/supabase';
 import { submitBill, parkBill, deleteParkedBill } from '@/app/actions/loyalty';
 import { Receipt } from './Receipt';
 import type { Customer, MenuItem, BillLineItem, PinLevel, PaymentMode } from '@/lib/loyalty-types';
@@ -117,10 +116,13 @@ export default function POSView({
       return;
     }
 
-    supabase.from('menu_items').select('*').eq('is_active', true).order('name')
-      .then(({ data }) => {
-        if (data) {
-          const augmentedData = (data as MenuItem[]).map(item => {
+    // Fetch from the ISR-cached API route instead of hitting Supabase directly.
+    // Next.js serves this from edge cache so the first-load is near-instant.
+    fetch('/api/menu')
+      .then(r => r.json())
+      .then(({ items }: { items: MenuItem[] }) => {
+        if (items?.length) {
+          const augmentedData = items.map(item => {
             const localMatch = localMenuItems.find(li => li.name === item.name);
             return {
               ...item,

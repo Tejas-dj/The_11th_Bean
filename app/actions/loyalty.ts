@@ -333,89 +333,68 @@ export async function deleteReward(id: string): Promise<{ ok: true } | { error: 
 export async function fetchAnalytics() {
   const supabase = createAdminClient();
 
-  const { startDate: todayStart } = getBusinessDayBounds();
+  const { startDate: todayStart, endDate: todayEnd } = getBusinessDayBounds();
   const yesterdayStart = new Date(todayStart.getTime() - 24 * 60 * 60 * 1000);
 
-  const [allCustomers, transactions, itemTotals, expensesData] = await Promise.all([
-    supabase
-      .from('customers')
-      .select('id, name, phone, total_points, lifetime_points, created_at')
-      .order('lifetime_points', { ascending: false }),
-    supabase
-      .from('transactions')
-      .select('id, type, points, bill_amount, pin_level, created_at, customers(name, phone)')
-      .order('created_at', { ascending: false })
-      .limit(500),
-    supabase
-      .from('transaction_items')
-      .select('quantity, unit_price, menu_items(name)'),
+  // Fire all RPC calls in parallel — Postgres does the heavy math,
+  // only tiny JSON blobs come back over the network.
+  const [summaryRes, peakRes, topItemsRes, topCustsRes, recentTxnsRes, expensesRes] = await Promise.all([
+    supabase.rpc('get_analytics_summary', {
+      p_today_start:     todayStart.toISOString(),
+      p_today_end:       todayEnd.toISOString(),
+      p_yesterday_start: yesterdayStart.toISOString(),
+    }),
+    supabase.rpc('get_peak_hours'),
+    supabase.rpc('get_top_items', { p_limit: 20 }),
+    supabase.rpc('get_top_customers', { p_limit: 10 }),
+    supabase.rpc('get_recent_transactions', { p_limit: 100 }),
     supabase
       .from('expenses')
       .select('*')
       .order('created_at', { ascending: false }),
   ]);
 
-  const custs = allCustomers.data ?? [];
-  const txns  = transactions.data ?? [];
-  const exps  = expensesData.data ?? [];
+  const summary      = summaryRes.data ?? {};
+  const rawPeakHours = (peakRes.data ?? []) as { hour: number; count: number }[];
+  const topItems     = topItemsRes.data ?? [];
+  const topCustomers = topCustsRes.data ?? [];
+  const transactions = recentTxnsRes.data ?? [];
+  const exps         = expensesRes.data ?? [];
 
-  // Revenue aggregates
-  const earnTxns     = txns.filter((t: { type: string; bill_amount: number | null }) => t.type === 'earn' && t.bill_amount != null);
-  const totalRevenue = earnTxns.reduce((s: number, t: { bill_amount: number }) => s + t.bill_amount, 0);
-  const totalExpenses = exps.reduce((s: number, e: { amount: number }) => s + e.amount, 0);
-  const netProfit    = totalRevenue - totalExpenses;
-  const avgBill      = earnTxns.length > 0 ? totalRevenue / earnTxns.length : 0;
-
-  const todayEarns      = earnTxns.filter((t: { created_at: string }) => new Date(t.created_at) >= todayStart);
-  const yesterdayEarns  = earnTxns.filter((t: { created_at: string }) => {
-    const d = new Date(t.created_at);
-    return d >= yesterdayStart && d < todayStart;
+  // Format peak hours into the labels the dashboard expects (6am–10pm)
+  const hourMap: Record<number, number> = {};
+  rawPeakHours.forEach(({ hour, count }) => { hourMap[hour] = count; });
+  const peakHours = Array.from({ length: 17 }, (_, i) => {
+    const h = i + 6; // 6 → 22
+    const label = h < 12 ? `${h}a` : h === 12 ? '12p' : `${h - 12}p`;
+    return { hour: label, count: hourMap[h] ?? 0 };
   });
-  
-  const todayExps = exps.filter((e: { created_at: string }) => new Date(e.created_at) >= todayStart);
-  const todayExpenses = todayExps.reduce((s: number, e: { amount: number }) => s + e.amount, 0);
 
-  const todayRevenue     = todayEarns.reduce((s: number, t: { bill_amount: number }) => s + t.bill_amount, 0);
-  const todayNetProfit   = todayRevenue - todayExpenses;
-  const yesterdayRevenue = yesterdayEarns.reduce((s: number, t: { bill_amount: number }) => s + t.bill_amount, 0);
-  const todayTxnCount    = todayEarns.length;
-  const newCustomersToday = custs.filter((c: { created_at: string }) => new Date(c.created_at) >= todayStart).length;
-
-  // Points economy
-  const totalCirculating = custs.reduce((s: number, c: { total_points: number }) => s + c.total_points, 0);
-  const totalEverIssued  = custs.reduce((s: number, c: { lifetime_points: number }) => s + c.lifetime_points, 0);
-  const totalRedeemed    = txns
-    .filter((t: { type: string }) => t.type === 'redeem')
-    .reduce((s: number, t: { points: number }) => s + t.points, 0);
-
-  // Peak hours (0–23) — based on earn transactions
-  const hourCounts: number[] = Array(24).fill(0);
-  earnTxns.forEach((t: { created_at: string }) => {
-    hourCounts[new Date(t.created_at).getHours()]++;
-  });
-  const peakHours = hourCounts.map((count, hour) => ({
-    hour: hour < 12 ? `${hour || 12}${hour < 12 ? 'a' : 'p'}` : `${hour === 12 ? 12 : hour - 12}p`,
-    count,
-  })).slice(6, 23); // 6am–10pm
+  const netProfit      = (summary.totalRevenue ?? 0) - (summary.totalExpenses ?? 0);
+  const todayNetProfit = (summary.todayRevenue ?? 0) - (summary.todayExpenses ?? 0);
 
   return {
-    topCustomers: custs.slice(0, 10),
-    transactions: txns,
-    transactionItems: itemTotals.data ?? [],
+    topCustomers,
+    transactions,
+    transactionItems: topItems, // top-items data replaces raw transaction_items for the dashboard
     expenses: exps,
-    pointsEconomy: { totalCirculating, totalEverIssued, totalRedeemed },
+    pointsEconomy: {
+      totalCirculating: summary.totalCirculating ?? 0,
+      totalEverIssued:  summary.totalEverIssued  ?? 0,
+      totalRedeemed:    summary.totalRedeemed    ?? 0,
+    },
     summary: {
-      totalRevenue,
-      totalExpenses,
+      totalRevenue:      summary.totalRevenue      ?? 0,
+      totalExpenses:     summary.totalExpenses      ?? 0,
       netProfit,
-      totalCustomers: custs.length,
-      avgBill,
-      todayRevenue,
-      todayExpenses,
+      totalCustomers:    summary.totalCustomers    ?? 0,
+      avgBill:           summary.avgBill           ?? 0,
+      todayRevenue:      summary.todayRevenue      ?? 0,
+      todayExpenses:     summary.todayExpenses     ?? 0,
       todayNetProfit,
-      todayTxnCount,
-      newCustomersToday,
-      yesterdayRevenue,
+      todayTxnCount:     summary.todayTxnCount     ?? 0,
+      newCustomersToday: summary.newCustomersToday ?? 0,
+      yesterdayRevenue:  summary.yesterdayRevenue  ?? 0,
     },
     peakHours,
   };

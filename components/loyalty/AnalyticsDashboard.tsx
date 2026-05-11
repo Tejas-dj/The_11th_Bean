@@ -63,15 +63,18 @@ function groupFinancialsByPeriod(
 }
 
 function getProductPerformance(transactionItems: any[]): { stars: ItemCount[], deadStock: ItemCount[] } {
-  const map = new Map<string, number>();
-  transactionItems.forEach((ti) => {
-    const name = ti.menu_items?.name ?? 'Unknown';
-    map.set(name, (map.get(name) ?? 0) + ti.quantity);
-  });
-  const sorted = Array.from(map.entries())
-    .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => b.count - a.count);
-  
+  // Handle both the new RPC shape { name, total_qty } and the old raw shape { menu_items: { name }, quantity }
+  const mapped: ItemCount[] = transactionItems.map((ti) => {
+    if (ti.name !== undefined && ti.total_qty !== undefined) {
+      // New RPC shape from get_top_items
+      return { name: ti.name ?? 'Unknown', count: Number(ti.total_qty) || 0 };
+    }
+    // Old raw transaction_items shape (fallback)
+    return { name: ti.menu_items?.name ?? 'Unknown', count: Number(ti.quantity) || 0 };
+  }).filter(i => i.count > 0);
+
+  const sorted = [...mapped].sort((a, b) => b.count - a.count);
+
   return {
     stars: sorted.slice(0, 5),
     deadStock: sorted.slice(-5).reverse(),

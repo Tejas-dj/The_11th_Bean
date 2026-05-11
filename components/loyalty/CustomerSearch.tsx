@@ -1,8 +1,13 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { findCustomerByPhone, createCustomer, searchCustomersByName, getParkedBills } from '@/app/actions/loyalty';
+import { supabase } from '@/lib/supabase';
+import { createCustomer, getParkedBills } from '@/app/actions/loyalty';
 import type { Customer, ParkedBill } from '@/lib/loyalty-types';
+
+function normalizePhone(raw: string): string {
+  return raw.replace(/\D/g, '').replace(/^91/, '').slice(-10);
+}
 
 interface Props {
   onCustomerSelected: (customer: Customer, parkedBillId?: string, parkedLineItems?: any[]) => void;
@@ -54,15 +59,19 @@ export default function CustomerSearch({ onCustomerSelected, pinLevel }: Props) 
 
   const sanitizePhone = (v: string) => v.replace(/\D/g, '').slice(0, 10);
 
-  // Debounced search for name
+  // Debounced name search — runs directly against Supabase (no server round-trip)
   useEffect(() => {
     if (nameSearch.length < 2) {
       setSuggestions([]);
       return;
     }
     const timer = setTimeout(async () => {
-      const res = await searchCustomersByName(nameSearch);
-      setSuggestions(res.customers || []);
+      const { data } = await supabase
+        .from('customers')
+        .select('id, name, phone, total_points, lifetime_points, created_at')
+        .ilike('name', `%${nameSearch}%`)
+        .limit(10);
+      setSuggestions((data as Customer[]) || []);
     }, 300);
     return () => clearTimeout(timer);
   }, [nameSearch]);
@@ -73,13 +82,18 @@ export default function CustomerSearch({ onCustomerSelected, pinLevel }: Props) 
     if (digits.length !== 10) { setError('Enter a valid 10-digit phone number.'); return; }
     setLoading(true);
     setError('');
-    const result = await findCustomerByPhone(digits);
+    // Direct browser → Supabase, skips the Next.js server entirely
+    const { data } = await supabase
+      .from('customers')
+      .select('id, name, phone, total_points, lifetime_points, created_at')
+      .eq('phone', normalizePhone(digits))
+      .maybeSingle();
     setLoading(false);
-    if ('notFound' in result) {
+    if (!data) {
       setScreen('new-customer');
-      setName(nameSearch); // Pre-fill name if they searched by name but fell back to phone
+      setName(nameSearch);
     } else {
-      onCustomerSelected(result.customer);
+      onCustomerSelected(data as Customer);
     }
   };
 
