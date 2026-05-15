@@ -513,7 +513,7 @@ export default function AnalyticsDashboard() {
           <p style={{ fontSize: '12px', fontWeight: 500, color: CREAM, marginBottom: '14px' }}>Top Customers</p>
           {topCustomers.length === 0 ? EMPTY_MSG : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {topCustomers.map((c, i) => (
+              {topCustomers.map((c: { id: string | number; name: string; phone: string; lifetime_points: number }, i: number) => (
                 <div key={c.id} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <span style={{ fontSize: '11px', color: 'rgba(242,232,217,0.3)', width: '16px', textAlign: 'right' }}>
                     {i + 1}
@@ -571,7 +571,7 @@ export default function AnalyticsDashboard() {
           {transactions.length === 0 ? (
             <div style={{ padding: '24px' }}>{EMPTY_MSG}</div>
           ) : (
-            transactions.slice(0, 30).map((t, i) => {
+            transactions.slice(0, 30).map((t: unknown, i: number) => {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               const txn = t as any as { id: string; type: string; points: number; bill_amount: number | null; payment_mode: string | null; bill_number: number | null; created_at: string; customers?: { name: string; phone: string } };
               const modeLabel: Record<string, string> = { cash: 'Cash', upi: 'UPI', card: 'Card' };
