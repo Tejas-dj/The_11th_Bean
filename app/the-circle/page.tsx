@@ -259,7 +259,7 @@ function CircleCard({ member }: { member: CircleMember }) {
 
         {member.photo ? (
           <Image
-            src={`/circle/${member.photo}`}
+            src={`/images/the-circle/${member.photo}`}
             alt={member.name}
             fill
             className="object-cover object-center transition-transform duration-700 group-hover:scale-105"

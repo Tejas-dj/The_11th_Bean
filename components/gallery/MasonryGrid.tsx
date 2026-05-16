@@ -1,5 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { SectionReveal } from '@/components/shared/SectionReveal';
 import type { GalleryImage } from '@/data/gallery';
 
@@ -26,11 +27,12 @@ export function MasonryGrid({ images, collectionId, onImageClick }: MasonryGridP
             aria-label={`View: ${img.alt}`}
             style={{ aspectRatio: `1 / ${img.aspectRatio}` }}
           >
-            {/* Placeholder — replaced when Shishir provides photos */}
-            <div
-              className="absolute inset-0"
-              style={{ backgroundColor: img.bgColor }}
-              aria-hidden="true"
+            <Image
+              src={img.src}
+              alt={img.alt}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 50vw, 33vw"
             />
 
             {/* Hover overlay */}

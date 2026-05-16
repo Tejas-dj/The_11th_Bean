@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import Image from 'next/image';
 import type { GalleryImage } from '@/data/gallery';
 
 interface LightboxProps {
@@ -91,17 +92,18 @@ export function Lightbox({ images, index, onClose, onNavigate }: LightboxProps) 
           onClick={(e) => e.stopPropagation()}
           style={{ maxHeight: '80vh' }}
         >
-          {/* Placeholder block */}
           <div
-            className="w-full rounded-xl"
-            style={{
-              backgroundColor: image.bgColor,
-              aspectRatio: `1 / ${image.aspectRatio}`,
-              maxHeight: '70vh',
-            }}
-            role="img"
-            aria-label={image.alt}
-          />
+            className="relative w-full rounded-xl overflow-hidden"
+            style={{ aspectRatio: `1 / ${image.aspectRatio}`, maxHeight: '70vh' }}
+          >
+            <Image
+              src={image.src}
+              alt={image.alt}
+              fill
+              className="object-contain"
+              sizes="(max-width: 768px) 90vw, 768px"
+            />
+          </div>
 
           {/* Caption */}
           <div className="mt-3 flex items-end justify-between gap-4">

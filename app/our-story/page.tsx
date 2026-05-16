@@ -37,6 +37,7 @@ export default function OurStoryPage() {
             imageBg="#8B6D4A"
             imageLabel="[Portrait of the founders]"
             imageAlt="The founders of The Eleventh Bean Café"
+            imageSrc="/images/story/story_ch1_founders.jpeg"
             flip={false}
           />
 
@@ -49,6 +50,7 @@ export default function OurStoryPage() {
             imageBg="#B8B394"
             imageLabel="[Coffee brewing close-up]"
             imageAlt="Close-up of coffee brewing at The Eleventh Bean"
+            imageSrc="/images/story/story_ch1_brewing.jpg"
             flip={true}
           />
         </div>
@@ -86,7 +88,7 @@ export default function OurStoryPage() {
           {/* TODO: Replace with Shishir's exact words — recorded and transcribed */}
           <PullQuote
             quote="Finding this path did not happen early. It happened after years of doing something else well. But once it became clear, it also became obvious."
-            attribution="Shishir, The 11<sup>th</sup> Bean"
+            attribution="Shishir, The 11th Bean"
           />
 
           <div className="max-w-2xl mx-auto pb-16">
@@ -121,6 +123,7 @@ export default function OurStoryPage() {
               imageBg="#8B6D4A"
               imageLabel="[Photo of the space during renovation / the street on Tata Silk Farm]"
               imageAlt="The café space during renovation"
+              imageSrc="/images/story/story_ch3_renovation.png"
               flip={false}
             />
             <Artifact
@@ -129,6 +132,7 @@ export default function OurStoryPage() {
               rotation={4}
               offsetTop="15%"
               offsetRight="-20px"
+              imageSrc="/images/story/artifact_floor_plan.png"
             />
             {/* Chikmagalur mascot — references the sourcing trips mentioned in this section */}
             <div
@@ -155,6 +159,7 @@ export default function OurStoryPage() {
               imageBg="#C8A96E"
               imageLabel="[Photo of the La Carimali machine / opening day]"
               imageAlt="The Eleventh Bean Café espresso machine"
+              imageSrc="/images/story/story_ch3_opening_day.png"
               flip={true}
             />
             <Artifact
@@ -163,6 +168,7 @@ export default function OurStoryPage() {
               rotation={-5}
               offsetTop="20%"
               offsetRight="-10px"
+              imageSrc="/images/story/artifact_first_receipt.jpg"
             />
           </div>
         </div>

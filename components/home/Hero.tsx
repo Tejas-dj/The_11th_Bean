@@ -124,13 +124,16 @@ export function Hero() {
 function DesktopBackground() {
   return (
     <div className="absolute inset-0 z-0">
-      {/* TODO: Replace with autoplay muted loop video (8-12s, max 3MB MP4 at 720p) from Shishir.
-          Poster image must be set for LCP — see brief Appendix I. */}
-      <div className="w-full h-full bg-caramel flex items-end justify-end p-6" aria-hidden="true">
-        <span className="text-cream/20 text-xs uppercase tracking-widest">
-          [Cafe interior video loop — 8–12 s]
-        </span>
-      </div>
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="w-full h-full object-cover"
+        aria-hidden="true"
+      >
+        <source src="/video/hero_loop.webm" type="video/mp4" />
+      </video>
     </div>
   );
 }
@@ -138,12 +141,13 @@ function DesktopBackground() {
 function MobileBackground() {
   return (
     <div className="absolute inset-0 z-0" aria-hidden="true">
-      {/* TODO: Replace with vertically-optimised hero image from Shishir (pour-over close-up recommended) */}
-      <div className="w-full h-full bg-caramel flex items-end justify-end p-6">
-        <span className="text-cream/20 text-xs uppercase tracking-widest">
-          [Hero image — portrait crop]
-        </span>
-      </div>
+      <Image
+        src="/images/hero/hero_mobile.jpg"
+        alt=""
+        fill
+        className="object-cover"
+        priority
+      />
     </div>
   );
 }

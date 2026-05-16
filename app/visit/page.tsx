@@ -8,13 +8,13 @@ export const metadata: Metadata = {
 };
 
 const HOURS = [
-  { day: 'Monday',   hours: '8:00 AM – 9:00 PM',  open: true  },
-  { day: 'Tuesday',  hours: '8:00 AM – 9:00 PM',  open: true  },
-  { day: 'Wednesday',hours: '8:00 AM – 9:00 PM',  open: true  },
-  { day: 'Thursday', hours: '8:00 AM – 9:00 PM',  open: true  },
-  { day: 'Friday',   hours: '8:00 AM – 10:00 PM', open: true  },
-  { day: 'Saturday', hours: '9:00 AM – 10:00 PM', open: true  },
-  { day: 'Sunday',   hours: '9:00 AM – 8:00 PM',  open: true  },
+  { day: 'Monday',   hours: '9:00 AM – 1:00 AM',  open: true  },
+  { day: 'Tuesday',  hours: '9:00 AM – 1:00 AM',  open: true  },
+  { day: 'Wednesday',hours: '9:00 AM – 1:00 AM',  open: true  },
+  { day: 'Thursday', hours: '9:00 AM – 1:00 AM',  open: true  },
+  { day: 'Friday',   hours: '9:00 AM – 1:00 AM', open: true  },
+  { day: 'Saturday', hours: '9:00 AM – 1:00 AM', open: true  },
+  { day: 'Sunday',   hours: '9:00 AM – 1:00 AM',  open: true  },
   // TODO: Verify hours with Shishir — these are placeholders
 ] as const;
 

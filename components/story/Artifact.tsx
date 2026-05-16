@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 interface ArtifactProps {
   label: string;
@@ -8,11 +9,12 @@ interface ArtifactProps {
   rotation?: number;
   offsetTop?: string;
   offsetRight?: string;
+  imageSrc?: string;
 }
 
 // On desktop: draggable polaroid that snaps back on release.
 // On mobile: static with slight rotation — dragging is too frustrating on touch.
-export function Artifact({ label, caption, rotation = -3, offsetTop = '10%', offsetRight = '-40px' }: ArtifactProps) {
+export function Artifact({ label, caption, rotation = -3, offsetTop = '10%', offsetRight = '-40px', imageSrc }: ArtifactProps) {
   const [isDesktop, setIsDesktop] = useState(false);
   useEffect(() => setIsDesktop(window.matchMedia('(min-width: 1024px)').matches), []);
 
@@ -27,14 +29,17 @@ export function Artifact({ label, caption, rotation = -3, offsetTop = '10%', off
     >
       {/* Polaroid-style card */}
       <div className="bg-cream-light p-2.5 pb-7 shadow-2xl w-32 md:w-36">
-        {/* TODO: Replace with real artifact scan/photo (early menu sketch, receipt, etc.) from Shishir */}
         <div
-          className="w-full aspect-square flex items-center justify-center"
-          style={{ backgroundColor: '#C8A96E' }}
+          className="w-full aspect-square relative flex items-center justify-center overflow-hidden"
+          style={!imageSrc ? { backgroundColor: '#C8A96E' } : undefined}
         >
-          <span className="text-cream/40 text-[8px] uppercase tracking-wider text-center px-2 leading-relaxed">
-            {label}
-          </span>
+          {imageSrc ? (
+            <Image src={imageSrc} alt={label} fill className="object-cover" />
+          ) : (
+            <span className="text-cream/40 text-[8px] uppercase tracking-wider text-center px-2 leading-relaxed">
+              {label}
+            </span>
+          )}
         </div>
         <p className="text-espresso/40 text-[8px] text-center mt-2 px-1 font-sans leading-tight">
           {caption}

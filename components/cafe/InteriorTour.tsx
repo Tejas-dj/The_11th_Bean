@@ -1,5 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { SectionReveal } from '@/components/shared/SectionReveal';
 
 // Each block in the guided interior tour — see brief Page 3, Section 2.
@@ -9,6 +10,7 @@ const TOUR_BLOCKS = [
     bgColor: '#8B6D4A',
     label: '[Counter / bar area — full-width photo]',
     alt: 'The 11th Bean counter and bar area',
+    src: '/images/cafe/tour/tour_counter_bar.png',
   },
   {
     type: 'callout' as const,
@@ -17,8 +19,8 @@ const TOUR_BLOCKS = [
   },
   {
     type: 'split' as const,
-    left: { bgColor: '#B8B394', label: '[Seating area — tables, chairs, laptops]', alt: 'Seating area with black Tolix chairs and wooden tables' },
-    right: { bgColor: '#C8A96E', label: '[Detail shot — rattan lamp / plant / table setting]', alt: 'Rattan pendant lamp detail' },
+    left:  { bgColor: '#B8B394', label: '[Seating area — tables, chairs, laptops]', alt: 'Seating area with black Tolix chairs and wooden tables', src: '/images/cafe/tour/tour_seating_area.png' },
+    right: { bgColor: '#C8A96E', label: '[Detail shot — rattan lamp / plant / table setting]', alt: 'Rattan pendant lamp detail', src: '/images/cafe/tour/tour_detail_rattan.webp' },
   },
   {
     type: 'callout' as const,
@@ -30,17 +32,19 @@ const TOUR_BLOCKS = [
     bgColor: '#2A2320',
     label: '[Brewing station — pour-over setup / La Carimali close-up]',
     alt: 'Coffee brewing station',
+    src: '/images/cafe/tour/tour_brewing_station.png',
   },
   {
     type: 'split' as const,
-    left:  { bgColor: '#A0674B', label: '[Window looking out — street view from inside]', alt: 'View from inside the cafe looking out to S End Road' },
-    right: { bgColor: '#C8A96E', label: '[Window looking in — warm glow from street]',   alt: 'View from outside looking into the cafe' },
+    left:  { bgColor: '#A0674B', label: '[Window looking out — street view from inside]', alt: 'View from inside the cafe looking out to S End Road', src: '/images/cafe/tour/tour_window_out.png' },
+    right: { bgColor: '#C8A96E', label: '[Window looking in — warm glow from street]',   alt: 'View from outside looking into the cafe', src: '/images/cafe/tour/tour_window_in.png' },
   },
   {
     type: 'full' as const,
     bgColor: '#8B6D4A',
     label: '[Evening shot — Edison bulbs, warm light, occupied tables]',
     alt: 'The 11th Bean in the evening with warm Edison bulb lighting',
+    src: '/images/cafe/tour/tour_evening.png',
   },
 ] as const;
 
@@ -60,11 +64,14 @@ export function InteriorTour() {
       {TOUR_BLOCKS.map((block, i) => {
         if (block.type === 'full') {
           return (
-            <motion.div key={i} {...scaleReveal} className="w-full overflow-hidden" style={{ height: 'clamp(300px, 55vw, 680px)' }}>
-              {/* TODO: Replace with real photo from Shishir */}
-              <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: block.bgColor }} role="img" aria-label={block.alt}>
-                <span className="text-cream/25 text-xs uppercase tracking-widest">{block.label}</span>
-              </div>
+            <motion.div key={i} {...scaleReveal} className="w-full overflow-hidden relative" style={{ height: 'clamp(300px, 55vw, 680px)' }}>
+              {block.src ? (
+                <Image src={block.src} alt={block.alt} fill className="object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: block.bgColor }} role="img" aria-label={block.alt}>
+                  <span className="text-cream/25 text-xs uppercase tracking-widest">{block.label}</span>
+                </div>
+              )}
             </motion.div>
           );
         }
@@ -72,11 +79,14 @@ export function InteriorTour() {
           return (
             <div key={i} className="flex flex-col md:flex-row gap-3 lg:gap-4">
               {[block.left, block.right].map((img, j) => (
-                <motion.div key={j} {...scaleReveal} className="flex-1 overflow-hidden rounded-xl" style={{ height: 'clamp(200px, 35vw, 480px)' }}>
-                  {/* TODO: Replace with real photo from Shishir */}
-                  <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: img.bgColor }} role="img" aria-label={img.alt}>
-                    <span className="text-cream/25 text-xs uppercase tracking-widest text-center px-4">{img.label}</span>
-                  </div>
+                <motion.div key={j} {...scaleReveal} className="flex-1 overflow-hidden rounded-xl relative" style={{ height: 'clamp(200px, 35vw, 480px)' }}>
+                  {img.src ? (
+                    <Image src={img.src} alt={img.alt} fill className="object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: img.bgColor }} role="img" aria-label={img.alt}>
+                      <span className="text-cream/25 text-xs uppercase tracking-widest text-center px-4">{img.label}</span>
+                    </div>
+                  )}
                 </motion.div>
               ))}
             </div>

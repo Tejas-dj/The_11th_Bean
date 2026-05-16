@@ -6,6 +6,14 @@ import { motion } from 'framer-motion';
 import { SectionReveal } from '@/components/shared/SectionReveal';
 import { previewItems, type MenuItem } from '@/data/menu';
 
+const MENU_IMAGE_SRCS: Record<string, string> = {
+  'eleventh-bean-drip':   '/images/menu/menu_eleventh-bean-drip.jpg',
+  'cafe-latte':           '/images/menu/menu_cafe-latte.jpg',
+  'choco-fudge-frappe':   '/images/menu/menu_choco-fudge-frappe.webp',
+  'matcha-lemonade':      '/images/menu/menu_matcha-lemonade.jpg',
+  'pour-over':            '/images/menu/menu_pour-over.jpg',
+};
+
 export function MenuPreview() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
@@ -112,6 +120,7 @@ export function MenuPreview() {
 }
 
 function MenuCard({ item, active, onClick }: { item: MenuItem; active: boolean; onClick: () => void }) {
+  const imageSrc = MENU_IMAGE_SRCS[item.id];
   return (
     <motion.div
       role="listitem"
@@ -133,14 +142,18 @@ function MenuCard({ item, active, onClick }: { item: MenuItem; active: boolean; 
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         className="bg-cream-light rounded-2xl overflow-hidden border border-sage/30"
       >
-        {/* Square image placeholder */}
-        {/* TODO: Replace with real item photo from Shishir */}
-        <div
-          className="w-full aspect-square flex items-center justify-center text-cream/40 text-xs uppercase tracking-widest"
-          style={{ backgroundColor: active ? '#C8A96E' : '#B8B394' }}
-          aria-hidden="true"
-        >
-          {item.name}
+        {/* Square item photo */}
+        <div className="w-full aspect-square relative overflow-hidden" aria-hidden="true">
+          {imageSrc ? (
+            <Image src={imageSrc} alt={item.name} fill className="object-cover" />
+          ) : (
+            <div
+              className="w-full h-full flex items-center justify-center text-cream/40 text-xs uppercase tracking-widest"
+              style={{ backgroundColor: active ? '#C8A96E' : '#B8B394' }}
+            >
+              {item.name}
+            </div>
+          )}
         </div>
 
         <div className="p-5">

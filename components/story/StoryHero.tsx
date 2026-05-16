@@ -5,12 +5,16 @@ import Image from 'next/image';
 export function StoryHero() {
   return (
     <section
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={{ background: 'linear-gradient(to bottom, #1a1510 0%, #2A2320 100%)' }}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#1a1510]"
       aria-label="Story opening"
     >
-      {/* TODO: Replace background with full-viewport "before" image — rainy Bengaluru skyline,
-          neon-lit IT park, or crowded office building. See brief Page 2, Section 1. */}
+      <Image
+        src="/images/story/story_hero_before.png"
+        alt=""
+        fill
+        className="object-cover opacity-50"
+        priority
+      />
       <div className="absolute inset-0 bg-espresso/40" aria-hidden="true" />
 
       {/* Stressed mascot — right side, large faded silhouette sets the "corporate life" mood */}

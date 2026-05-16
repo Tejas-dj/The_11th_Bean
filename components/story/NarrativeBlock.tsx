@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { SectionReveal } from '@/components/shared/SectionReveal';
 
 interface NarrativeBlockProps {
@@ -6,6 +7,7 @@ interface NarrativeBlockProps {
   imageAlt: string;
   imageBg: string;
   imageLabel: string;
+  imageSrc?: string;
   flip?: boolean; // true = image left, text right
 }
 
@@ -15,6 +17,7 @@ export function NarrativeBlock({
   imageAlt,
   imageBg,
   imageLabel,
+  imageSrc,
   flip = false,
 }: NarrativeBlockProps) {
   return (
@@ -24,15 +27,18 @@ export function NarrativeBlock({
         className={`w-full lg:w-1/2 ${flip ? 'lg:order-1' : 'lg:order-2'}`}
       >
         <div
-          className="w-full aspect-[4/3] rounded-2xl overflow-hidden flex items-center justify-center"
-          style={{ backgroundColor: imageBg }}
+          className="w-full aspect-[4/3] rounded-2xl overflow-hidden relative flex items-center justify-center"
+          style={!imageSrc ? { backgroundColor: imageBg } : undefined}
           role="img"
           aria-label={imageAlt}
         >
-          {/* TODO: Replace with real photo from Shishir */}
-          <p className="text-cream/30 text-xs uppercase tracking-widest text-center px-8 leading-loose">
-            {imageLabel}
-          </p>
+          {imageSrc ? (
+            <Image src={imageSrc} alt={imageAlt} fill className="object-cover" />
+          ) : (
+            <p className="text-cream/30 text-xs uppercase tracking-widest text-center px-8 leading-loose">
+              {imageLabel}
+            </p>
+          )}
         </div>
       </SectionReveal>
 

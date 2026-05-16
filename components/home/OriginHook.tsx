@@ -28,22 +28,20 @@ export function OriginHook() {
           <SectionReveal direction="left" className="w-full lg:w-[55%]">
             <div
               className="w-full aspect-[4/3] rounded-2xl overflow-hidden relative"
-              style={{ backgroundColor: '#C8A96E' }}
-              role="img"
-              aria-label="Portrait of Shishir at the cafe counter — placeholder"
+              aria-label="Portrait of Shishir at the cafe counter"
             >
               {/* The image itself moves at a different rate to the scroll = parallax */}
               <motion.div
-                className="absolute inset-[-10%] flex items-center justify-center"
+                className="absolute inset-[-10%]"
                 style={{ y: imageY }}
               >
-                <div className="text-center text-espresso/50 p-10 space-y-2">
-                  <p className="text-xs uppercase tracking-[0.2em]">Photo placeholder</p>
-                  <p className="text-sm leading-relaxed max-w-[220px] mx-auto">
-                    Candid portrait of Shishir<br />behind the counter, mid-action
-                  </p>
-                  <p className="text-xs text-espresso/35">Approx. 1200 × 900 px</p>
-                </div>
+                <Image
+                  src="/images/Shishir_HeadShot.jpeg"
+                  alt="Shishir behind the counter at The 11th Bean"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 55vw"
+                />
               </motion.div>
             </div>
           </SectionReveal>

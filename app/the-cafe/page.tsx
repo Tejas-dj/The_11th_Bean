@@ -33,21 +33,17 @@ export default function TheCafePage() {
     <div className="bg-cream">
       {/* ── Entrance ── */}
       <section aria-label="Cafe entrance" className="relative">
-        {/* TODO: Replace with real exterior / entrance photo from Shishir (70vh min-height recommended) */}
         <div
-          className="w-full overflow-hidden"
+          className="w-full overflow-hidden relative"
           style={{ height: 'clamp(480px, 72vh, 820px)' }}
         >
-          <div
-            className="w-full h-full flex flex-col items-center justify-end pb-12"
-            style={{ backgroundColor: '#8B6D4A' }}
-            role="img"
-            aria-label="The 11th Bean exterior — placeholder"
-          >
-            <span className="text-cream/25 text-xs uppercase tracking-widest">
-              [Cafe exterior photo — street view, entrance, signage]
-            </span>
-          </div>
+          <Image
+            src="/images/cafe/cafe_exterior.png"
+            alt="The 11th Bean cafe exterior — entrance on Tata Silk Farm Road"
+            fill
+            className="object-cover"
+            priority
+          />
         </div>
 
         <div className="max-w-[1400px] mx-auto px-6 py-12">
@@ -98,16 +94,13 @@ export default function TheCafePage() {
 
           <div className="flex flex-col lg:flex-row gap-10 items-center">
             <SectionReveal direction="left" className="w-full lg:w-1/2">
-              {/* TODO: Replace with bookshelf nook photo — the most Instagrammable spot */}
-              <div
-                className="w-full aspect-[4/3] rounded-2xl flex items-center justify-center"
-                style={{ backgroundColor: '#B8B394' }}
-                role="img"
-                aria-label="The bookshelf reading nook at The 11th Bean"
-              >
-                <span className="text-cream/30 text-xs uppercase tracking-widest text-center px-6">
-                  [Bookshelf nook — floor-to-ceiling books, guitar, rattan lamp]
-                </span>
+              <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden relative">
+                <Image
+                  src="/images/cafe/cafe_living_room_nook.png"
+                  alt="The bookshelf reading nook at The 11th Bean"
+                  fill
+                  className="object-cover"
+                />
               </div>
             </SectionReveal>
 
