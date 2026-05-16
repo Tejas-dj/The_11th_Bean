@@ -13,6 +13,10 @@ export const metadata: Metadata = {
   title: 'The 11th Bean | Artisanal Cafe in Basavanagudi, Bengaluru',
   description:
     'An artisanal cafe in Basavanagudi, Bengaluru. Coffee crafted with obsession, a space built for community. Come for the brew, stay for the story.',
+  icons: {
+    icon: [{ url: '/11th_bean_favicon.svg', type: 'image/svg+xml' }],
+    shortcut: '/11th_bean_favicon.svg',
+  },
   openGraph: {
     title: 'The 11th Bean | Artisanal Cafe in Basavanagudi, Bengaluru',
     description:
