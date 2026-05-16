@@ -88,7 +88,7 @@ export function OriginHook() {
               </div>
 
               <p className="text-espresso/70 text-base md:text-lg leading-relaxed">
-                Shishir spent over 15 years in IT, working across India, France and Germany. Priya was on a parallel path — before stepping away to pursue a Master's in Psychology.
+                Shishir spent over 15 years in IT, working across India, France and Germany. Priya was on a parallel path, before stepping away to pursue a Master's in Psychology.
               </p>
               <p className="text-espresso/70 text-base md:text-lg leading-relaxed">
                 Coming back to India brought a different perspective. The work felt distant from what we wanted to build. That frustration became the clarity we needed.
