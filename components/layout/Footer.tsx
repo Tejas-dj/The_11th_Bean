@@ -125,7 +125,7 @@ export function Footer() {
         <div className="mt-12 pt-6 border-t border-cream/10 flex flex-col md:flex-row justify-between items-center gap-3 text-cream/40 text-xs">
           <p>© {new Date().getFullYear()} The 11th Bean. All rights reserved.</p>
           {/* TODO: Replace with your studio name */}
-          <p>Crafted with care by <a href="https://www.linkedin.com/in/tejas-d-jaiprakash/" target="_blank" rel="noopener noreferrer" className="text-cream underline underline-offset-2 hover:text-rattan transition-colors duration-200">Tejas.D.Jaiprakash</a></p>
+          <p className="text-l">Crafted with care by <a href="https://www.linkedin.com/in/tejas-d-jaiprakash/" target="_blank" rel="noopener noreferrer" className="text-cream underline underline-offset-2 hover:text-rattan transition-colors duration-200">Tejas.D.Jaiprakash</a></p>
         </div>
       </div>
     </footer>
