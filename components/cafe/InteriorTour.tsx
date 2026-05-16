@@ -74,13 +74,7 @@ export function InteriorTour() {
             <div key={i} className="flex flex-col md:flex-row gap-3 lg:gap-4">
               {[block.left, block.right].map((img, j) => (
                 <motion.div key={j} {...scaleReveal} className="flex-1 overflow-hidden rounded-xl relative" style={{ height: 'clamp(200px, 35vw, 480px)' }}>
-                  {img.src ? (
-                    <Image src={img.src} alt={img.alt} fill className="object-cover" />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: img.bgColor }} role="img" aria-label={img.alt}>
-                      <span className="text-cream/25 text-xs uppercase tracking-widest text-center px-4">{img.label}</span>
-                    </div>
-                  )}
+                  <Image src={img.src} alt={img.alt} fill className="object-cover" />
                 </motion.div>
               ))}
             </div>
