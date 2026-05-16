@@ -95,23 +95,12 @@ function PillarCard({ pillar }: { pillar: Pillar }) {
     >
       {/* Background image */}
       <div className="absolute inset-0" aria-hidden="true">
-        {pillar.imageSrc ? (
-          <Image
-            src={pillar.imageSrc}
-            alt=""
-            fill
-            className="object-cover"
-          />
-        ) : (
-          <div
-            className="w-full h-full flex items-center justify-center opacity-30"
-            style={{ backgroundColor: pillar.bgColor }}
-          >
-            <span className="text-cream text-xs text-center px-6 uppercase tracking-widest leading-loose">
-              {pillar.imageLabel}
-            </span>
-          </div>
-        )}
+        <Image
+          src={pillar.imageSrc}
+          alt=""
+          fill
+          className="object-cover"
+        />
       </div>
 
       {/* Cursor spotlight — radial glow that follows the mouse */}
