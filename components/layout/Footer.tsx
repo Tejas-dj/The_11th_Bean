@@ -2,9 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const HOURS = [
-  { day: 'Monday – Friday', hours: '9:00 AM – 1:00 AM' },
-  { day: 'Saturday',        hours: '9:00 AM – 1:00 AM' },
-  { day: 'Sunday',          hours: '9:00 AM – 1:00 AM' },
+  { day: 'Open on all days', hours: '9:00 AM - 1:00 AM' },
 ];
 
 /* TODO: Replace with real social handles from Shishir */
@@ -52,7 +50,6 @@ export function Footer() {
             />
             <p className="text-cream/70 text-sm leading-relaxed max-w-[220px]">
               A unit of Maison Aranya. Built on Indian craftsmanship.
-              Run with intention.
             </p>
           </div>
 
@@ -61,9 +58,9 @@ export function Footer() {
             <div>
               <p className="text-xs font-medium tracking-widest uppercase text-cream/50 mb-2">Find Us</p>
               <address className="not-italic text-sm text-cream/80 leading-relaxed">
-                42, Tata Silk Farm, Basavanagudi<br />
-                Near Mecon Limited, S End Road<br />
-                Bengaluru 560028
+                42/1, Near Shell Petrol Pump,<br />
+                South End Road, Basavanagudi,<br />
+                Bengaluru - 560004
               </address>
               <a
                 href="https://maps.app.goo.gl/fNYWaYGMFMGKJidN8"
@@ -128,7 +125,7 @@ export function Footer() {
         <div className="mt-12 pt-6 border-t border-cream/10 flex flex-col md:flex-row justify-between items-center gap-3 text-cream/40 text-xs">
           <p>© {new Date().getFullYear()} The 11th Bean. All rights reserved.</p>
           {/* TODO: Replace with your studio name */}
-          <p>Crafted with care by <span className="text-cream/60">DJ</span></p>
+          <p>Crafted with care by <a href="https://www.linkedin.com/in/tejas-d-jaiprakash/" target="_blank" rel="noopener noreferrer" className="text-cream underline underline-offset-2 hover:text-rattan transition-colors duration-200">Tejas.D.Jaiprakash</a></p>
         </div>
       </div>
     </footer>

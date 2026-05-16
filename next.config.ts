@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 2592000, // 30 days
+    //unoptimized: process.env.NODE_ENV === 'development',
   },
 };
 

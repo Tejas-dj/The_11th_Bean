@@ -144,7 +144,7 @@ export default function ManifestoPage() {
               Come in. Have a seat.
             </p>
             <p className="text-espresso/50 text-sm">
-              42, Tata Silk Farm, Basavanagudi. The blue gate.
+              Near Shell Petrol Pump, South End Road
             </p>
             <div className="flex flex-wrap gap-3 justify-center pt-2">
               <Link

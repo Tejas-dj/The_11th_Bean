@@ -215,7 +215,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               ))}
             </div>
             <p className="text-xs text-center">
-              42, Tata Silk Farm, Basavanagudi, Bengaluru
+              42/1, Near Shell Petrol Pump, South End Road, Basavanagudi, Bengaluru - 560004
             </p>
           </motion.div>
         </motion.div>

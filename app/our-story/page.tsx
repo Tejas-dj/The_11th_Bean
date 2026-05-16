@@ -127,14 +127,6 @@ export default function OurStoryPage() {
               imageSrc="/images/story/story_ch3_renovation.png"
               flip={false}
             />
-            <Artifact
-              label="First sketch"
-              caption="Floor plan sketch, pencil on graph paper"
-              rotation={4}
-              offsetTop="15%"
-              offsetRight="-20px"
-              imageSrc="/images/story/artifact_floor_plan.png"
-            />
             {/* Chikmagalur mascot — references the sourcing trips mentioned in this section */}
             <div
               className="absolute bottom-4 right-4 md:right-auto md:left-0 w-20 md:w-28 opacity-60 pointer-events-none select-none"
@@ -165,11 +157,13 @@ export default function OurStoryPage() {
             />
             <Artifact
               label="Opening day"
-              caption="First receipt: ₹120, one cappuccino"
+              caption="First receipt: ₹121, one cappuccino"
               rotation={-5}
-              offsetTop="20%"
-              offsetRight="-10px"
-              imageSrc="/images/story/artifact_first_receipt.jpg"
+              offsetTop="10%"
+              offsetLeft="-20px"
+              imageSrc="/images/story/artifact_first_receipt.png"
+              cardWidth="w-32 md:w-48"
+              imageAspect="aspect-[395/657]"
             />
           </div>
         </div>

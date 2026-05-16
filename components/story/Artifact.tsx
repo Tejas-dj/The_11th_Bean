@@ -9,14 +9,21 @@ interface ArtifactProps {
   rotation?: number;
   offsetTop?: string;
   offsetRight?: string;
+  offsetLeft?: string;
   imageSrc?: string;
+  cardWidth?: string;
+  imageAspect?: string;
 }
 
 // On desktop: draggable polaroid that snaps back on release.
 // On mobile: static with slight rotation — dragging is too frustrating on touch.
-export function Artifact({ label, caption, rotation = -3, offsetTop = '10%', offsetRight = '-40px', imageSrc }: ArtifactProps) {
+export function Artifact({ label, caption, rotation = -3, offsetTop = '10%', offsetRight, offsetLeft, imageSrc, cardWidth = 'w-32 md:w-36', imageAspect = 'aspect-square' }: ArtifactProps) {
   const [isDesktop, setIsDesktop] = useState(false);
   useEffect(() => setIsDesktop(window.matchMedia('(min-width: 1024px)').matches), []);
+
+  const positionStyle = offsetLeft
+    ? { top: offsetTop, left: offsetLeft }
+    : { top: offsetTop, right: offsetRight ?? '-40px' };
 
   return (
     <motion.div
@@ -24,13 +31,13 @@ export function Artifact({ label, caption, rotation = -3, offsetTop = '10%', off
       dragSnapToOrigin
       whileDrag={{ scale: 1.06, rotate: rotation * 0.5, zIndex: 50, cursor: 'grabbing' }}
       className="absolute z-10 select-none"
-      style={{ top: offsetTop, right: offsetRight, rotate: rotation, cursor: isDesktop ? 'grab' : 'default' }}
+      style={{ ...positionStyle, rotate: rotation, cursor: isDesktop ? 'grab' : 'default' }}
       aria-hidden="true"
     >
       {/* Polaroid-style card */}
-      <div className="bg-cream-light p-2.5 pb-7 shadow-2xl w-32 md:w-36">
+      <div className={`bg-cream-light p-2.5 pb-7 shadow-2xl ${cardWidth}`}>
         <div
-          className="w-full aspect-square relative flex items-center justify-center overflow-hidden"
+          className={`w-full ${imageAspect} relative flex items-center justify-center overflow-hidden`}
           style={!imageSrc ? { backgroundColor: '#C8A96E' } : undefined}
         >
           {imageSrc ? (

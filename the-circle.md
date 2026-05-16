@@ -46,7 +46,7 @@ category: Finance
 handle: -
 url: -
 tagline: Scaling high-net-worth portfolios through market precision while driving real-world social impact.
-since: 2026
+since:
 color: #2A2320
 photo: irfan-pasha.jpeg
 shishir_says: Irfan Pasha is a Bengaluru-based wealth manager with over seven years of expertise in equity trading, HNI portfolio advisory, and algorithmic trading, currently with Anand Rathi. Known for disciplined execution and tailored financial strategies, he excels at driving high-performance results for ultra-HNI clients. Beyond the markets, Irfan is the founder of 'One Last Desire,' an animal welfare initiative. He balances aggressive financial ambition with genuine social impact and community leadership.
@@ -60,7 +60,7 @@ category: Other
 handle: -
 url: -
 tagline: Co-Founder
-since: 2023
+since:
 color: #2A2320
 photo: keira-shah.jpeg
 shishir_says: 20 year old, BSC Psychology student, currently a Co-founder of Event company Scalable and Founder of a DIY kits company.

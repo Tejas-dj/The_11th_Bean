@@ -19,7 +19,7 @@ export interface EventEntry {
 }
 
 export const eventCategories: { id: EventType; label: string; description: string }[] = [
-  { id: 'at-the-bean', label: 'At The Bean',  description: 'Events happening right here at 42, Tata Silk Farm.' },
+  { id: 'at-the-bean', label: 'At The Bean',  description: 'Events happening right here at The 11th Bean.' },
   { id: 'collab',      label: 'Collab',        description: 'Co-hosted with other spaces, brands and collectives.' },
   { id: 'pop-up',      label: 'Pop-Up',        description: 'One-day experiences — markets, tastings, and surprise guests.' },
 ];

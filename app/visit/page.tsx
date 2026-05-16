@@ -3,8 +3,8 @@ import Image from 'next/image';
 import { SectionReveal } from '@/components/shared/SectionReveal';
 
 export const metadata: Metadata = {
-  title: 'Visit Us | The 11th Bean, Tata Silk Farm, Basavanagudi',
-  description: 'Your table is waiting. Find The 11th Bean at 42, Tata Silk Farm, Basavanagudi, Bengaluru. Hours, directions, and how to get here.',
+  title: 'Visit Us | The 11th Bean, 42/1, South End Road, Basavanagudi',
+  description: 'Your table is waiting. Find The 11th Bean at 42/1, South End Road, Basavanagudi, Bengaluru. Hours, directions, and how to get here.',
 };
 
 const HOURS = [
@@ -73,9 +73,9 @@ export default function VisitPage() {
             <div>
               <p className="text-espresso/40 text-[10px] tracking-[0.2em] uppercase mb-3">Address</p>
               <address className="not-italic text-espresso/85 leading-relaxed text-base">
-                42, Tata Silk Farm, Basavanagudi<br />
-                Near Mecon Limited, S End Road<br />
-                Bengaluru 560028
+                42/1, Near Shell Petrol Pump,<br />
+                South End Road, Basavanagudi,<br />
+                Bengaluru - 560004
               </address>
               <a
                 href="https://maps.app.goo.gl/fNYWaYGMFMGKJidN8"
