@@ -12,14 +12,14 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: 'The First Circle | The 11th Bean, Basavanagudi',
   description:
-    'The people who drink here. The businesses we back. A curated circle of regulars whose work Shishir personally endorses.',
+    'The people who drink here. The businesses we back. A curated circle of regulars whose work Shishir and Priya personally endorse.',
 };
 
 export default function TheCirclePage() {
   const members = getCircleMembers();
 
   return (
-    <div style={{ backgroundColor: '#1a1210', minHeight: '100vh' }}>
+    <div style={{ backgroundColor: '#1a1210', minHeight: '100vh', overflowX: 'hidden' }}>
 
       {/* ── Hero ── */}
       <section
@@ -93,11 +93,11 @@ export default function TheCirclePage() {
             {/* Description */}
             <div className="max-w-md">
               <p style={{ color: 'rgba(242,232,217,0.6)', fontSize: '1.1rem', lineHeight: 1.75, marginBottom: '1rem' }}>
-                These aren&apos;t ads. They&apos;re people Shishir knows, whose work
-                he&apos;s seen up close, and whose craft he can personally vouch for.
+                These aren&apos;t ads. They&apos;re people we know, whose work
+                we&apos;ve seen up close, and whose craft we can personally vouch for.
               </p>
               <p style={{ color: 'rgba(242,232,217,0.3)', fontSize: '0.875rem', lineHeight: 1.65 }}>
-                If you&apos;re a regular and you make something worth knowing about — ask him.
+                If you&apos;re a regular and you make something worth knowing about — come talk to us.
               </p>
             </div>
           </SectionReveal>
@@ -196,7 +196,7 @@ export default function TheCirclePage() {
             </h2>
             <p style={{ color: 'rgba(242,232,217,0.45)', fontSize: '0.95rem', lineHeight: 1.7, marginBottom: '2.5rem' }}>
               The circle grows one conversation at a time.<br />
-              Come in, order something good, and tell Shishir what you do.
+              Come in, order something good, and tell us what you do.
             </p>
             <Link
               href="/visit"
@@ -362,7 +362,7 @@ function CircleCard({ member }: { member: CircleMember }) {
               fontSize: 9, letterSpacing: '0.2em',
               textTransform: 'uppercase',
             }}>
-              — Shishir
+              — Shishir &amp; Priya
             </footer>
           </blockquote>
         )}

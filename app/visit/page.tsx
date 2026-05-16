@@ -20,7 +20,7 @@ const HOURS = [
 
 // TODO: Verify these with Shishir before launch
 const TIPS = [
-  "Ask Shishir about today's single origin. He'll light up.",
+  "Ask Shishir or Priya about today's single origin. They'll light up.",
   "The corner table by the window gets the best light after 3pm.",
   "If you're here before 10am, ask for the pour over. It's worth the wait.",
   "The guitar by the bookshelves is there to be played. Nobody will judge.",
@@ -256,7 +256,7 @@ export default function VisitPage() {
                   </h3>
                   <p className="text-espresso/60 text-sm leading-relaxed">
                     Saturday mornings before we open, regulars play at the courts nearby.
-                    Ask Shishir if you want in. Bring your own paddle.
+                    Ask Shishir or Priya if you want in. Bring your own paddle.
                   </p>
                 </div>
               </div>

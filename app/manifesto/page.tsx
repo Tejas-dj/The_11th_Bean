@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'Why We Exist | The 11th Bean',
-  description: 'The philosophy behind The 11th Bean. Why Shishir built it, what it stands for, and what we believe a cafe should be.',
+  description: 'The philosophy behind The 11th Bean. Why Shishir and Priya built it, what it stands for, and what we believe a cafe should be.',
 };
 
 // Sourced directly from Shishir's cafe info document

@@ -10,8 +10,8 @@ import { SectionReveal }  from '@/components/shared/SectionReveal';
 import { ArchDivider }    from '@/components/shared/ArchDivider';
 
 export const metadata: Metadata = {
-  title: 'Our Story | How Shishir Left IT to Build The 11th Bean',
-  description: 'Before the first cup, there was a cubicle. The story of Shishir and the cafe he built in Basavanagudi.',
+  title: 'Our Story | How Shishir and Priya Built The 11th Bean',
+  description: 'Before the first cup, there were two careers and a shared decision. The story of Shishir, Priya and the café they built in Basavanagudi.',
 };
 
 export default function OurStoryPage() {
@@ -31,8 +31,9 @@ export default function OurStoryPage() {
           <NarrativeBlock
             headline="The IT Years"
             paragraphs={[
-              "I spent over 15 years in the IT industry, working across India, France and Germany. It was stable, structured and rewarding in many ways. Priya was on a similar path before choosing to step away and pursue a Master's in Psychology.",
-              "On paper, everything made sense. In reality, it did not. Coming back to India brought a different perspective. The work felt distant from what I wanted to build. The frustration was not sudden. It built slowly, until it became clear that something had to change.",
+              "Shishir spent over 15 years in the IT industry, working across India, France and Germany. It was stable, structured and rewarding in many ways.",
+              "Priya was on a similar path. After years in her own field, she chose to step away and pursue a Master's in Psychology, her own form of reorientation.",
+              "On paper, everything made sense. In reality, it did not. Coming back to India brought a different perspective. The work felt distant from what we wanted to build. The frustration was not sudden. It built slowly, until it became clear that something had to change.",
             ]}
             imageBg="#8B6D4A"
             imageLabel="[Portrait of the founders]"
@@ -136,7 +137,7 @@ export default function OurStoryPage() {
             />
             {/* Chikmagalur mascot — references the sourcing trips mentioned in this section */}
             <div
-              className="absolute bottom-4 left-0 w-20 md:w-28 opacity-60 pointer-events-none select-none"
+              className="absolute bottom-4 right-4 md:right-auto md:left-0 w-20 md:w-28 opacity-60 pointer-events-none select-none"
               aria-hidden="true"
             >
               <Image
