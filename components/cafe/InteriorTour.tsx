@@ -65,13 +65,7 @@ export function InteriorTour() {
         if (block.type === 'full') {
           return (
             <motion.div key={i} {...scaleReveal} className="w-full overflow-hidden relative" style={{ height: 'clamp(300px, 55vw, 680px)' }}>
-              {block.src ? (
-                <Image src={block.src} alt={block.alt} fill className="object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: block.bgColor }} role="img" aria-label={block.alt}>
-                  <span className="text-cream/25 text-xs uppercase tracking-widest">{block.label}</span>
-                </div>
-              )}
+              <Image src={block.src} alt={block.alt} fill className="object-cover" />
             </motion.div>
           );
         }
