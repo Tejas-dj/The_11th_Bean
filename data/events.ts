@@ -19,9 +19,9 @@ export interface EventEntry {
 }
 
 export const eventCategories: { id: EventType; label: string; description: string }[] = [
-  { id: 'at-the-bean', label: 'At The Bean',  description: 'Events happening right here at The 11th Bean.' },
-  { id: 'collab',      label: 'Collab',        description: 'Co-hosted with other spaces, brands and collectives.' },
-  { id: 'pop-up',      label: 'Pop-Up',        description: 'One-day experiences — markets, tastings, and surprise guests.' },
+  { id: 'at-the-bean', label: 'At The Bean', description: 'Events happening right here at The 11th Bean.' },
+  { id: 'collab', label: 'Collab', description: 'Co-hosted with other spaces, brands and collectives.' },
+  { id: 'pop-up', label: 'Pop-Up', description: 'One-day experiences — markets, tastings, and surprise guests.' },
 ];
 
 export const events: EventEntry[] = [
@@ -87,20 +87,20 @@ export const events: EventEntry[] = [
     posterImage: '/event_posters/terranium_workshop.png',
   },
   {
-  id: 'pickleball-league-s1-may',
-  title: 'The 11th Bean Pickleball League — Season 1',
-  type: 'at-the-bean',
-  date: '2026-05-10',
-  time: 'Flexible Start',
-  venue: 'Basavanagudi / Jayanagar',
-  description: 'From a 1-day tournament to a structured league. A 3-week pickleball season with two tiers, rankings, playoffs, and DUPR tracking support.',
-  longDescription: `The 11th Bean Sports Club is going bigger. What started as a one-day tournament is now a full-blown structured league — and Season 1 is here.\n\nPlayers are split across two tiers: Prathama (Top League) and Dwitheeya (Challenger League). Every match is played to 11, with rankings tracked throughout the 3-week season leading into playoffs. Top performers get promoted; bottom finishers get relegated — so every point counts.\n\nThe league also includes full DUPR tracking support, trophies, medals, and cash prizes for standout players. Entry is ₹999 per player (not per team), and spots are strictly capped at 60.\n\nDM "IN" on 8105585901 to join.`,
-  tags: ['sport', 'pickleball', 'league', 'outdoor', 'competitive'],
-  status: 'upcoming',
-  accentColor: '#3B5C2F',
-  mascot: '/mascot/pickleball.svg',
-  posterImage: '/event_posters/pickleball_league_s1.png',
-  rsvpLink: '#rsvp-placeholder',
-},
+    id: 'pickleball-league-s1-may',
+    title: 'The 11th Bean Pickleball League — Season 1',
+    type: 'at-the-bean',
+    date: 'TBD',
+    time: 'Flexible Start',
+    venue: 'Basavanagudi / Jayanagar',
+    description: 'From a 1-day tournament to a structured league. A 3-week pickleball season with two tiers, rankings, playoffs, and DUPR tracking support.',
+    longDescription: `The 11th Bean Sports Club is going bigger. What started as a one-day tournament is now a full-blown structured league — and Season 1 is here.\n\nPlayers are split across two tiers: Prathama (Top League) and Dwitheeya (Challenger League). Every match is played to 11, with rankings tracked throughout the 3-week season leading into playoffs. Top performers get promoted; bottom finishers get relegated — so every point counts.\n\nThe league also includes full DUPR tracking support, trophies, medals, and cash prizes for standout players. Entry is ₹999 per player (not per team), and spots are strictly capped at 60.\n\nDM "IN" on 8105585901 to join.`,
+    tags: ['sport', 'pickleball', 'league', 'outdoor', 'competitive'],
+    status: 'upcoming',
+    accentColor: '#3B5C2F',
+    mascot: '/mascot/pickleball.svg',
+    posterImage: '/event_posters/pickleball_league_s1.png',
+    rsvpLink: '#rsvp-placeholder',
+  },
 ];
 

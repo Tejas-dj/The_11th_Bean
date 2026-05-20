@@ -8,13 +8,13 @@ export const metadata: Metadata = {
 };
 
 const HOURS = [
-  { day: 'Monday',   hours: '9:00 AM – 1:00 AM',  open: true  },
-  { day: 'Tuesday',  hours: '9:00 AM – 1:00 AM',  open: true  },
-  { day: 'Wednesday',hours: '9:00 AM – 1:00 AM',  open: true  },
-  { day: 'Thursday', hours: '9:00 AM – 1:00 AM',  open: true  },
-  { day: 'Friday',   hours: '9:00 AM – 1:00 AM', open: true  },
-  { day: 'Saturday', hours: '9:00 AM – 1:00 AM', open: true  },
-  { day: 'Sunday',   hours: '9:00 AM – 1:00 AM',  open: true  },
+  { day: 'Monday', hours: '9:00 AM – 1:00 AM', open: true },
+  { day: 'Tuesday', hours: '9:00 AM – 1:00 AM', open: true },
+  { day: 'Wednesday', hours: '9:00 AM – 1:00 AM', open: true },
+  { day: 'Thursday', hours: '9:00 AM – 1:00 AM', open: true },
+  { day: 'Friday', hours: '9:00 AM – 1:00 AM', open: true },
+  { day: 'Saturday', hours: '9:00 AM – 1:00 AM', open: true },
+  { day: 'Sunday', hours: '9:00 AM – 1:00 AM', open: true },
   // TODO: Verify hours with Shishir — these are placeholders
 ] as const;
 
@@ -121,7 +121,7 @@ export default function VisitPage() {
                 {/* TODO: Replace with real phone/email from Shishir */}
                 <div>
                   <a href="tel:+919876543210" className="link-underline hover:text-caramel transition-colors">
-                    +91 98765 43210
+                    +91 81055 85901
                   </a>
                 </div>
                 <div>
