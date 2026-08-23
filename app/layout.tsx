@@ -6,7 +6,6 @@ import { Footer } from '@/components/layout/Footer';
 import { ScrollProgress } from '@/components/layout/ScrollProgress';
 import { PageLoader } from '@/components/shared/PageLoader';
 import { EventAnnouncement } from '@/components/shared/EventAnnouncement';
-import { RenovationPopup } from '@/components/shared/RenovationPopup';
 import { Analytics } from "@vercel/analytics/react"
 
 
@@ -44,7 +43,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
         <Footer />
         <EventAnnouncement />
-        <RenovationPopup />
         <Analytics />
       </body>
     </html>
