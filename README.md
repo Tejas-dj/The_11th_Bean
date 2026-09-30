@@ -42,10 +42,8 @@ The 11th Bean is a hand-crafted digital presence for a real artisanal cafe found
 The website is built to reflect that same deliberate, unhurried care:
 
 - **Narrative-first design** — pages read like a story, not a brochure
-- **Smooth, cinematic scrolling** powered by Lenis
 - **GSAP & Framer Motion animations** with full reduced-motion support
-- **Rich bean mascot system** — 16 hand-drawn SVG characters that appear contextually across pages
-- **Full loyalty program** — Supabase-backed POS, cashier, and owner analytics suite
+- **Rich bean mascot system** — 15 hand-drawn SVG characters that appear contextually across pages
 - **Full SEO stack** — metadata, Open Graph, XML sitemap, and `robots.txt`
 - **Security headers** and Vercel edge caching configured out of the box
 
@@ -67,12 +65,7 @@ The website is built to reflect that same deliberate, unhurried care:
 | Styling        | [Tailwind CSS v4](https://tailwindcss.com/)                                         | `^4`             |
 | Animation      | [GSAP](https://gsap.com/) + [@gsap/react](https://gsap.com/docs/v3/Packages/react/) | `^3.15` / `^2.1` |
 | Animation      | [Framer Motion](https://www.framer.com/motion/)                                     | `^12.38`         |
-| Smooth Scroll  | [Lenis](https://lenis.darkroom.engineering/)                                        | `^1.3`           |
-| Database & Auth| [Supabase](https://supabase.com/)                                                   | `^2.105`         |
-| Charts         | [Recharts](https://recharts.org/)                                                   | `^3.8`           |
-| Search         | [Fuse.js](https://www.fusejs.io/)                                                   | `^7.3`           |
 | Video Player   | [react-player](https://github.com/cookpete/react-player)                            | `^3.4`           |
-| Security       | [bcryptjs](https://github.com/dcodeIO/bcrypt.js)                                    | `^3.0`           |
 | Fonts          | [Google Fonts](https://fonts.google.com/) via `next/font`                           | —                |
 | Deployment     | [Vercel](https://vercel.com/)                                                       | —                |
 
@@ -109,7 +102,6 @@ Fonts are loaded via Next.js `next/font/google` with `display: swap` for optimal
 ### Motion
 
 - **Easing**: Custom organic cubic-bezier `[0.16, 1, 0.3, 1]` used across all transitions
-- **Scroll**: Lenis smooth-scroll (duration `1.2s`) wraps the entire app via `LenisProvider`
 - **Reduced Motion**: Full `prefers-reduced-motion` support — all animations are disabled via CSS media query override
 
 ---
@@ -120,7 +112,7 @@ Fonts are loaded via Next.js `next/font/google` with `display: swap` for optimal
 the-11th-bean/
 │
 ├── app/                                  # Next.js App Router — pages & routing
-│   ├── layout.tsx                        # Root layout: Navbar, Footer, LenisProvider, PageLoader
+│   ├── layout.tsx                        # Root layout: Navbar, Footer, PageLoader
 │   ├── page.tsx                          # Homepage (/)
 │   ├── globals.css                       # Global styles: @theme tokens, base resets, animations
 │   ├── favicon.ico
@@ -132,7 +124,7 @@ the-11th-bean/
 │   ├── the-cafe/
 │   │   └── page.tsx                      # Interior tour, ambient audio player, neighborhood map
 │   ├── menu/
-│   │   └── page.tsx                      # Full menu with tasting notes and Shishir's picks
+│   │   └── page.tsx                      # Full menu with category tabs and origin reveals
 │   ├── podcast/
 │   │   └── page.tsx                      # Podcast hub with in-browser audio player
 │   ├── watch/
@@ -148,17 +140,8 @@ the-11th-bean/
 │   │   └── [slug]/page.tsx               # Individual blog post (dynamic route)
 │   ├── events/
 │   │   └── page.tsx                      # Events hub with posters and RSVP links
-│   ├── the-circle/
-│   │   └── page.tsx                      # Community members area
-│   ├── loyalty/
-│   │   └── page.tsx                      # Customer-facing loyalty POS interface
-│   ├── loyalty-admin/
-│   │   └── page.tsx                      # Owner analytics, cashier management, menu manager
-│   │
-│   ├── api/
-│   │   └── menu/route.ts                 # Menu API endpoint (GET /api/menu)
-│   └── actions/
-│       └── loyalty.ts                    # Server actions for loyalty program operations
+│   └── the-circle/
+│       └── page.tsx                      # Community members area
 │
 ├── components/                           # Feature-scoped React component library
 │   │
@@ -180,9 +163,7 @@ the-11th-bean/
 │   │
 │   ├── menu/                             # Menu page components
 │   │   ├── MenuCard.tsx                  # Individual drink/food card with origin reveal
-│   │   ├── MenuTabs.tsx                  # Category tab filter
-│   │   ├── TastingChart.tsx              # Radar chart: acidity, body, sweetness, aroma, bitterness
-│   │   └── ShishirPick.tsx               # "Shishir's Pick" badge and highlight
+│   │   └── MenuTabs.tsx                  # Category tab filter
 │   │
 │   ├── cafe/                             # The Cafe page components
 │   │   ├── InteriorTour.tsx              # Guided interior photo tour (full-width + split)
@@ -201,28 +182,11 @@ the-11th-bean/
 │   │   ├── CollectionTabs.tsx            # Photo collection filter tabs
 │   │   └── Lightbox.tsx                  # Full-screen image lightbox viewer
 │   │
-│   ├── loyalty/                          # Loyalty program UI suite (14 components)
-│   │   ├── AnalyticsDashboard.tsx        # Revenue, visits, and points analytics
-│   │   ├── CashierView.tsx               # Cashier-facing transaction interface
-│   │   ├── OwnerView.tsx                 # Owner management dashboard
-│   │   ├── POSView.tsx                   # Point-of-sale billing interface
-│   │   ├── BillingForm.tsx               # Order entry and billing form
-│   │   ├── Receipt.tsx                   # Receipt display and print
-│   │   ├── PinEntry.tsx                  # PIN entry for cashier authentication
-│   │   ├── CustomerSearch.tsx            # Fuzzy customer lookup (Fuse.js)
-│   │   ├── MenuManager.tsx               # Owner menu item management
-│   │   ├── PointsManager.tsx             # Manual points adjustment UI
-│   │   ├── RewardManager.tsx             # Reward tier and redemption management
-│   │   ├── TransactionHistory.tsx        # Full transaction log view
-│   │   ├── LedgerView.tsx                # Financial ledger for owner review
-│   │   └── EodExpenses.tsx               # End-of-day expense entry
-│   │
 │   ├── layout/                           # Global layout chrome
 │   │   ├── Navbar.tsx                    # Sticky navigation bar with scroll-aware behavior
 │   │   ├── MobileMenu.tsx                # Full-screen mobile slide-in menu
 │   │   ├── Footer.tsx                    # Site footer with links and brand copy
-│   │   ├── ScrollProgress.tsx            # Thin top-of-page reading progress bar
-│   │   └── LenisProvider.tsx             # Context provider wrapping Lenis smooth scroll
+│   │   └── ScrollProgress.tsx            # Thin top-of-page reading progress bar
 │   │
 │   ├── shared/                           # Cross-feature reusable components
 │   │   ├── ArchDivider.tsx               # Decorative arch-shaped section divider
@@ -243,7 +207,6 @@ the-11th-bean/
 │   └── instagram.ts                      # Instagram feed post data (6 posts)
 │
 ├── hooks/                                # Custom React hooks
-│   ├── useLenis.ts                       # Instantiates and manages the Lenis scroll instance
 │   ├── useMediaQuery.ts                  # SSR-safe CSS media query hook
 │   ├── useReducedMotion.ts               # Detects `prefers-reduced-motion` user preference
 │   ├── useScrollDirection.ts             # Tracks scroll direction (up/down) for navbar behavior
@@ -251,19 +214,15 @@ the-11th-bean/
 │
 ├── lib/                                  # Shared utilities and configuration
 │   ├── fonts.ts                          # Google Font instances (Lora, DM Sans) via next/font
-│   ├── constants.ts                      # Brand colors, breakpoints, nav links, easing curves
-│   ├── supabase.ts                       # Supabase browser client
-│   ├── supabase-admin.ts                 # Supabase service-role client (server only)
-│   ├── loyalty-types.ts                  # TypeScript types for the loyalty program
+│   ├── constants.ts                      # Navigation links and nav item types
 │   └── parseCircle.ts                    # Parser for community circle member data
 │
 ├── public/                               # Static assets (served at root /)
 │   ├── robots.txt                        # Search engine crawl rules
 │   ├── Main_Logo.svg                     # Primary brand logo
-│   ├── mascot/                           # 16 hand-drawn SVG bean mascot illustrations
+│   ├── mascot/                           # 15 hand-drawn SVG bean mascot illustrations
 │   │   ├── morning.svg                   # Morning coffee mood
 │   │   ├── pour_over.svg                 # Pour-over ritual
-│   │   ├── tasting.svg                   # Tasting / cupping
 │   │   ├── podcast_host.svg              # Podcast recording
 │   │   ├── Chikmagalur.svg               # Origin sourcing trips
 │   │   ├── stressed.svg                  # The corporate-life-before chapter
@@ -284,12 +243,7 @@ the-11th-bean/
 │   │   ├── pickleball_tournament.png
 │   │   └── terranium_workshop.png
 │   ├── instagram/                        # Instagram feed images (post_1.png – post_6.png)
-│   ├── video/                            # Hero video loop (placeholder — see placeholder_deets.md)
-│   └── *.svg                             # Next.js / Vercel default icons (file, globe, window)
-│
-├── supabase/                             # Supabase configuration and migrations
-├── scripts/                              # Utility / one-off scripts
-├── styles/                               # (Reserved — global styles live in app/globals.css)
+│   └── video/                            # Hero video loop (placeholder — see placeholder_deets.md)
 │
 ├── next.config.ts                        # Next.js config: AVIF/WebP images, compression, no powered-by header
 ├── tsconfig.json                         # TypeScript config: strict mode, path alias (@/*)
@@ -308,7 +262,7 @@ the-11th-bean/
 | `/`              | Homepage       | Hero, brand pillars, menu preview, podcast teaser, social strip                   |
 | `/our-story`     | Our Story      | Four-chapter narrative: corporate life → the leap → building the cafe → today     |
 | `/the-cafe`      | The Cafe       | Interior tour, ambient soundscape player, photo gallery, neighborhood map         |
-| `/menu`          | Menu           | Full menu with category tabs, tasting charts, origin reveals, and Shishir's picks |
+| `/menu`          | Menu           | Full menu with category tabs, origin reveals, and brew details                    |
 | `/podcast`       | Podcast        | Episode list, featured episode, and persistent in-browser audio player            |
 | `/watch`         | Watch          | Video content and behind-the-scenes footage (YouTube embeds via react-player)     |
 | `/gallery`       | Gallery        | Masonry photo gallery with collection filtering and lightbox                      |
@@ -317,8 +271,6 @@ the-11th-bean/
 | `/blog`          | Blog           | Blog post listing; individual posts at `/blog/[slug]`                             |
 | `/events`        | Events         | Event hub with poster images and RSVP links                                       |
 | `/the-circle`    | The Circle     | Community members area                                                            |
-| `/loyalty`       | Loyalty        | Customer-facing loyalty card and POS interface (Supabase-backed)                  |
-| `/loyalty-admin` | Loyalty Admin  | Owner analytics dashboard, cashier management, menu manager                       |
 
 ---
 
@@ -329,14 +281,11 @@ Components are organized by **feature scope**, not by type. This means:
 - **`components/home/`** — only used on the homepage
 - **`components/story/`** — only used on `/our-story`
 - **`components/cafe/`** — only used on `/the-cafe`
-- **`components/loyalty/`** — only used on `/loyalty` and `/loyalty-admin`
 - **`components/layout/`** — used on every page (Navbar, Footer, etc.)
 - **`components/shared/`** — reusable across multiple features (ArchDivider, SectionReveal, PageLoader, EventAnnouncement)
 - **`components/ui/`** — reserved for future primitive UI components
 
 ### Key Architectural Patterns
-
-**Smooth Scroll** — `LenisProvider` wraps the entire app in `layout.tsx`. The `useLenis` hook creates and manages the Lenis instance with a `1.2s` exponential ease, and the `html` element has `scroll-behavior: auto` to prevent browser interference.
 
 **Scroll-Triggered Animations** — `SectionReveal` is a lightweight wrapper component that uses Framer Motion's `useInView` to apply a fade-up reveal on scroll. It accepts a `delay` prop for staggered children.
 
@@ -344,21 +293,18 @@ Components are organized by **feature scope**, not by type. This means:
 
 **Scroll-Aware Navbar** — `useScrollDirection` and `useNavbarHidden` together drive the Navbar's hide/show behavior — the nav hides on scroll down and reveals on scroll up, keeping content unobstructed.
 
-**Loyalty Program** — A 14-component Supabase-backed suite covering the full loyalty lifecycle: customer lookup, point accumulation, reward redemption, cashier PIN auth, owner analytics, end-of-day expenses, and menu management.
-
 ---
 
 ## Data Layer
 
-Static content lives in `data/` as plain TypeScript files with exported typed arrays. Business data (loyalty transactions, customer accounts) is stored in Supabase.
-
+Static content lives in `data/` as plain TypeScript files with exported typed arrays.
 ### `data/menu.ts`
 
 Defines the `MenuItem` interface and exports `menuItems`, `menuCategories`, and `previewItems`. Each item can optionally include:
 
-- `tastingNotes` — `{ acidity, body, sweetness, aroma, bitterness }` for the TastingChart
+- `tastingNotes` — `{ acidity, body, sweetness, aroma, bitterness }` (currently unused in the UI)
 - `origin` / `originRegion` — for the origin reveal interaction
-- `isShishirsPick` — flags the item for the ShishirPick highlight
+- `isShishirsPick` — flags Shishir's picks (currently unused in the UI)
 - `brewMethod` — brewing parameters shown on hover
 
 ### `data/episodes.ts`
@@ -395,7 +341,6 @@ Instagram feed data for the 6-post social strip rendered in `components/home/Soc
 
 | Hook                  | Purpose                                                                                |
 | --------------------- | -------------------------------------------------------------------------------------- |
-| `useLenis`            | Creates and manages a Lenis smooth-scroll instance with a `requestAnimationFrame` loop |
 | `useMediaQuery`       | SSR-safe hook that returns `true`/`false` for a given CSS media query string           |
 | `useReducedMotion`    | Returns `true` if the user has `prefers-reduced-motion: reduce` set                    |
 | `useScrollDirection`  | Returns `'up'` or `'down'` based on the user's current scroll velocity                 |
@@ -405,13 +350,12 @@ Instagram feed data for the 6-post social strip rendered in `components/home/Soc
 
 ## Mascot System
 
-The 11th Bean character — a round, expressive coffee bean — appears contextually across the site in 16 different moods and situations. All mascots are **hand-drawn SVGs** stored in `public/mascot/`.
+The 11th Bean character — a round, expressive coffee bean — appears contextually across the site in 15 different moods and situations. All mascots are **hand-drawn SVGs** stored in `public/mascot/`.
 
 | File               | Mood / Context                        |
 | ------------------ | ------------------------------------- |
 | `morning.svg`      | Homepage hero — the start of a day    |
 | `pour_over.svg`    | Menu page — the pour-over ritual      |
-| `tasting.svg`      | Menu / tasting chart sections         |
 | `podcast_host.svg` | Podcast page — behind the mic         |
 | `Chikmagalur.svg`  | Our Story — the sourcing trips        |
 | `stressed.svg`     | Our Story — the corporate chapter     |
@@ -485,18 +429,6 @@ cd the-11th-bean
 npm install
 ```
 
-### Environment Variables
-
-The loyalty program, blog, and community features require a Supabase project. Create a `.env.local` file in the project root:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
-```
-
-> Pages that don't use Supabase (`/`, `/our-story`, `/the-cafe`, `/menu`, `/podcast`, `/watch`, `/gallery`, `/visit`, `/manifesto`) will work without these variables.
-
 ### Development Server
 
 ```bash
@@ -545,15 +477,7 @@ The project is deployed on **[Vercel](https://vercel.com/)** with zero configura
 
 ### Environment
 
-Add the following environment variables in the Vercel project settings for full feature support:
-
-| Variable                        | Required for               |
-| ------------------------------- | -------------------------- |
-| `NEXT_PUBLIC_SUPABASE_URL`      | Loyalty program, blog      |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Loyalty program, blog      |
-| `SUPABASE_SERVICE_ROLE_KEY`     | Loyalty admin, server actions |
-
-`.env*` files are gitignored by default.
+No environment variables are required — the site deploys with zero configuration beyond `vercel.json`.
 
 ---
 
