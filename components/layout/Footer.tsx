@@ -124,8 +124,8 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-cream/10 flex flex-col md:flex-row justify-between items-center gap-3 text-cream/40 text-xs">
           <p>© {new Date().getFullYear()} The 11th Bean. All rights reserved.</p>
-          {/* TODO: Replace with your studio name */}
-          <p className="text-l">Crafted with care by <a href="https://www.linkedin.com/in/tejas-d-jaiprakash/" target="_blank" rel="noopener noreferrer" className="text-cream underline underline-offset-2 hover:text-rattan transition-colors duration-200">Tejas.D.Jaiprakash</a></p>
+          {/* White, not cream: cream on caramel is 3.95:1 and fails WCAG AA for 12px text; white is 4.79:1 */}
+          <p className="credit text-white text-center md:text-right">Website by <a href="https://cobaltkitecreative.com/" rel="nofollow" className="whitespace-nowrap underline underline-offset-2 hover:decoration-2 focus-visible:outline-white!">CobaltKite Creative</a> · Founder <a href="https://cobaltkitecreative.com/about/tejas-d-jaiprakash/" rel="nofollow" className="whitespace-nowrap underline underline-offset-2 hover:decoration-2 focus-visible:outline-white!">Tejas D Jaiprakash</a></p>
         </div>
       </div>
     </footer>
